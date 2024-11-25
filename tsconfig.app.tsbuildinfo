@@ -1,0 +1,1 @@
+{"root":["./src/app.tsx","./src/calculatetotals.ts","./src/main.tsx","./src/vite-env.d.ts","./src/components/table/table.tsx","./src/components/table/calculateangle.ts","./src/components/table/calculatedifficulty.ts","./src/components/table/gettagcolor.tsx","./src/components/table/tabledata.ts","./src/components/table/tabletypes.ts"],"version":"5.6.2"}

@@ -1,0 +1,12 @@
+#root {
+  margin: 0 auto;
+  padding: 2rem;
+  text-align: center;
+}
+
+.ant-table-thead .ant-table-cell {
+  background-color: #1e140a !important;
+  color: white !important;
+}
+
+
