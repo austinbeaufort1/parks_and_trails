@@ -1,7 +1,6 @@
 import { DifficultyDesc, AngleDesc, difficultyTagColors, DifficultyTagColors, angleTagColors, AngleTagColors } from "./tableTypes";
 
 export function getDifficultyTag(text: DifficultyDesc): DifficultyTagColors {
-  console.log('TEXT', text)
   return text === 'Easy'
     ? difficultyTagColors.easy
     : text === 'Moderate'
@@ -18,11 +17,11 @@ export function getDifficultyTag(text: DifficultyDesc): DifficultyTagColors {
 }
 
 export function getAngleTag(angle: AngleDesc): AngleTagColors {
-  return angle === 'Flat'
+  return angle === 'Flat' || angle == 'Nearly Flat'
     ? angleTagColors.flat
-    : angle === 'Nearly Flat'
+    : angle === 'Gentle Slopes'
       ? angleTagColors.nearlyFlat
-      : angle === 'Gentle Slope'
+      : angle === 'Moderate'
         ? angleTagColors.gentleSlope
         : angle === 'Moderately Steep'
           ? angleTagColors.moderatelySteep

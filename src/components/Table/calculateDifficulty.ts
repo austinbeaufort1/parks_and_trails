@@ -55,15 +55,17 @@ const desc = {
                 : 'Bomber',
 
   angle: (angle: number): AngleDesc =>
-    angle < 2
+    angle < 1 
       ? 'Flat'
-      : angle < 4
+      : angle < 2
         ? 'Nearly Flat'
-        : angle < 8
-          ? 'Gentle Slope'
-          : angle < 12
-            ? 'Moderately Steep'
-            : angle < 20
-              ? 'Steep'
-              : 'Terrifying',
+        : angle < 4
+          ? 'Gentle Slopes'
+          : angle < 8
+            ? 'Moderate'
+            : angle < 12
+              ? 'Moderately Steep'
+              : angle < 20
+                ? 'Steep'
+                : 'Terrifying',
 }

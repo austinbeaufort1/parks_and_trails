@@ -3,7 +3,7 @@ type Route = 'loop' | 'out & back' | 'loop / out & back';
 export type DifficultyDesc = 'Easy' | 'Moderate' | 'Moderately Strenuous'
   | 'Strenuous' | 'Very Strenuous' | 'Challenging' | 'Bomber';
 
-export type AngleDesc = 'Flat' | 'Nearly Flat' | 'Gentle Slope'
+export type AngleDesc = 'Flat' | 'Nearly Flat' | 'Gentle Slopes' | 'Moderate'
   | 'Moderately Steep' | 'Steep' | 'Terrifying';
 
 export interface DistanceElevation {
