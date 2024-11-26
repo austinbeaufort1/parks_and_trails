@@ -1024,4 +1024,22 @@ export const data: Row[] = [
       crux: getCruxDetails(0.15, 79, 'end'),
     }
   },
+  {
+    key: '88',
+    state: 'PA',
+    county: 'Franklin',
+    parkName: 'N/A',
+    trailName: "Green Knolls Mountain Road",
+    ...getCalculatedFields(2.65, 591, 'middle'),
+    route: 'out & back',
+    videos: [],
+    extras: {
+      description: `Start at the pulloff into Green Knolls. Follow the road the whole way up
+      the mountain. On the way back down take a left on Laurel Drive. This will eventually reconnect
+      with the main road you hiked up on. Continue down the main road and take a right onto Mt. Union
+      Follow Mt. Union to Michaux Drive and walk the Michaux Drive loop. Then walk back Mt. Union and
+      back to the parking lot.`,
+      crux: getCruxDetails(0.22, 171, 'end'),
+    }
+  },
 ];
