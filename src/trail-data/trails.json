@@ -1,0 +1,272 @@
+[
+  {
+    "state": "PA",
+    "county": "Westmoreland",
+    "parkName": "Twin Lakes Park",
+    "key": "Tamarack_Trail",
+    "title": "Tamarack Trail",
+    "description": "A short woodland loop with gentle slopes through the forest. Keep your eye out for remnants of a bridge.",
+    "video": "https://youtu.be/JLWdGC3yOms?si=dSK-qdeA9j1J8jLN"
+  },
+  {
+    "state": "PA",
+    "county": "Westmoreland",
+    "parkName": "Twin Lakes Park",
+    "key": "Twin_Lakes_Upper_Lake_Loop",
+    "title": "Upper Lake Loop",
+    "description": "Shorter of the two lake loops. A nice brick walking path. Lots of wildlife. I've seen ducks, geese, dragonflies, squirrels, red-winged blackbirds, and more! There is also a fitness trail that runs along this loop with various activities.",
+    "video": "https://youtu.be/_MLTzucrVFs?si=blZDIIiM1DAxwxPq"
+  },
+  {
+    "state": "PA",
+    "county": "Westmoreland",
+    "parkName": "Twin Lakes Park",
+    "key": "Twin_Lakes_Lower_Lake_Loop",
+    "title": "Lower Lake Loop",
+    "description": "Longer of the two lake loops. A nice brick walking path. This trail features a boardwalk area. Lots of wildlife. I've seen ducks, geese, dragonflies, squirrels, red-winged blackbirds, and more! You can rent boats on the lower lake and cross country ski on this trail in the winter.",
+    "video": "https://youtu.be/oWEZlZYTFzs?si=mtzSMNZVejyzv7TL"
+  },
+  {
+    "state": "PA",
+    "county": "Westmoreland",
+    "parkName": "St. Clair Park",
+    "key": "St._Clair_Park_Main_Path",
+    "title": "Main Path",
+    "description": "Trail through a park in downtown Greensburg, PA. Here you can find a geocache, old gravestones, squirrels, birds, and more. Trail is paved.",
+    "video": "https://youtu.be/PJHsAOMxAv8?si=aCjtG_jd9H504u2y"
+  },
+  {
+    "state": "PA",
+    "county": "Westmoreland",
+    "parkName": "Lynch Field Park",
+    "key": "Lynch_Field_Park_Outer_Loop",
+    "title": "Outer Loop",
+    "description": "A Community Park in Greensburg, PA. Nice loop / track area for walking. Lots of birds. Creek runs along the park. Connects to the Five Star Trail",
+    "video": "None"
+  },
+  {
+    "state": "PA",
+    "county": "Westmoreland",
+    "parkName": "Twin Lakes Park",
+    "key": "Horse_Trail",
+    "title": "Horse Trail",
+    "description": "Horse Trail is the most difficult trail at Twin Lakes. There are woodsy sections, a gravel section, and a grassy section. This trail has quite a few ups and downs. I would recommend boots on this one as the trail can get muddy. Found a snake on this trail.",
+    "video": "https://youtu.be/YedyFhfUruQ?si=qe_m_6yceo7nl-FQ"
+  },
+  {
+    "state": "PA",
+    "county": "Westmoreland",
+    "parkName": "Twin Lakes Park",
+    "key": "Wilderness_Trail",
+    "title": "Wilderness Trail",
+    "description": "Hidden Trail at Twin Lakes. At the edge of the parking lot resides a trail. The trail goes over the bridge and leads into the woods.",
+    "video": "https://youtu.be/44jYR5ryHOA?si=r_zrgZ-JspLtk6k6"
+  },
+  {
+    "state": "PA",
+    "county": "Westmoreland",
+    "parkName": "Ann Rudd Saxman Nature Park",
+    "key": "Ann_Rudd_Saxman_Nature_Park",
+    "title": "Woods Loop",
+    "description": "Hidden Gem of a Park in Greensburg, PA. Beautiful garden area in the spring, summer, and autumn. Trail extends behind the garden area back into the woods. Spotted butterfies, chipmunks, a groundhog. They hold beekeeper meetings here. Big wasp nest was down in the woods trail area.",
+    "video": "https://youtu.be/JSBXogOZIhE?si=-mngQJFtzg0JB1vG"
+  },
+  {
+    "state": "PA",
+    "county": "Westmoreland",
+    "parkName": "Twin Lakes Park",
+    "key": "Little_Crabtree_Creek_Trail",
+    "title": "Little Crabtree Creek Trail",
+    "description": "Paved hike or bike trail that extends out of the Twin Lakes park area. Multiple geocaches are along this trail. Talked to an older man at the end of the trail, he was saying one of the trees fell on him when he was younger so watch out.",
+    "video": "https://youtu.be/7PgE3TYsdzk?si=YJ9nWV8kEstNvJAr"
+  },
+  {
+    "state": "PA",
+    "county": "Westmoreland",
+    "parkName": "Huff Park",
+    "key": "Huff_Park_Loop",
+    "title": "Main Loop",
+    "description": "Small park off of the Five Star Trail. Short and flat. A micro geocache is hidden here.",
+    "video": "https://youtu.be/sgvBt_mWSD0?si=NeeAXLxKwcKSqXAs"
+  },
+  {
+    "state": "PA",
+    "county": "Westmoreland",
+    "parkName": "Keystone State Park",
+    "key": "Stone_Lodge_Loop",
+    "title": "Stone Lodge Trail",
+    "description": "Historic stone lodge at the beginning of this trail loop. The trail takes you back into the woods behind the lodge. You can either go to the right and walk up the dirt path, or go to the left and walk up the grassy pipeline part of the trail.",
+    "video": "https://youtu.be/B0O7LhivsEY?si=mt-o02iDfWkS8cZP"
+  },
+  {
+    "state": "PA",
+    "county": "Westmoreland",
+    "parkName": "Indian Lake Park",
+    "key": "Indian_Lake_Park",
+    "title": "Lake Loop + Bow Trail + Arrow Trail",
+    "description": "Nice paved trail around a lake with woods trails branching off near the back of the lake. When I was there I walked passed a downed powerline near the entrance of the woods trails. There is a covered bridge in the lake loop section.",
+    "video": "https://youtu.be/W4nzavHYtO8?si=YijRPPHVjsAgyA_X"
+  },
+  {
+    "state": "OH",
+    "county": "Lake",
+    "parkName": "Gully Brook Park",
+    "key": "Gully_Brook_Park",
+    "title": "Main Loop",
+    "description": "Peaceful gravel trail through the woods. Expect to see lots of wildlife!",
+    "video": "None"
+  },
+  {
+    "state": "PA",
+    "county": "Westmoreland",
+    "parkName": "Jacob's Creek",
+    "key": "Jacob_s_Creek_Multi-Use_Trail",
+    "title": "Jacob's Creek Multi-Use Trail",
+    "description": "Paved Trail that runs along Jacob's Creek. Near Scottdale, PA. Good for walking, cycling, etc.",
+    "video": "https://youtu.be/s8aH3UtSwr8?si=QaXo7oF97PazaY9s"
+  },
+  {
+    "state": "PA",
+    "county": "Westmoreland",
+    "parkName": "Scottdale to Mt. Pleasant",
+    "key": "Coal_and_Coke_Trail",
+    "title": "Coal and Coke Trail",
+    "description": "Hike or bike, a nice trail that runs along railroad tracks for part of the way.",
+    "video": "https://youtu.be/m1C1CzageBI?si=_52zJYpDjjdac9jn"
+  },
+  {
+    "state": "PA",
+    "county": "Westmoreland",
+    "parkName": "Lynch Field Park to WCCC",
+    "key": "Five_Star_Trail",
+    "title": "Five Star Trail",
+    "description": "This is a rail trail that starts off near downtown Greensburg at Lynch Field Park. This trail turns more rural as it extends out past youngwood and past Westmoreland Community College. Many geocaches line this trail. There are businesses along the trail where you can grab water, food, or take a break.",
+    "video": "https://youtu.be/xNdgNVPzNN4?si=CKg-75XAeu8K0sRy"
+  },
+  {
+    "state": "PA",
+    "county": "Indiana",
+    "parkName": "Blairsville Riverfront Area",
+    "key": "Blairsville_Riverfront_Trail",
+    "title": "Blairsville Riverfront Trail",
+    "description": "Paved trail that runs along a river. Great for biking or hiking. River was low when I visted and I was able to walk out to the small island areas. You might be able to see small waterfalls running off the mountainside on the other side of the river. This area is prone to flooding.",
+    "video": "https://youtu.be/oQcqfrEFvbg?si=q3lI09ng1ryTPwUk"
+  },
+  {
+    "state": "PA",
+    "county": "Blair",
+    "parkName": "Hollidaysburg Area",
+    "key": "Chimney_Rocks_Hollidaysburg_PA",
+    "title": "Chimney Rocks",
+    "description": "Mountainside woodsy trail. Rewarding scenic view overlooking Hollidaysburg. Huge wooden star that lights up at the top. Watch your step!",
+    "video": "https://youtu.be/6xvUIlpY2kk?si=ooDE0CRTcyT05W9D"
+  },
+  {
+    "state": "PA",
+    "county": "Blair",
+    "parkName": "Nature Works Park",
+    "key": "Nature_Works_Park",
+    "title": "Main Loop",
+    "description": "Community Park walk. I would recommend parking near the barn, walking the spiral garden area, and then looping the main park. There is a fun short boardwalk section in the main area. This park has honey locust trees and their spikes are the largest I've seen.",
+    "video": "https://youtu.be/3QZ-WTGG6U0?si=mvs9YBayVsNPQLsk"
+  },
+  {
+    "state": "PA",
+    "county": "Centre",
+    "parkName": "Tom Tudek Memorial Park",
+    "key": "Tom_Tudek_Memorial_Park",
+    "title": "Main Loop",
+    "description": "Paved stroll through a park near State College. In the summer they have a garden area.",
+    "video": "https://youtu.be/pB2TX0fOL3g?si=2gc8iWblTWFgemwa"
+  },
+  {
+    "state": "PA",
+    "county": "Centre",
+    "parkName": "Mount Nittany",
+    "key": "Mount_Nittany",
+    "title": "White Trail to Mike Lynch Overlook",
+    "description": "Display board and log book at the trailhead. Mountain hike up to a scenic overlook where you can see out over the Penn State area.",
+    "video": "https://youtu.be/Yg_AGQMafus?si=AXotC8LdlOr_cFQz"
+  },
+  {
+    "state": "PA",
+    "county": "Indiana",
+    "parkName": "Yellow Creek State Park",
+    "key": "Dragonfly_Pond_Loop",
+    "title": "Dragonfly Pond Loop",
+    "description": "A half mile loop around the pond. Generally flat. Said hi to a friendly cat that was on the trail watching butterflies.",
+    "video": "https://youtu.be/xZvgYVEgv1M?si=ZtYJZJmc8Cu3hEjl"
+  },
+  {
+    "state": "OH",
+    "county": "Portage",
+    "parkName": "Nelson-Kennedy Ledges State Park",
+    "key": "Nelson-Kennedy_White_Trail",
+    "title": "White Trail",
+    "description": "Easiest of the four trails in the park. Beautiful views of rock formations. Take a slight detour and check out the glass bridge!",
+    "video": "https://youtu.be/sSRp05Bov1w?si=mu1pMmrPIHn_RnwW"
+  },
+  {
+    "state": "OH",
+    "county": "Portage",
+    "parkName": "Nelson-Kennedy Ledges State Park",
+    "key": "NK_Ledges_Yellow_Trail",
+    "title": "Yellow Trail",
+    "description": "Yellow Trail leads you to, through, and under beautiful rock formations. Keep an eye out for dwarf's pass and shipwreck rock! Trail ends near Cascade Falls. I'd recommend taking a slight detour to check out the waterfall and cave area under it up close.",
+    "video": "https://youtu.be/E5DR2tAH8Ik?si=zBlByGwE6xD5jBDu"
+  },
+  {
+    "state": "OH",
+    "county": "Portage",
+    "parkName": "Nelson-Kennedy Ledges State Park",
+    "key": "NK_Blue_Trail",
+    "title": "Blue Trail",
+    "description": "Blue Trail takes you on the outskirts of some of the tallest rock formations, past a waterfall, and over a glass bridge.",
+    "video": "https://youtu.be/5oXuITcdM4w?si=54IEa4zEReFT48C-"
+  },
+  {
+    "state": "OH",
+    "county": "Portage",
+    "parkName": "Nelson-Kennedy Ledges State Park",
+    "key": "NK_Red_Trail",
+    "title": "Red Trail",
+    "description": "The park labels this trail as 'extreme'. It takes you directly through the crevices in the rock formations and past the `Devil's Icebox`. If you're daring you can take a detour and check out the `Devil's Hole` as well.",
+    "video": "https://youtu.be/1ku_N7hUK4g?si=-IsIgLAzVND7Yf36"
+  },
+  {
+    "state": "PA",
+    "county": "Westmoreland",
+    "parkName": "Oak Hollow Park",
+    "key": "Oak_Hollow_Park_Loop",
+    "title": "Loop",
+    "description": "A custom loop that takes you past the pond, follows a ravine section, and around a trail in the back of the park. The trail's have names on the map, but didn't see labels at the park.",
+    "video": "https://youtu.be/M_ASxJ1inQg?si=N8rJsaJ3QHo30Wdw"
+  },
+  {
+    "state": "PA",
+    "county": "Westmoreland",
+    "parkName": "Hempfield Park",
+    "key": "Hempfield_Forest_Loop",
+    "title": "Forest Loop",
+    "description": "Starts with a steep section that takes you to a nice view of Hemfield Park below. There may be a geocache in this area as well. Follow the trail to the right and continue until you reach a clearing where there are houses. Turn and retrace your steps until you find a trail branch that shoots off to the left and back down towards the park.",
+    "video": "None"
+  },
+  {
+    "state": "PA",
+    "county": "Westmoreland",
+    "parkName": "Hempfield Park",
+    "key": "Hempfield_Mountain",
+    "title": "Hill Climb",
+    "description": "Want a challenge? Try this steep trali. Nice view at the top in the winter. Geocache might be nearby.",
+    "video": "https://youtu.be/RTbbKXJmA0I?si=_JepiwrUk47XlRDs"
+  },
+  {
+    "state": "PA",
+    "county": "Westmoreland",
+    "parkName": "Uni. of Pittsburgh, Greensburg Branch",
+    "key": "Bell_Memorial_Trail",
+    "title": "Bell Memorial Trail",
+    "description": "At back of the top parking lot at the university resides the Bell Memorial Trail. This trail starts with a steeper section and flattens out into a nice wooded walk at the top. View of the campus when the leaves are down. Geocaches possible along the trail.",
+    "video": "https://youtu.be/BN_jkPmRFfo?si=PHBc3J_kVISutoxd"
+  }
+]

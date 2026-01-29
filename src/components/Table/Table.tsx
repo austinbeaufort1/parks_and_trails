@@ -1,207 +1,227 @@
-import '../../App.css';
-import React from 'react';
-import { Table, Tag, Columns } from 'antd';
-import { ColumnType } from 'antd/es/table';
-import { AngleDesc, DifficultyDesc, Row, tableColors } from './tableTypes';
-import { data } from './tableData';
-import { getAngleTag, getDifficultyTag } from './getTagColor';
+import "../../App.css";
+import React from "react";
+import { Table, Columns } from "antd";
+import { Tag } from "../ui/Tag";
+import { ColumnType } from "antd/es/table";
+import { TrailView } from "../Map/TrailsMap";
+import { getDifficultyTag, getAngleTag } from "./getTagColor";
+import { AngleDesc } from "../../types/angle";
+import { tableColors } from "../../types/uicolors";
 
+function getAngleDesc(angle: number): AngleDesc {
+  if (angle < 1) return "Flat";
+  if (angle < 2) return "Nearly Flat";
+  if (angle < 4) return "Gentle Slopes";
+  if (angle < 8) return "Moderate";
+  if (angle < 12) return "Moderately Steep";
+  if (angle < 20) return "Steep";
+  if (angle < 28) return "Very Steep";
+  return "Terrifying";
+}
 
-const columns: ColumnType<Row>[] = [
+/* --------------------------------------------------
+   Table Columns
+-------------------------------------------------- */
+const columns: ColumnType<TrailView>[] = [
   {
-    title: 'State',
-    dataIndex: 'state',
-    key: 'state',
+    title: "State",
+    dataIndex: ["meta", "state"],
+    key: "state",
+    responsive: ["xs", "sm", "md", "lg", "xl"],
     render: (text: string) => ({
-      props: {
-        style: { background: tableColors.lightGreen }
-      },
-      children: <div>{text}</div>
-    })
-  },
-  {
-    width: '100px',
-    title: 'County',
-    dataIndex: 'county',
-    key: 'county',
-    render: (text: string) => ({
-      props: {
-        style: { background: tableColors.lightestGreen }
-      },
-      children: <div>{text}</div>
-    })
-  },
-  {
-    width: '100px',
-    title: 'Park Name',
-    dataIndex: 'parkName',
-    key: 'parkName',
-    render: (text: string) => ({
-      props: {
-        style: { background: tableColors.lightGreen }
-      },
-      children: <div>{text}</div>
-    })
-  },
-  {
-    width: '100px',
-    title: 'Trail Name',
-    dataIndex: 'trailName',
-    key: 'trailName',
-    render: (text: string) => ({
-      props: {
-        style: { background: tableColors.lightestGreen }
-      },
-      children: <div>{text}</div>
-    })
-  },
-  {
-    title: 'Explore!',
-    dataIndex: 'videos',
-    key: 'videos',
-    width: '100px',
-    render: (videos: string[][]) => ({
-      props: {
-        style: { background: tableColors.lightBlue },
-      },
-      children: <div>
-        {videos.map((video: string[], i: number) =>
-          (<p key={i}><a target='_blank' href={video[1]}>{video[0]}</a></p>))
-        }
-      </div>
+      props: { style: { background: tableColors.lightGreen } },
+      children: <div>{text}</div>,
     }),
   },
   {
-    title: 'Dist\nance\n (mi)',
-    dataIndex: 'distance',
-    key: 'distance',
-    width: '50px',
-    defaultSortOrder: 'descend',
-    sorter: (a: { distance: number }, b: { distance: number }) => a.distance - b.distance,
+    title: "County",
+    dataIndex: ["meta", "county"],
+    key: "county",
+    responsive: ["sm", "md", "lg", "xl"],
     render: (text: string) => ({
-      props: {
-        style: { background: tableColors.lightBrown }
-      },
-      children: <div>{text}</div>
-    })
+      props: { style: { background: tableColors.lightestGreen } },
+      children: <div>{text}</div>,
+    }),
   },
   {
-    title: 'Elev\nation\n Gain\n (ft)',
-    dataIndex: 'elevationGain',
-    key: 'elevationGain',
-    width: '50px',
-    defaultSortOrder: 'descend',
-    sorter: (a: { elevationGain: number }, b: { elevationGain: number }) => a.elevationGain - b.elevationGain,
+    title: "Park Name",
+    dataIndex: ["meta", "parkName"],
+    key: "parkName",
+    responsive: ["sm", "md", "lg", "xl"],
     render: (text: string) => ({
-      props: {
-        style: { background: tableColors.lightestBrown }
-      },
-      children: <div>{text}</div>
-    })
+      props: { style: { background: tableColors.lightGreen } },
+      children: <div>{text}</div>,
+    }),
   },
   {
-    title: 'Dif\nicu\nlty',
-    dataIndex: 'difficulty',
-    key: 'difficulty',
-    width: '50px',
-    defaultSortOrder: 'descend',
-    sorter: (a: { difficulty: number }, b: { difficulty: number }) => a.difficulty - b.difficulty,
+    title: "Trail Name",
+    dataIndex: ["meta", "title"],
+    key: "trailName",
+    render: (text: string, record: TrailView) => ({
+      props: { style: { background: tableColors.lightestGreen } },
+      children: <div>{text || record.key}</div>,
+    }),
+  },
+  {
+    title: "Explore!",
+    dataIndex: ["meta", "video"],
+    key: "videos",
+    responsive: ["sm", "md", "lg", "xl"],
+    render: (video: string) => ({
+      props: { style: { background: tableColors.lightBlue } },
+      children: video ? (
+        <a href={video} target="_blank" rel="noreferrer">
+          View Adventure
+        </a>
+      ) : (
+        <span>—</span>
+      ),
+    }),
+  },
+  {
+    title: "Distance (mi)",
+    dataIndex: "distanceFeet",
+    key: "distance",
+    sorter: (a, b) => a.distanceFeet - b.distanceFeet,
+    defaultSortOrder: "descend",
+    render: (distanceFeet: number) => ({
+      props: { style: { background: tableColors.lightBrown } },
+      children: <div>{(distanceFeet / 5280).toFixed(2)}</div>,
+    }),
+  },
+  {
+    title: "Elevation Gain (ft)",
+    dataIndex: "elevationGain",
+    key: "elevationGain",
+    sorter: (a, b) => a.elevationGain - b.elevationGain,
+    defaultSortOrder: "descend",
+    render: (ele: number) => ({
+      props: { style: { background: tableColors.lightestBrown } },
+      children: <div>{ele.toFixed(0)}</div>,
+    }),
+  },
+  {
+    title: "Difficulty",
+    dataIndex: "difficultyScore",
+    key: "difficulty",
+    sorter: (a, b) => a.difficultyScore - b.difficultyScore,
+    defaultSortOrder: "descend",
+    render: (score: number) => ({
+      props: { style: { background: tableColors.lightBrown } },
+      children: <div>{score.toFixed(1)}</div>,
+    }),
+  },
+  {
+    title: "Difficulty Desc.",
+    dataIndex: "difficultyDescription",
+    key: "difficultyDesc",
     render: (text: string) => ({
-      props: {
-        style: { background: tableColors.lightBrown }
-      },
-      children: <div>{text}</div>
-    })
+      props: { style: { background: tableColors.lightestBrown } },
+      // @ts-expect-error Tag children type issue
+      children: <Tag color={getDifficultyTag(text)}>{text}</Tag>,
+    }),
   },
   {
-    title: 'Difficulty',
-    dataIndex: 'difficultyDesc',
-    key: 'difficultyDesc',
-    width: '50px',
-    render: (text: DifficultyDesc) => ({
-      props: {
-        style: { background: tableColors.lightestBrown }
-      },
-      // @ts-expect-error Tag takes children but typescript is erroring
-      children: <div><Tag color={getDifficultyTag(text)}>{text}</Tag></div>
-    })
+    title: "Avg Angle (deg)",
+    dataIndex: "avgAngle",
+    key: "angle",
+    sorter: (a, b) => a.avgAngle - b.avgAngle,
+    render: (angle: number) => ({
+      props: { style: { background: tableColors.lightBrown } },
+      children: <div>{angle.toFixed(1)}</div>,
+    }),
   },
   {
-    title: 'Avg Angle (deg)',
-    dataIndex: 'angle',
-    key: 'angle',
-    width: '50px',
-    defaultSortOrder: 'descend',
-    sorter: (a: { angle: number }, b: { angle: number }) => a.angle - b.angle,
-    render: (text: string) => ({
-      props: {
-        style: { background: tableColors.lightBrown }
-      },
-      children: <div>{text}</div>
-    })
+    title: "Avg Angle Desc.",
+    dataIndex: "avgAngle",
+    key: "angleDesc",
+    render: (angle: number) => ({
+      props: { style: { background: tableColors.lightestBrown } },
+      // @ts-expect-error Tag children type issue
+      children: (
+        <Tag color={getAngleTag(getAngleDesc(angle))}>
+          {getAngleDesc(angle)}
+        </Tag>
+      ),
+    }),
   },
   {
-    title: 'Avg Angle',
-    dataIndex: 'angleDesc',
-    key: 'angleDesc',
-    width: '50px',
-    render: (text: AngleDesc) => ({
-      props: {
-        style: { background: tableColors.lightestBrown }
-      },
-      // @ts-expect-error Tag takes children but typescript is erroring
-      children: <div><Tag color={getAngleTag(text)}>{text}</Tag></div>
-    })
+    title: "Tree Cover (%)",
+    dataIndex: "avgCanopy",
+    key: "canopy",
+    responsive: ["md", "lg", "xl"],
+    render: (canopy: number) => ({
+      props: { style: { background: tableColors.lightBrown } },
+      children: <div>{canopy}%</div>,
+    }),
   },
   {
-    title: 'Route',
-    dataIndex: 'route',
-    key: 'route',
-    render: (text: string) => ({
-      props: {
-        style: { background: tableColors.lightBrown }
-      },
-      children: <div>{text}</div>
-    })
+    title: "Landcover (%)",
+    dataIndex: "landcoverPercentages",
+    key: "landcoverPercentages",
+    responsive: ["lg", "xl"],
+    render: (lcs: { type: string; percent: number }[]) => ({
+      props: { style: { background: tableColors.lightestBrown } },
+      children: (
+        <div>{lcs.map((lc) => `${lc.type} ${lc.percent}%`).join(", ")}</div>
+      ),
+    }),
   },
 ];
 
+/* --------------------------------------------------
+   Main Table Component
+-------------------------------------------------- */
+interface MainTableProps {
+  trails: TrailView[];
+}
 
-const MainTable: React.FC = () => <Table
-  columns={columns as Columns}
-  dataSource={data}
-  // @ts-expect-error expandable type error with Table
-  expandable={{
-    expandedRowRender: (record: Row) => {
-      const crux = record.extras.crux;
-      return (
-        <div style={{ textAlign: 'center' }}>
-          <p style={{ margin: 0 }}><strong>Description: </strong>{record.extras.description}</p>
-          {crux.distance === 0
-            ? (
-              <>
-                <p><strong>Most Difficult Part (Crux) of the Trail:</strong> </p>
-                <p>No crux</p>
-              </>
-            )
-            : (
-              <>
-                <p><strong>Most Difficult Part (Crux) of the Trail:</strong> </p>
-                {/* @ts-expect-error Tag takes children but typescript is erroring */} 
-                <Tag color={getAngleTag(crux.angleDesc)}>{crux.angleDesc}</Tag>
-                <p>Crux Distance: {crux.distance} miles</p>
-                <p>Crux Angle: {crux.angle} degrees</p>
-              </>
-            )
-          }
-        </div>
-      )
-    }
-  }}
-/>;
+const MainTable: React.FC<MainTableProps> = ({ trails }) => (
+  <div style={{ overflowX: "auto" }}>
+    <Table
+      columns={columns as Columns}
+      dataSource={trails}
+      pagination={{ pageSize: 10 }}
+      rowKey="key"
+      expandable={{
+        expandedRowRender: (trail: TrailView) => {
+          const cruxPoint = trail.points.reduce(
+            (max, p) => (p.slopeDeg > max.slopeDeg ? p : max),
+            trail.points[0]
+          );
+          const cruxDistanceMiles = trail.distanceFeet / 5280; // simplified
+          return (
+            <div style={{ textAlign: "center" }}>
+              <p style={{ margin: 0 }}>
+                <strong>Description: </strong>
+                {trail.meta?.description || "No description"}
+              </p>
 
-// typescript not picking up on data or columns being used, so logging it here
-console.log(data)
-console.log(columns)
+              {cruxDistanceMiles === 0 ? (
+                <>
+                  <p>
+                    <strong>Most Difficult Part (Crux) of the Trail:</strong>
+                  </p>
+                  <p>No crux</p>
+                </>
+              ) : (
+                <>
+                  <p>
+                    <strong>Most Difficult Part (Crux) of the Trail:</strong>
+                  </p>
+                  <Tag color={getAngleTag(cruxPoint.slopeDeg)}>
+                    {cruxPoint.slopeDeg.toFixed(1)}
+                  </Tag>
+                  <p>Crux Distance: {cruxDistanceMiles.toFixed(2)} mi</p>
+                  <p>Crux Angle: {cruxPoint.slopeDeg.toFixed(1)}°</p>
+                </>
+              )}
+            </div>
+          );
+        },
+      }}
+    />
+  </div>
+);
 
 export default MainTable;

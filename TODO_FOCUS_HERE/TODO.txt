@@ -1,0 +1,14 @@
+1. red trail at nelson kennedy ledges shows out and back even though it's really just point to point. 
+    this is due to the algorithm checking if start and end are close together, if not then it's an out and back.
+
+check if crux angles on cardlist align with crux angles on map
+
+2. Maybe I dont need red points at the end of a trail?
+
+3. Trails sometimes overlap on the map
+
+4. maybe selected trail should glow a bit so it's obvious that one is selected
+
+5. green dots on the map overlap need a solution
+
+new layers, cemeteries, geocaches, custom routes, straight line missions, challenge trails

@@ -1,0 +1,10 @@
+  // some the angles feel way more crazy than i'm remembering, should manually inspect
+  {
+    "state": "PA",
+    "county": "Westmoreland",
+    "parkName": "Scottdale to Mt. Pleasant",
+    "key": "Coal_and_Coke_Trail",
+    "title": "Coal and Coke Trail",
+    "description": "Hike or bike, a nice trail that runs along railroad tracks for part of the way.",
+    "video": "https://youtu.be/m1C1CzageBI?si=_52zJYpDjjdac9jn"
+  }, 

@@ -1,3 +1,11 @@
+/* in index.css or global styles */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+
 #root {
   margin: 0 auto;
   padding: 2rem;
@@ -9,4 +17,197 @@
   color: white !important;
 }
 
+/* .start-marker div {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.3s ease-out;
+}
 
+.start-marker.pop-in div {
+  transform: scale(1);
+} */
+
+/* ---------- Trail Card ---------- */
+.trail-card {
+  width: 100%;
+  max-width: 100%;
+}
+
+/* Title / extra */
+.trail-card-title,
+.trail-card-extra {
+  white-space: normal;
+}
+
+/* Desktop rows */
+.trail-card-row {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+  margin-bottom: 8px;
+}
+
+/* Details */
+.trail-card-details p {
+  margin-bottom: 8px;
+}
+
+/* Angle rows */
+.angle-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+  justify-content: center; /* center horizontally */
+  text-align: center;      /* center text inside each element */
+}
+
+/* ---------- Card Header Wrapping ---------- */
+.trail-card-title-wrapper {
+  display: flex;
+  flex-direction: column;   /* stack vertically */
+  gap: 2px;                 /* spacing between lines */
+  align-items: center;      /* center everything horizontally */
+  text-align: center;       /* center text inside each line */
+}
+
+.trail-card-title {
+  font-weight: bold;
+}
+
+.trail-card-subtitle {
+  font-size: 0.95rem;
+  white-space: normal;
+}
+
+.trail-card-difficulty {
+  font-size: 0.85rem;
+  color: #555;
+}
+
+.trail-card-extra {
+  white-space: normal;
+  margin-top: 0;
+}
+
+/* ---------- Mobile ---------- */
+@media (max-width: 480px) {
+  .trail-card-row {
+    flex-direction: column;
+    flex-wrap: wrap;
+    gap: 4px;
+  }
+
+  .angle-row {
+    flex-direction: column;  /* stack label + tag vertically */
+    flex-wrap: wrap;
+    align-items: center;     /* center elements */
+    gap: 4px;
+  }
+
+  .landcover {
+    word-break: break-word;
+  }
+
+  /* Card header adjustments for mobile */
+  .trail-card-title-wrapper {
+    flex-direction: column;
+    flex-wrap: wrap;  /* keep vertical stack even on desktop */
+    gap: 2px;
+    align-items: center;     /* center horizontally */
+  }
+
+  .trail-card-extra {
+    margin-top: 4px;
+    text-align: left;
+  }
+}
+
+.input {
+    width: 90%;
+    padding: 10px 10px;
+    font-size: 15px;
+    font-weight: bold;
+    text-align: center;
+    outline: none; /* move outline removal here */
+    cursor: pointer; /* optional: show pointer on hover */
+}
+
+.wave {
+    border-radius: 40px 0 40px 0;
+    transition: border 0.3s ease, box-shadow 0.3s ease; /* explicitly animate these */
+}
+
+.waveD {
+    background-color: rgb(171, 255, 145);
+    color: rgb(0, 94, 12);
+    border: 2px solid rgb(0, 94, 12);
+    box-shadow: 2px 2px 2px 1px rgba(0, 110, 6, 0.4);
+}
+
+.waveD:hover {
+    border: 3px solid rgb(105, 255, 163);
+    box-shadow: 12px 12px 2px 1px rgba(0, 110, 6, 0.4);
+}
+
+.waveRust {
+    background-color: rgb(191, 142, 107);   /* muted clay / iron */
+    color: rgb(78, 38, 12);                  /* dark bark brown */
+    border: 2px solid rgb(78, 38, 12);
+    box-shadow: 2px 2px 2px 1px rgba(78, 38, 12, 0.35);
+}
+
+.waveRust:hover {
+    border: 3px solid rgb(213, 171, 141);    /* sun-faded rust */
+    box-shadow: 10px 10px 2px 1px rgba(78, 38, 12, 0.35);
+}
+
+.waveSky {
+  background-color: rgb(176, 210, 228);   /* soft sky blue */
+  color: rgb(24, 72, 96);                  /* deep alpine blue */
+  border: 2px solid rgb(24, 72, 96);
+  box-shadow: 2px 2px 2px 1px rgba(24, 72, 96, 0.35);
+}
+
+.waveSky:hover {
+  border: 3px solid rgb(210, 232, 245);    /* sunlit sky */
+  box-shadow: 10px 10px 2px 1px rgba(24, 72, 96, 0.35);
+}
+
+
+.ant-collapse-header:hover {
+  opacity: 0.75;
+}
+
+/* fonts */
+.font-permanent-marker  { font-family: "Permanent Marker", cursive !important; }
+.font-trade-winds { font-family: "Trade Winds", cursive !important; }
+.font-lugrasimo  { font-family: "Lugrasimo", cursive !important; }
+.font-knewave { font-family: "Knewave", cursive !important; }
+.font-rock-salt  { font-family: "Rock Salt", cursive !important; }
+.font-rubik-dirt  { font-family: "Rubik Dirt", sans-serif !important; }
+.font-rubik-distressed  { font-family: "Rubik Distressed", sans-serif !important; }
+.font-piedra  { font-family: "Piedra", cursive !important; }
+.font-honk  { font-family: "Honk", cursive !important; }
+.font-jacquard { font-family: "Jacquard 12 Charted", cursive !important; }
+.font-caveat  { font-family: "Caveat", cursive !important; }
+.font-patrick-hand  { font-family: "Patrick Hand", cursive !important; }
+
+
+/* Home Page */
+.home-title {
+    font-family: "Permanent Marker", cursive;
+    font-size: 3rem !important;
+}
+
+.home-button {
+  font-family: "Rock Salt", cursive;
+}
+
+.start-marker.completed .start-marker-inner {
+  background-color: skyblue;
+  border: 2px solid blue;
+  color: white;
+  font-weight: bold;
+}

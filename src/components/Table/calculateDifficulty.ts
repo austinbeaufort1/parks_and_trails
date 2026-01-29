@@ -1,8 +1,18 @@
-import { CalculatedFields, DistanceElevation, AngleDesc, DifficultyDesc, HighestPoint, Crux } from "./tableTypes";
+import { CalculatedFields } from "../../types/trail";
+import { DistanceElevation, AngleDesc, Crux } from "../../types/angle";
+import { HighestPoint, DifficultyDesc } from "../../types/difficulty";
 import { calculateAngleNearestHudredth } from "./calculateAngle";
 
-export function getCalculatedFields(distance: number, elevationGain: number, highestPoint: HighestPoint): CalculatedFields {
-  const { difficulty, angle } = calculateDifficultyAndAngle(distance, elevationGain, highestPoint);
+export function getCalculatedFields(
+  distance: number,
+  elevationGain: number,
+  highestPoint: HighestPoint
+): CalculatedFields {
+  const { difficulty, angle } = calculateDifficultyAndAngle(
+    distance,
+    elevationGain,
+    highestPoint
+  );
 
   return {
     distance,
@@ -10,10 +20,14 @@ export function getCalculatedFields(distance: number, elevationGain: number, hig
     difficulty,
     angle,
     ...desc.difficultyAndAngle(difficulty, angle),
-  }
+  };
 }
 
-function calculateDifficultyAndAngle(distance: number, elevationGain: number, highestPoint: HighestPoint): DistanceElevation {
+function calculateDifficultyAndAngle(
+  distance: number,
+  elevationGain: number,
+  highestPoint: HighestPoint
+): DistanceElevation {
   return {
     difficulty: calculateDifficulty(distance, elevationGain),
     angle: calculateAngleNearestHudredth(distance, elevationGain, highestPoint),
@@ -21,51 +35,64 @@ function calculateDifficultyAndAngle(distance: number, elevationGain: number, hi
 }
 
 function calculateDifficulty(distance: number, elevationGain: number): number {
-  return Math.round(Math.sqrt((elevationGain * 2) * distance));
+  return Math.round(Math.sqrt(elevationGain * 2 * distance));
 }
 
-export function getCruxDetails(distance: number, elevationGain: number, highestPoint: HighestPoint): Crux {
-  const angle = calculateAngleNearestHudredth(distance, elevationGain, highestPoint);
+export function getCruxDetails(
+  distance: number,
+  elevationGain: number,
+  highestPoint: HighestPoint
+): Crux {
+  const angle = calculateAngleNearestHudredth(
+    distance,
+    elevationGain,
+    highestPoint
+  );
   return {
     distance,
     angle,
     angleDesc: desc.angle(angle),
-  }
+  };
 }
 
 const desc = {
-  difficultyAndAngle: (difficulty: number, angle: number): { difficultyDesc: DifficultyDesc, angleDesc: AngleDesc } => ({
+  difficultyAndAngle: (
+    difficulty: number,
+    angle: number
+  ): { difficultyDesc: DifficultyDesc; angleDesc: AngleDesc } => ({
     difficultyDesc: desc.difficulty(difficulty),
     angleDesc: desc.angle(angle),
   }),
 
   difficulty: (difficulty: number): DifficultyDesc =>
     difficulty <= 49
-      ? 'Easy'
+      ? "Easy"
       : difficulty < 100
-        ? 'Moderate'
-        : difficulty < 150
-          ? 'Moderately Strenuous'
-          : difficulty < 200
-            ? 'Strenuous'
-            : difficulty < 250
-              ? 'Very Strenuous'
-              : difficulty < 500
-                ? 'Challenging'
-                : 'Bomber',
+      ? "Moderate"
+      : difficulty < 150
+      ? "Moderately Strenuous"
+      : difficulty < 200
+      ? "Strenuous"
+      : difficulty < 250
+      ? "Very Strenuous"
+      : difficulty < 500
+      ? "Challenging"
+      : "Bomber",
 
   angle: (angle: number): AngleDesc =>
-    angle < 1 
-      ? 'Flat'
+    angle < 1
+      ? "Flat"
       : angle < 2
-        ? 'Nearly Flat'
-        : angle < 4
-          ? 'Gentle Slopes'
-          : angle < 8
-            ? 'Moderate'
-            : angle < 12
-              ? 'Moderately Steep'
-              : angle < 20
-                ? 'Steep'
-                : 'Terrifying',
-}
+      ? "Nearly Flat"
+      : angle < 4
+      ? "Gentle Slopes"
+      : angle < 8
+      ? "Moderate"
+      : angle < 12
+      ? "Moderately Steep"
+      : angle < 20
+      ? "Steep"
+      : angle < 28
+      ? "Very Steep"
+      : "Terrifying",
+};
