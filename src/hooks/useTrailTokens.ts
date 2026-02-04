@@ -9,7 +9,6 @@ export function useTrailTokens(userId?: string, trailId?: string) {
 
   // Move fetchTokens out of useEffect
   const fetchTokens = useCallback(async () => {
-    console.log("TRAIL ID", trailId);
     if (!userId || !trailId) return;
 
     setLoading(true);

@@ -45,6 +45,7 @@ import { CompletionModal } from "../CompletionModal/CompletionModal";
 import { processRewards } from "../helpers/Rewards/processRewards";
 import { BadgeQueue } from "../Badges/BadgeQueue";
 import { TokenPopup } from "../TokenPopup";
+import { initialFormData } from "../TrailsPage/TrailCard";
 
 const LittleTag = styled(Tag)`
   padding: 3px;
@@ -193,6 +194,7 @@ export default function TrailsMap({
     selectedTrail?.difficulty_score ?? 0,
     selectedTrail?.landcover_percentages,
   );
+  const [formData, setFormData] = useState(initialFormData);
 
   useEffect(() => {
     if (selectedTrail) {
@@ -288,16 +290,17 @@ export default function TrailsMap({
             trailId={selectedTrailId ?? "0"}
             userId={user.id}
             estimatedTime={trailTime}
+            formData={formData}
+            setFormData={setFormData}
             onCompleted={async (payload) => {
               await completeTrail(user.id, selectedTrailId ?? "0", payload);
               const newRewards = await processRewards({
                 userId: user.id,
                 trailId: selectedTrailId ?? "0",
-                trailDistance: metersToMiles(
-                  selectedTrail?.total_distance_m ?? 0,
-                ),
+                trailDistance: selectedTrail?.total_distance_m ?? 0,
                 payload,
                 timesCompleted: timesCompletedAfter,
+                formData,
               });
 
               setEarnedBadges(newRewards.badges);

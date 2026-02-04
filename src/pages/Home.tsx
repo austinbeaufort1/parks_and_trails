@@ -7,7 +7,7 @@ import {
   FeatureDescription,
   FeatureTitle,
 } from "../components/ui/FeatureCard";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useAuth } from "../components/AuthContext";
 import "./Home.css";
 import AuthScreen from "../components/AuthScreen";
@@ -18,13 +18,32 @@ interface HomeProps {
 
 const Home: React.FC<HomeProps> = ({ setTab }) => {
   const [showAuth, setShowAuth] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const { user, logout } = useAuth();
 
-  // ✅ Close modal automatically when user logs in
   useEffect(() => {
     if (user) setShowAuth(false);
   }, [user]);
+
+  const handleUploadClick = () => {
+    fileInputRef.current?.click();
+  };
+
+  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    if (!file.name.toLowerCase().endsWith(".gpx")) {
+      alert("Please upload a GPX file");
+      return;
+    }
+
+    console.log("GPX uploaded:", file);
+
+    // optional: jump user to map after upload
+    setTab("map");
+  };
 
   return (
     <div className="home-page">
@@ -36,25 +55,34 @@ const Home: React.FC<HomeProps> = ({ setTab }) => {
             Explore detailed trail maps, slope data, difficulty ratings, tree
             coverage, and more. Perfect for planning your next adventure!
           </Subtitle>
+
           <div className="home-buttons">
             <Button onClick={() => setTab("map")}>Go to Map</Button>
+
             {!user ? (
               <Button onClick={() => setShowAuth(true)}>
                 Login to track hikes
               </Button>
             ) : (
-              <Button
-                onClick={async () => {
-                  await logout();
-                }}
-              >
-                Logout
-              </Button>
+              <>
+                <Button onClick={handleUploadClick}>Upload GPX</Button>
+
+                <Button onClick={logout}>Logout</Button>
+
+                <input
+                  ref={fileInputRef}
+                  type="file"
+                  accept=".gpx"
+                  style={{ display: "none" }}
+                  onChange={handleFileChange}
+                />
+              </>
             )}
           </div>
         </div>
       </div>
 
+      {/* ---------- Feature Cards (UNCHANGED) ---------- */}
       <FeaturesGrid>
         <FeatureCard>
           <FeatureTitle>Interactive Maps</FeatureTitle>

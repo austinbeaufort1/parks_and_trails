@@ -1,4 +1,4 @@
-import { checkTokens } from "./checkTokens";
+import { checkTokens, Mode } from "./checkTokens";
 import { checkBadges } from "./checkBadges";
 import { checkQuests } from "./checkQuests";
 import { initialFormData } from "../../TrailsPage/TrailCard";
@@ -10,6 +10,9 @@ export const processRewards = async ({
   timesCompleted,
   trailDistance,
   formData,
+  estimatedTime,
+  trail,
+  mode,
 }: {
   userId: string;
   trailId: string;
@@ -17,14 +20,21 @@ export const processRewards = async ({
   timesCompleted: number;
   trailDistance: number;
   formData: typeof initialFormData;
+  estimatedTime: number;
+  trail: any;
+  mode: Mode;
 }) => {
   const tokens = await checkTokens({
     userId,
     trailId,
     timesCompleted,
     formData,
+    trailDistance,
+    estimatedTime,
+    trail,
+    mode,
   });
-  const badges = await checkBadges(userId);
+  const badges = await checkBadges(userId, trailId);
   //   const questEvents = await checkQuests({
   //     userId,
   //     timesCompleted,

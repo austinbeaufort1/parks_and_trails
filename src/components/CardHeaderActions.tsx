@@ -76,7 +76,7 @@ export const CardHeaderActions: React.FC<CardHeaderActionsProps> = ({
         )}
 
         <OverflowContent className={overflowOpen ? "open" : "closed"}>
-          {user && count > 0 && drawerView !== "trail" && (
+          {/* {user && count > 0 && drawerView !== "trail" && (
             <OverflowItem
               onClick={() => {
                 setDrawerView("trail");
@@ -97,7 +97,7 @@ export const CardHeaderActions: React.FC<CardHeaderActionsProps> = ({
             >
               View Completion Details
             </OverflowItem>
-          )}
+          )} */}
           {user && (
             <OverflowItem
               onClick={() => {
@@ -159,7 +159,9 @@ const OverflowButton = styled.button<{ variant?: ActionsVariant }>`
 
   color: ${({ variant }) => (variant === "sidebar" ? "#eee" : "#444")};
 
-  transition: background 0.15s ease, transform 0.1s ease;
+  transition:
+    background 0.15s ease,
+    transform 0.1s ease;
 
   &:hover {
     background: rgba(255, 255, 255, 0.15);
@@ -192,7 +194,10 @@ const OverflowContent = styled.div`
   opacity: 0;
   visibility: hidden;
   pointer-events: none;
-  transition: transform 0.15s ease, opacity 0.15s ease, visibility 0.15s;
+  transition:
+    transform 0.15s ease,
+    opacity 0.15s ease,
+    visibility 0.15s;
 
   &.open {
     transform: scale(1);

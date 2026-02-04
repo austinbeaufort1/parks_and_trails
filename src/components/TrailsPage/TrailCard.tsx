@@ -25,6 +25,11 @@ import { processRewards } from "../helpers/Rewards/processRewards";
 import { EarnedBadge } from "../Badges/BadgeQueue";
 import { TokenPopup, EarnedToken } from "../TokenPopup";
 import { useTrailTokens } from "../../hooks/useTrailTokens";
+import {
+  updateTrailMemory,
+  updateTrailMemoryFromPayload,
+} from "../helpers/updateTrailMemory";
+import { Flex } from "antd";
 
 type DrawerView = "trail" | "completion";
 
@@ -34,6 +39,7 @@ interface TrailCardProps {
 }
 
 export const initialFormData = {
+  durationHours: null as number | null,
   durationMinutes: null as number | null,
   weight: [] as string[],
   weightInputs: {} as Record<string, number>,
@@ -53,6 +59,15 @@ export const initialFormData = {
   sportsContinuity: null as "continuous" | "intermittent" | null,
   awkwardObject: "",
   otherWildlife: "",
+  // New fields for Juggling
+  jugglingBalls: 3, // default to 3 balls
+  jugglingDrops: 100, // default to 0 drops
+  discGolfThrows: 1000,
+  // New field for Unicycling
+  unicycleFalls: 100, // default to 0 falls
+
+  // New field for Handstand Walk
+  handstand50m: false, // default false, not yet walked 50m
 };
 
 export const TrailCard: React.FC<TrailCardProps> = ({ trail, onViewMap }) => {
@@ -142,7 +157,7 @@ export const TrailCard: React.FC<TrailCardProps> = ({ trail, onViewMap }) => {
 
           <TrailDetails>
             <span style={{ marginBottom: "-5px" }}>
-              Difficulty: ({trail.difficulty_score}){" "}
+              Effort Level: ({trail.difficulty_score}){" "}
               {getDifficultyDescription(trail.difficulty_score)}
             </span>
           </TrailDetails>
@@ -190,30 +205,46 @@ export const TrailCard: React.FC<TrailCardProps> = ({ trail, onViewMap }) => {
             </span>
           </TrailDetails>
 
-          {/* Primary action */}
-          <ActionButton
-            onClick={() => {
-              setDrawerView("trail");
-              setSidebarOpen(true);
-            }}
-          >
-            View Details
-          </ActionButton>
+          <Flex>
+            {/* Primary action */}
+            <ActionButton
+              onClick={() => {
+                setDrawerView("trail");
+                setSidebarOpen(true);
+              }}
+            >
+              View Details
+            </ActionButton>
+            {user && count > 0 && (
+              <ActionButton
+                variant="sand"
+                onClick={() => {
+                  setDrawerView("completion");
+                  setSidebarOpen(true);
+                }}
+              >
+                View Memories
+              </ActionButton>
+            )}
+          </Flex>
         </CardContent>
 
         {/* Completion Modal */}
         {user && (
           <CompletionModal
             open={completeModalOpen}
-            onClose={() => setCompleteModalOpen(false)}
+            onClose={() => {
+              setCompleteModalOpen(false);
+              setFormData(initialFormData);
+            }}
             trailId={trail.id}
             userId={user.id}
             estimatedTime={trailTime}
             formData={formData}
+            trail={trail}
             setFormData={setFormData}
             onCompleted={async (payload) => {
-              await completeTrail(user.id, trail.id, payload);
-
+              console.log("PAYLOAD", payload);
               const newRewards = await processRewards({
                 userId: user.id,
                 trailId: trail.id,
@@ -221,13 +252,40 @@ export const TrailCard: React.FC<TrailCardProps> = ({ trail, onViewMap }) => {
                 payload,
                 timesCompleted: timesCompletedAfter,
                 formData,
+                estimatedTime: trailTime,
+                trail: trail,
+                mode: "reward",
               });
+
+              const detectedRewards = await processRewards({
+                userId: user.id,
+                trailId: trail.id,
+                trailDistance: trail.total_distance_m,
+                payload,
+                timesCompleted: timesCompletedAfter,
+                formData,
+                estimatedTime: trailTime,
+                trail: trail,
+                mode: "detect",
+              });
+              console.log("DETECTED AWARDS", detectedRewards);
+
+              await completeTrail(
+                user.id,
+                trail.id,
+                payload,
+                () => {},
+                detectedRewards.tokens,
+              );
+              // ✅ Update trail memory
+              await updateTrailMemoryFromPayload(trail.id, payload);
 
               setEarnedBadges(newRewards.badges);
               setEarnedTokens(newRewards.tokens);
               refreshTokens();
               refreshCompletions();
               refreshStats();
+              setFormData(initialFormData);
             }}
           />
         )}

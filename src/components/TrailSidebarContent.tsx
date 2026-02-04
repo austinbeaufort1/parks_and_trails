@@ -8,9 +8,11 @@ import { getAngleDesc } from "./helpers/angle";
 import { getAngleTag } from "./Table/getTagColor";
 import { TrailCard } from "../types/trail";
 import { brown } from "@radix-ui/colors";
-import { formatDistance } from "./helpers/format";
+import { formatDistance, metersToFeet } from "./helpers/format";
 import { EarnedToken } from "./TokenPopup";
 import { useTrailTokens } from "../hooks/useTrailTokens";
+import { calculatePar } from "./helpers/parCalculator";
+import { ActivityParsTooltip } from "./ActivityParsTooltip";
 
 interface TrailSidebarContentProps {
   drawerView: "trail" | "completion";
@@ -83,10 +85,11 @@ export const TrailSidebarContent: React.FC<TrailSidebarContentProps> = ({
         />
         <LabelValue label="Tree Coverage" value={`${trail.avg_canopy_pct}%`} />
         <LandCover landcover_percentages={trail.landcover_percentages} />
+
         <LabelValue
           label="Tags"
           value={trail.tags.map((tag, i) =>
-            i === trail.tags.length - 1 ? tag : tag + ", "
+            i === trail.tags.length - 1 ? tag : tag + ", ",
           )}
         />
         {/* <LabelValue
@@ -107,6 +110,7 @@ export const TrailSidebarContent: React.FC<TrailSidebarContentProps> = ({
         elevationPerCompletion={trail.elevation_gain_m}
         completionStyles={completionStyles}
         tokens={tokens}
+        distance_m={trail.total_distance_m}
       />
     );
   }
