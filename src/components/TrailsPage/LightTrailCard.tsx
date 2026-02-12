@@ -21,11 +21,12 @@ export const LightTrailCard: React.FC<LightTrailCardProps> = ({
         background: "#f9f9f9",
       }}
     >
-      <h3>{trail.name}</h3>
       <p>
-        {trail.parkName} – {trail.state}, {trail.county}
+        {trail.park_name} – {trail.county}, {trail.state}
       </p>
-      <p>{trail.details}</p>
+      <h3>{trail.title}</h3>
+
+      <p>{trail.description}</p>
       <button onClick={onViewMap}>View on Map</button>
     </div>
   );
