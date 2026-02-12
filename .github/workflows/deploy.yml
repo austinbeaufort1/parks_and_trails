@@ -1,0 +1,35 @@
+name: Deploy Vite site to GitHub Pages
+
+on:
+  push:
+    branches:
+      - main # Change if your main branch has a different name
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1. Checkout your repository
+      - uses: actions/checkout@v3
+
+      # 2. Set up Node & PNPM
+      - uses: pnpm/action-setup@v2
+        with:
+          version: 8 # Use the Node/PNPM version you need
+
+      # 3. Install dependencies
+      - run: pnpm install
+
+      # 4. Build the Vite project
+      - run: pnpm run build
+
+      # 5. Copy CNAME into dist/ for GitHub Pages
+      - run: cp CNAME dist/CNAME
+
+      # 6. Deploy to GitHub Pages
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v6
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./dist
