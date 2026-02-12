@@ -37,30 +37,33 @@ const Home: React.FC<HomeProps> = ({ setTab }) => {
     >
       {/* ---------- Hero Section ---------- */}
       {isiPhone ? (
-        // iPhone-specific hero
         <div className="home-hero-iphone">
-          <h1 className="title-main">Trail Depth</h1>
-          <div className="home-buttons">
-            <CloudButton onClick={() => navigate("/trails")}>
-              Explore
-            </CloudButton>
-            {!user ? (
-              <CloudButton onClick={() => setShowAuth(true)}>
-                Login to Track
+          <div className="home-hero-overlay">
+            {" "}
+            {/* keep overlay! */}
+            <h1 className="title-main">Trail Depth</h1>
+            <div className="home-buttons">
+              <CloudButton onClick={() => navigate("/trails")}>
+                Explore
               </CloudButton>
-            ) : (
-              <CloudButton onClick={logout}>Logout</CloudButton>
-            )}
+              {!user ? (
+                <CloudButton onClick={() => setShowAuth(true)}>
+                  Login to Track
+                </CloudButton>
+              ) : (
+                <CloudButton onClick={logout}>Logout</CloudButton>
+              )}
+            </div>
+            <Subtitle className="iphone-subtitle">
+              Walk, run, or hike curated trails your way. Track your progress,
+              log your experience, and explore beyond the ordinary. Trail Depth
+              is about more than finishing paths — it’s about how you choose to
+              move. Every step counts.
+            </Subtitle>
           </div>
-          <Subtitle className="iphone-subtitle">
-            Walk, run, or hike curated trails your way. Track your progress, log
-            your experience, and explore beyond the ordinary. Trail Depth is
-            about more than finishing paths — it’s about how you choose to move.
-            Every step counts.
-          </Subtitle>
         </div>
       ) : (
-        // Default hero for desktop/Android
+        // default desktop/Android hero stays the same
         <div className="home-hero">
           <div className="home-hero-overlay">
             <h1 style={{ fontSize: "3rem" }} className="title-main">

@@ -23,9 +23,23 @@
   align-items: center;
   justify-content: flex-start; /* push logo up */
   min-height: 50vh;
-  padding-top: 2rem; /* adjust as needed */
+  padding-top: 2rem; /* adjust spacing */
   color: #fff;
   text-align: center;
+}
+
+.home-hero-iphone .home-hero-overlay {
+  background: linear-gradient(
+    to bottom,
+    rgba(255, 94, 77, 0.4),
+    rgba(255, 149, 0, 0.3),
+    rgba(255, 200, 87, 0.1),
+    rgba(255, 200, 87, 0)
+  );
+  padding: 32px;
+  text-align: center;
+  border-radius: 12px;
+  width: 90%;
 }
 
 .home-hero-iphone .title-main {
