@@ -18,15 +18,11 @@
 
 /* Only apply to iOS devices (iPhone/iPad) */
 /* Only for iOS devices */
+/* Only target iOS devices */
 @supports (-webkit-touch-callout: none) {
-  /* target the container of your buttons */
-  .home-buttons {
-    margin-top: 2rem; /* increase spacing below the logo */
-  }
-
-  /* optional: if there’s any other content below logo + buttons */
-  .home-hero + * {
-    margin-top: 1rem; /* pushes everything below hero down a bit */
+  .home-hero h1 {
+    margin-top: 0; /* remove any default top spacing */
+    transform: translateY(-15%); /* move logo up */
   }
 }
 
