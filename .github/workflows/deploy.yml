@@ -13,26 +13,28 @@ jobs:
       # 1. Checkout repo
       - uses: actions/checkout@v3
 
-      # 2. Clean caches and old builds
-      - name: Clean workspace
-        run: |
-          rm -rf node_modules dist
-          rm -rf pnpm-lock.yaml
-          echo "Cleaned node_modules and dist"
-
-      # 3. Set up Node.js & PNPM
+      # 2. Set up Node.js and pnpm
       - uses: pnpm/action-setup@v2
         with:
-          version: 8 # PNPM version
+          version: 8
+
+      # 3. Clear caches / remove old node_modules
+      - name: Clear pnpm store & node_modules
+        run: |
+          pnpm store prune
+          rm -rf node_modules
+          rm -rf dist
 
       # 4. Install dependencies fresh
-      - run: pnpm install
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile --prefer-offline=false
 
-      # 5. Build the Vite project
-      - run: pnpm exec vite build
+      # 5. Build Vite project
+      - name: Build site
+        run: pnpm exec vite build
 
-      # 6. Copy CNAME into dist/ (if using custom domain)
-      - run: cp CNAME dist/CNAME || echo "No CNAME file found"
+      # 6. Copy CNAME (if using custom domain)
+      - run: cp CNAME dist/CNAME
 
       # 7. Deploy to GitHub Pages
       - name: Deploy to GitHub Pages
