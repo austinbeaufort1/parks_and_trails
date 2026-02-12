@@ -3,7 +3,7 @@ name: Deploy Vite site to GitHub Pages
 on:
   push:
     branches:
-      - main # change if your main branch is different
+      - main
 
 jobs:
   deploy:
@@ -13,26 +13,27 @@ jobs:
       # 1. Checkout repo
       - uses: actions/checkout@v3
 
-      # 2. Set up Node.js and pnpm
-      - uses: pnpm/action-setup@v2
+      # 2. Setup Node
+      - uses: actions/setup-node@v3
         with:
-          version: 8
+          node-version: 20
 
-      # 3. Clear caches / remove old node_modules
-      - name: Clear pnpm store & node_modules
+      # 3. Install dependencies
+      - name: Install dependencies
+        run: npm ci
+
+      # 4. Clean cache and node_modules (optional, fresh start)
+      - name: Clean cache
         run: |
           rm -rf node_modules
-          rm -rf dist
+          npm cache clean --force
+          npm install
 
-      # 4. Install dependencies fresh
-      - name: Install dependencies
-        run: pnpm install --frozen-lockfile --prefer-offline=false
+      # 5. Build Vite project WITHOUT type checking
+      - name: Build for production
+        run: npm run build -- --no-ts-check
 
-      # 5. Build Vite project
-      - name: Build site
-        run: pnpm exec vite build
-
-      # 6. Copy CNAME (if using custom domain)
+      # 6. Copy CNAME for GitHub Pages
       - run: cp CNAME dist/CNAME
 
       # 7. Deploy to GitHub Pages
