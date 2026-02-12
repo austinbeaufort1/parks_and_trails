@@ -10,6 +10,8 @@
   /* padding: 2rem; */
   text-align: center;
   background: white;
+  color-scheme: light;
+  background-color: #ffffff; /* extra safety */
 }
 
 html,
