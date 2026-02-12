@@ -8,15 +8,6 @@ interface LightTrailCardProps {
   onViewMap: () => void;
 }
 
-// src/components/TrailsPage/LightTrailCard.tsx
-import React from "react";
-import { TrailCard as TrailCardType } from "../../types/trail";
-
-interface LightTrailCardProps {
-  trail: TrailCardType;
-  onViewMap: () => void;
-}
-
 export const LightTrailCard: React.FC<LightTrailCardProps> = ({
   trail,
   onViewMap,
