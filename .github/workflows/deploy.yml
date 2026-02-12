@@ -21,7 +21,6 @@ jobs:
       # 3. Clear caches / remove old node_modules
       - name: Clear pnpm store & node_modules
         run: |
-          pnpm store prune
           rm -rf node_modules
           rm -rf dist
 
