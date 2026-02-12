@@ -17,14 +17,16 @@
 }
 
 /* Only apply to iOS devices (iPhone/iPad) */
+/* Only for iOS devices */
 @supports (-webkit-touch-callout: none) {
-  .home-hero {
-    padding-top: 12vh; /* push logo down */
-    padding-bottom: 6vh; /* optional: extra bottom spacing */
+  /* target the container of your buttons */
+  .home-buttons {
+    margin-top: 2rem; /* increase spacing below the logo */
   }
 
-  .home-buttons {
-    margin-top: 2rem; /* separate buttons from logo */
+  /* optional: if there’s any other content below logo + buttons */
+  .home-hero + * {
+    margin-top: 1rem; /* pushes everything below hero down a bit */
   }
 }
 
