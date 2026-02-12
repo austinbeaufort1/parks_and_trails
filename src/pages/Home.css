@@ -10,6 +10,12 @@
   background-attachment: fixed;
 }
 
+@supports (-webkit-touch-callout: none) and (background-attachment: scroll) {
+  .home-page {
+    background-attachment: scroll; /* disables parallax */
+  }
+}
+
 @media (max-width: 900px) {
   .home-page {
     background-size: 60vw;
