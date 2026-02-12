@@ -1,6 +1,6 @@
-import { checkTokens, Mode } from "./checkTokens";
-import { checkBadges } from "./checkBadges";
-import { checkQuests } from "./checkQuests";
+import { checkTokens } from "./tokens/index";
+import { Mode } from "./tokens/types";
+import { checkBadges } from "./badges/index";
 import { initialFormData } from "../../TrailsPage/TrailCard";
 
 export const processRewards = async ({
@@ -10,7 +10,7 @@ export const processRewards = async ({
   timesCompleted,
   trailDistance,
   formData,
-  estimatedTime,
+  estimatedTimeMins,
   trail,
   mode,
 }: {
@@ -20,7 +20,7 @@ export const processRewards = async ({
   timesCompleted: number;
   trailDistance: number;
   formData: typeof initialFormData;
-  estimatedTime: number;
+  estimatedTimeMins: number;
   trail: any;
   mode: Mode;
 }) => {
@@ -30,7 +30,7 @@ export const processRewards = async ({
     timesCompleted,
     formData,
     trailDistance,
-    estimatedTime,
+    estimatedTimeMins,
     trail,
     mode,
   });

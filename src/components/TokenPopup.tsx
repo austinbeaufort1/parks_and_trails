@@ -78,7 +78,6 @@ interface TokenPopupProps {
 
 export const TokenPopup: React.FC<TokenPopupProps> = ({ tokens, onClose }) => {
   if (!tokens.length) return null;
-  console.log("TOKENS", tokens);
 
   return (
     <Overlay>

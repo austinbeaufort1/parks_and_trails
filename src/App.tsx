@@ -29,6 +29,9 @@ import {
   BarChartOutlined,
   TrophyOutlined,
 } from "@ant-design/icons";
+import { UserTrailCombosPage } from "./pages/TrailCombosPage";
+import { LoadSpinner } from "./components/Loader";
+import { FullLoadSpinner } from "./components/FullLoadSpinner";
 
 const STORAGE_KEY = "activeRoute";
 
@@ -36,16 +39,17 @@ function App() {
   const mapLocation = useLocation();
   const isMapPage = mapLocation.pathname === "/map";
   const { user } = useAuth();
-  const { trails, loading, error } = useTrails();
+  const { trails, loading: isTrailsFetching, error } = useTrails();
   const navigate = useNavigate();
   const location = useLocation();
 
   const [selectedTrailId, setSelectedTrailId] = useState<string | null>(null);
   const [filterSidebarOpen, setFilterSidebarOpen] = useState(false);
-  const { tokens, refresh: refreshTokens } = useTrailTokens(
-    user?.id,
-    selectedTrailId ?? undefined,
-  );
+  const {
+    tokens,
+    loading: isTokensRefreshing,
+    refresh: refreshTokens,
+  } = useTrailTokens(user?.id, selectedTrailId ?? undefined);
 
   // ===== Use hook for filters =====
   const { filters, setFilters, filteredTrails, resetFilters } =
@@ -65,8 +69,13 @@ function App() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  if (loading) return <div style={{ padding: 24 }}>Loading…</div>;
-  if (error) return <div style={{ padding: 24 }}>Error: {error}</div>;
+  if (error) {
+    return (
+      <div style={{ padding: 24 }}>
+        <p style={{ color: "red" }}>Error: {error}</p>
+      </div>
+    );
+  }
 
   return (
     <>
@@ -100,7 +109,11 @@ function App() {
         {/* ===== ROUTES ===== */}
         <Routes>
           <Route path="/" element={<Home />} />
-
+          <Route path="/combos" element={<UserTrailCombosPage />} />
+          <Route
+            path="/trails/:trailId/combos"
+            element={<UserTrailCombosPage />}
+          />
           <Route
             path="/map"
             element={
@@ -111,6 +124,8 @@ function App() {
                 onOpenFilters={() => setFilterSidebarOpen(true)}
                 tokens={tokens}
                 refreshTokens={refreshTokens}
+                isTokensRefreshing={isTokensRefreshing}
+                isTrailsFetching={isTrailsFetching}
               />
             }
           />
@@ -122,7 +137,7 @@ function App() {
                 trails={trails}
                 filteredTrails={filteredTrails}
                 filters={filters}
-                loading={loading}
+                loading={isTrailsFetching}
                 error={error}
                 onViewMap={(id) => {
                   setSelectedTrailId(id);
@@ -238,11 +253,14 @@ const AppContainer = styled.div`
 `;
 
 const TopNav = styled.nav`
+  width: 100%;
   display: flex;
+  justify-content: start; /* 🔑 always center nav items */
   gap: 16px;
   padding: 12px;
   border-bottom: 1px solid #eee;
   font-family: "Rock Salt";
+  background: #ffffff;
 `;
 
 const NavLabel = styled.span`

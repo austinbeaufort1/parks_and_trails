@@ -53,7 +53,6 @@ export function useCompleteTrail() {
     setError(null);
     const filteredTokens = filterTokens(tokens);
     const tokenTitles = filteredTokens.map((token) => token.title);
-    console.log("TOKEN TITLES", tokenTitles);
 
     // 1️⃣ Insert completion
     const { error: completionError } = await supabase

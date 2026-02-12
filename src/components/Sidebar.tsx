@@ -13,7 +13,7 @@ const SidebarContainer = styled.div<{ open: boolean; mapMode?: boolean }>`
   width: 100vw;
   max-width: 500px;
   background: white;
-  box-shadow: -2px 0 8px rgba(0, 0, 0, 0.3);
+  // box-shadow: -2px 0 8px rgba(0, 0, 0, 0.3);
   transform: translateX(${(props) => (props.open ? "0%" : "100%")});
   transition: transform 0.3s ease-in-out;
   z-index: ${(props) => (props.mapMode ? 2000 : 1010)};

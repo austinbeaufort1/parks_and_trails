@@ -1,15 +1,18 @@
 import styled from "styled-components";
-import { slate, blue } from "@radix-ui/colors";
+import { slate, blue, yellow } from "@radix-ui/colors";
 
 export const FeatureCard = styled.div`
-  background: ${slate.slate2};
+  background: ${yellow.yellow2};
   border: 1px solid ${slate.slate6};
   border-radius: 12px;
+  opacity: 0.9;
 
   padding: 1.25rem;
   text-align: center;
 
-  transition: transform 0.15s ease, box-shadow 0.15s ease;
+  transition:
+    transform 0.15s ease,
+    box-shadow 0.15s ease;
 
   &:hover {
     transform: translateY(-2px);

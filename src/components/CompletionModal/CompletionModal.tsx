@@ -188,25 +188,28 @@ export const CompletionModal: React.FC<CompletionModalProps> = ({
           />
         </div>
       </div>
+      <small
+        style={{
+          color: "#555",
+          fontStyle: "italic",
+          display: "block",
+          marginBottom: 8,
+        }}
+      >
+        Optional — adding details can earn tokens or badges!
+      </small>
 
       {/* Add Challenge Details Toggle */}
       <div style={{ display: "flex", gap: 8, marginBottom: 12 }}>
-        <Button
-          type="dashed"
-          block
-          onClick={() => setShowDetails(!showDetails)}
-        >
-          {showDetails ? "Hide Challenge Details" : "Add Challenge Details"}
+        <Button block onClick={() => setShowDetails(!showDetails)}>
+          {showDetails ? "Hide Details" : "Add Details"}
         </Button>
 
         <Button
-          type="dashed"
           block
           onClick={() => setShowCreativeDetails(!showCreativeDetails)}
         >
-          {showCreativeDetails
-            ? "Hide Creative Challenges"
-            : "Add Creative Challenges"}
+          {showCreativeDetails ? "Hide Creative" : "Add Creative"}
         </Button>
       </div>
 

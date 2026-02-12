@@ -1,12 +1,15 @@
-import {
-  formatDistance,
-  formatElevation,
-  metersToFeet,
-} from "../helpers/format";
+import { Link } from "react-router-dom";
+import { useUserTrailCombos } from "../../hooks/useUserTrailCombos";
+import { useEffect } from "react";
+import { TrailCard } from "../../types/trail";
+import { useAuth } from "../AuthContext";
+import { formatDistance, formatElevation } from "../helpers/format";
+import { buildTopCombos } from "../helpers/Rewards/badgeCombos";
 import { LabelValue } from "../LabelValue";
 import { EarnedToken } from "../TokenPopup";
 import { TokenTag } from "../ui/Tag";
 import Tooltip from "antd/lib/Tooltip";
+import { Flex } from "antd";
 
 interface CompletionDetailsPanelProps {
   count: number;
@@ -15,6 +18,7 @@ interface CompletionDetailsPanelProps {
   completionStyles?: string[];
   tokens: EarnedToken[];
   distance_m: number;
+  trail: TrailCard;
 }
 
 const tierOf = (t: EarnedToken) =>
@@ -25,7 +29,6 @@ const isSpeedToken = (t: EarnedToken) => t.title.startsWith("Swiftfoot");
 
 /**
  * Logical identity for UI display.
- * Tokens with the same key will collapse to ONE.
  */
 const tokenKey = (t: EarnedToken): string => {
   if (isDiscGolf(t)) return `disc-golf:tier-${tierOf(t)}`;
@@ -47,8 +50,45 @@ export const CompletionDetailsPanel: React.FC<CompletionDetailsPanelProps> = ({
   completionStyles = [],
   tokens = [],
   distance_m,
+  trail,
 }) => {
+  const { user } = useAuth();
+  // ✅ Call hook unconditionally with fallback nulls
+  const {
+    rows: completionsRows = [],
+    loading: combosLoading,
+    refresh: refreshTrailCombos,
+  } = useUserTrailCombos(trail?.id ?? null, user?.id ?? null);
+
+  useEffect(() => {
+    if (!tokens.length) return;
+    refreshTrailCombos();
+  }, [tokens.length, refreshTrailCombos]);
+
   if (count <= 0) return null;
+
+  // Build top combos safely
+  const validCompletions = completionsRows
+    .map((row) => {
+      let tokens: string[] = [];
+      if (row.completion_tokens) {
+        try {
+          tokens = JSON.parse(row.completion_tokens);
+        } catch {
+          console.warn(
+            "Failed to parse completion_tokens:",
+            row.completion_tokens,
+          );
+          tokens = [];
+        }
+      }
+      return { completion_tokens: tokens };
+    })
+    .filter((row) => row.completion_tokens.length >= 2); // only combos with 2+ tokens
+
+  const topCombos = buildTopCombos(validCompletions);
+
+  // const topCombos = buildTopCombos(completionsRows);
 
   // --- Familiar (highest tier)
   const highestFamiliarToken = tokens
@@ -56,7 +96,7 @@ export const CompletionDetailsPanel: React.FC<CompletionDetailsPanelProps> = ({
     .sort((a, b) => tierOf(a) - tierOf(b))
     .at(-1);
 
-  // --- Load Class (highest per style)
+  // --- Load Class
   const loadStyles = [
     "Pack Hauler",
     "Front Loader",
@@ -122,7 +162,7 @@ export const CompletionDetailsPanel: React.FC<CompletionDetailsPanelProps> = ({
     .map((sport) => tokens.filter((t) => t.title.startsWith(sport)).at(-1))
     .filter(Boolean) as EarnedToken[];
 
-  // --- Speed Tokens (highest tier)
+  // --- Speed Tokens
   const highestSpeedToken = tokens
     .filter(isSpeedToken)
     .sort((a, b) => {
@@ -132,15 +172,21 @@ export const CompletionDetailsPanel: React.FC<CompletionDetailsPanelProps> = ({
     })
     .at(-1);
 
-  // --- Build final list (semantic dedupe)
+  // --- Final token list
   const tokensToDisplay = uniqueByTokenKey([
     ...(highestFamiliarToken ? [highestFamiliarToken] : []),
     ...highestLoadTokens,
     ...highestCircusTokens,
     ...(bestDiscGolf ? [bestDiscGolf] : []),
     ...otherSportTokens,
-    ...(highestSpeedToken ? [highestSpeedToken] : []), // ✅ Swiftfoot token
+    ...(highestSpeedToken ? [highestSpeedToken] : []),
   ]);
+
+  const displayedKeys = new Set(tokensToDisplay.map(tokenKey));
+
+  const leftovers = tokens.filter((t) => !displayedKeys.has(tokenKey(t)));
+
+  tokensToDisplay.push(...leftovers);
 
   return (
     <div className="trail-completion-details">
@@ -176,6 +222,72 @@ export const CompletionDetailsPanel: React.FC<CompletionDetailsPanelProps> = ({
               </Tooltip>
             ))}
           </div>
+
+          {topCombos.length > 0 && (
+            <div style={{ marginTop: 12 }}>
+              <div>
+                <strong>Combos</strong>
+              </div>
+              <Flex style={{ gap: "8px", flexWrap: "wrap" }}>
+                <Link
+                  to={`/trails/${trail.id}/combos`}
+                  style={{
+                    fontSize: 12,
+                    marginTop: 4,
+                    display: "inline-block",
+                    padding: "4px 8px",
+                    border: "1px solid #005e0c", // dark green border like your cards
+                    borderRadius: 4,
+                    textDecoration: "none",
+                    color: "#005e0c",
+                    transition: "all 0.2s",
+                  }}
+                >
+                  Trail Combos →
+                </Link>
+
+                <Link
+                  to={`/combos`}
+                  style={{
+                    fontSize: 12,
+                    marginTop: 4,
+                    display: "inline-block",
+                    padding: "4px 8px",
+                    border: "1px solid #005e0c",
+                    borderRadius: 4,
+                    textDecoration: "none",
+                    color: "#005e0c",
+                    transition: "all 0.2s",
+                  }}
+                >
+                  All Combos →
+                </Link>
+              </Flex>
+              <h5 style={{ marginTop: "10px", marginBottom: 0 }}>
+                Most Frequent Combos on this Trail
+              </h5>
+              <div style={{ marginTop: 6 }}>
+                {topCombos.map((combo) => (
+                  <div
+                    key={combo.key}
+                    style={{
+                      display: "flex",
+                      justifyContent: "space-between",
+                      fontSize: 12,
+                      marginBottom: 4,
+                    }}
+                  >
+                    <span
+                      style={{ borderBottom: "1px solid black", width: "100%" }}
+                    >
+                      {combo.tokens.map((t) => `[${t}]`).join(" + ")}
+                    </span>
+                    <span style={{ opacity: 0.7 }}>×{combo.count}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
         </div>
       )}
     </div>

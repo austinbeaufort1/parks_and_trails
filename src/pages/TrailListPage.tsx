@@ -2,13 +2,14 @@
 import React from "react";
 import { TrailCard } from "../components/TrailsPage/TrailCard";
 import { FiltersButton } from "../components/ui/Buttons";
+import { LoadSpinner } from "../components/Loader";
 import { TrailFilters } from "../types/filters";
 import { TrailCard as TrailCardType } from "../types/trail";
 
 interface TrailListPageProps {
   trails: TrailCardType[];
   filters: TrailFilters;
-  filteredTrails: TrailCardType[]; // computed in App.tsx or useTrailFilters
+  filteredTrails: TrailCardType[];
   loading: boolean;
   error: string | null;
   onViewMap: (trailId: string) => void;
@@ -22,13 +23,19 @@ export const TrailListPage: React.FC<TrailListPageProps> = ({
   onViewMap,
   onOpenFilters,
 }) => {
-  if (loading) {
+  if (loading)
     return (
-      <div style={{ display: "flex", justifyContent: "center", marginTop: 50 }}>
-        <p>Loading trails…</p>
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "center", // horizontal centering
+          alignItems: "center", // vertical centering
+          height: "60vh", // adjust so it’s roughly centered in the viewport
+        }}
+      >
+        <LoadSpinner size={200} />
       </div>
     );
-  }
 
   if (error) {
     return (
@@ -39,11 +46,27 @@ export const TrailListPage: React.FC<TrailListPageProps> = ({
   }
 
   return (
-    <div style={{ padding: 16, position: "relative" }}>
+    <div
+      style={{
+        background: `linear-gradient(
+      to bottom,
+      rgba(25, 25, 112, 0.85) 0%,
+      rgba(72, 61, 139, 0.65) 3%,
+      rgba(123, 104, 238, 0.35) 6%,
+      rgba(123, 104, 238, 0) 9%
+    )`,
+        padding: "32px",
+        textAlign: "center",
+        borderRadius: "12px",
+        width: "90%",
+      }}
+    >
+      {/* ===== LOADING OVERLAY (for filter changes) ===== */}
+
       {/* ===== FILTER BUTTON ===== */}
       <FiltersButton onClick={onOpenFilters}>Filters</FiltersButton>
 
-      {filteredTrails.length === 0 ? (
+      {filteredTrails.length === 0 && !loading ? (
         <p>No trails match your filters.</p>
       ) : (
         <div

@@ -24,7 +24,9 @@ export const TokenTag = styled.span<{ color?: string }>`
 
   /* subtle shadow for tapability */
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.7);
-  transition: box-shadow 0.2s, transform 0.1s;
+  transition:
+    box-shadow 0.2s,
+    transform 0.1s;
   cursor: pointer;
 
   &:active {

@@ -1,12 +1,10 @@
 // components/Badges/Badge.tsx
 import styled from "styled-components";
 import usStates from "@svg-maps/usa";
-import {
-  getBadgeColor,
-  getPathBoundingBox,
-} from "../helpers/Rewards/badgeHelpers"; // NEW: helpers file
+import { getPathBoundingBox } from "../helpers/Rewards/badgeHelpers"; // NEW: helpers file
 import { Tooltip } from "antd";
 import { getBrowserBBox } from "../helpers/Rewards/svgBBox";
+import { getBadgeColor } from "../helpers/Rewards/getBadgeColor";
 
 export interface BadgeData {
   id: string;

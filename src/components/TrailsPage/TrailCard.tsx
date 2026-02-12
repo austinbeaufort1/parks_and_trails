@@ -30,6 +30,7 @@ import {
   updateTrailMemoryFromPayload,
 } from "../helpers/updateTrailMemory";
 import { Flex } from "antd";
+import { parseEstimatedMinutes } from "../helpers/Rewards/tokens/utils";
 
 type DrawerView = "trail" | "completion";
 
@@ -81,6 +82,7 @@ export const TrailCard: React.FC<TrailCardProps> = ({ trail, onViewMap }) => {
   const [earnedTokens, setEarnedTokens] = useState<EarnedToken[]>([]);
   const { tokens, refresh: refreshTokens } = useTrailTokens(user?.id, trail.id);
   const [formData, setFormData] = useState(initialFormData);
+  const [completionLoading, setCompletionLoading] = useState(false);
 
   const { completeTrail } = useCompleteTrail();
   const { completionsMap, refresh: refreshCompletions } = useUserCompletionsMap(
@@ -132,6 +134,11 @@ export const TrailCard: React.FC<TrailCardProps> = ({ trail, onViewMap }) => {
           boxShadow: "3px 3px 3px 3px rgba(0,0,0,0.2)",
           position: "relative",
           boxSizing: "border-box",
+          minHeight: "480px",
+          maxHeight: "480px",
+          display: "flex",
+          flexDirection: "column",
+          // opacity: 0.95,
         }}
       >
         {/* Header: Checkmark left, overflow right */}
@@ -146,64 +153,72 @@ export const TrailCard: React.FC<TrailCardProps> = ({ trail, onViewMap }) => {
         />
 
         {/* Trail Info */}
-        <CardContent>
-          <TrailLocation>
-            {trail.county}, {trail.state}
-          </TrailLocation>
+        <CardContent
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "space-between",
+          }}
+        >
+          <div>
+            <TrailLocation>
+              {trail.county}, {trail.state}
+            </TrailLocation>
 
-          <ParkName>{trail.park_name}</ParkName>
+            <ParkName>{trail.park_name}</ParkName>
 
-          <TrailTitle>{trail.title}</TrailTitle>
+            <TrailTitle>{trail.title}</TrailTitle>
 
-          <TrailDetails>
-            <span style={{ marginBottom: "-5px" }}>
-              Effort Level: ({trail.difficulty_score}){" "}
-              {getDifficultyDescription(trail.difficulty_score)}
-            </span>
-          </TrailDetails>
+            <TrailDetails>
+              <span style={{ marginBottom: "-5px" }}>
+                Effort Level: ({trail.difficulty_score}){" "}
+                {getDifficultyDescription(trail.difficulty_score)}
+              </span>
+            </TrailDetails>
 
-          <TrailDetails>
-            <span>
-              <i>Distance: {formatDistance(trail.total_distance_m)}</i>
-            </span>
-            {" · "}
-            <span>
-              <i>Est. {trailTime}</i>
-            </span>
-            <div
-              style={{
-                display: "flex",
-                fontSize: "14px",
-                marginTop: "-10px",
-                marginBottom: "-10px",
-              }}
-            >
-              <p
+            <TrailDetails>
+              <span>
+                <i>Distance: {formatDistance(trail.total_distance_m)}</i>
+              </span>
+              {" · "}
+              <span>
+                <i>Est. {trailTime}</i>
+              </span>
+              <div
                 style={{
-                  borderBottom: `3px solid ${getAngleColor(trail.avg_angle)}`,
-                  borderTop: `3px solid ${getAngleColor(trail.avg_angle)}`,
-                  paddingLeft: "2px",
-                  paddingRight: "2px",
-                  marginRight: "10px",
+                  display: "flex",
+                  fontSize: "14px",
+                  marginTop: "-10px",
+                  marginBottom: "-10px",
                 }}
               >
-                Avg°: {getAngleDesc(trail.avg_angle)}
-              </p>
-              <p
-                style={{
-                  borderBottom: `3px solid ${getAngleColor(trail.max_angle)}`,
-                  borderTop: `3px solid ${getAngleColor(trail.max_angle)}`,
-                  paddingLeft: "2px",
-                  paddingRight: "2px",
-                }}
-              >
-                Max°: {getAngleDesc(trail.max_angle)}
-              </p>
-            </div>
-            <span>
-              <i>Elevation: {formatElevation(trail.elevation_gain_m)}</i>
-            </span>
-          </TrailDetails>
+                <p
+                  style={{
+                    borderBottom: `3px solid ${getAngleColor(trail.avg_angle)}`,
+                    borderTop: `3px solid ${getAngleColor(trail.avg_angle)}`,
+                    paddingLeft: "2px",
+                    paddingRight: "2px",
+                    marginRight: "10px",
+                  }}
+                >
+                  Avg°: {getAngleDesc(trail.avg_angle)}
+                </p>
+                <p
+                  style={{
+                    borderBottom: `3px solid ${getAngleColor(trail.max_angle)}`,
+                    borderTop: `3px solid ${getAngleColor(trail.max_angle)}`,
+                    paddingLeft: "2px",
+                    paddingRight: "2px",
+                  }}
+                >
+                  Max°: {getAngleDesc(trail.max_angle)}
+                </p>
+              </div>
+              <span>
+                <i>Elevation: {formatElevation(trail.elevation_gain_m)}</i>
+              </span>
+            </TrailDetails>
+          </div>
 
           <Flex>
             {/* Primary action */}
@@ -244,7 +259,6 @@ export const TrailCard: React.FC<TrailCardProps> = ({ trail, onViewMap }) => {
             trail={trail}
             setFormData={setFormData}
             onCompleted={async (payload) => {
-              console.log("PAYLOAD", payload);
               const newRewards = await processRewards({
                 userId: user.id,
                 trailId: trail.id,
@@ -252,7 +266,7 @@ export const TrailCard: React.FC<TrailCardProps> = ({ trail, onViewMap }) => {
                 payload,
                 timesCompleted: timesCompletedAfter,
                 formData,
-                estimatedTime: trailTime,
+                estimatedTimeMins: parseEstimatedMinutes(trailTime),
                 trail: trail,
                 mode: "reward",
               });
@@ -264,18 +278,17 @@ export const TrailCard: React.FC<TrailCardProps> = ({ trail, onViewMap }) => {
                 payload,
                 timesCompleted: timesCompletedAfter,
                 formData,
-                estimatedTime: trailTime,
+                estimatedTimeMins: parseEstimatedMinutes(trailTime),
                 trail: trail,
                 mode: "detect",
               });
-              console.log("DETECTED AWARDS", detectedRewards);
 
               await completeTrail(
                 user.id,
                 trail.id,
                 payload,
                 () => {},
-                detectedRewards.tokens,
+                newRewards.tokens,
               );
               // ✅ Update trail memory
               await updateTrailMemoryFromPayload(trail.id, payload);

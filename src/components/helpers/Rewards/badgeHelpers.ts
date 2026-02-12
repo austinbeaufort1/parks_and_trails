@@ -1,27 +1,3 @@
-import { BadgeData } from "../../Badges/Badge";
-import { BadgePopupData } from "../../Badges/BadgePopup";
-
-export function getBadgeColor(badge: BadgeData | BadgePopupData) {
-  if (badge.svgPath || (badge.icon_svg && !badge.icon_svg.endsWith(".svg"))) {
-    // state badge: use lowercase abbreviation for consistent mapping
-    const key = (badge.icon_svg || badge.id || badge.title || "").toLowerCase();
-    return stringToColor(key);
-  }
-
-  // non-state badge: use provided color if available
-  return (badge as BadgeData).color || "#4caf50";
-}
-
-// same stringToColor helper
-export function stringToColor(str: string) {
-  let hash = 0;
-  for (let i = 0; i < str.length; i++) {
-    hash = str.charCodeAt(i) + ((hash << 5) - hash);
-  }
-  const hue = hash % 360;
-  return `hsl(${hue}, 40%, 75%)`; // pastel
-}
-
 // Compute bounding box of an SVG path
 export function getPathBoundingBox(path: string) {
   const commands = path.match(/[a-df-z][^a-df-z]*/gi);

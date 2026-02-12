@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { Button } from "../components/ui/Buttons";
+import { Button, CloudButton } from "../components/ui/Buttons";
 import { Title } from "../components/ui/Titles";
 import { Subtitle } from "../components/ui/Subtitles";
 import {
@@ -7,10 +7,12 @@ import {
   FeatureDescription,
   FeatureTitle,
 } from "../components/ui/FeatureCard";
+import { useNavigate } from "react-router-dom";
 import { useState, useEffect, useRef } from "react";
 import { useAuth } from "../components/AuthContext";
 import "./Home.css";
 import AuthScreen from "../components/AuthScreen";
+import { Clouds } from "../components/ui/Clouds";
 
 interface HomeProps {
   setTab: (key: string) => void;
@@ -18,96 +20,107 @@ interface HomeProps {
 
 const Home: React.FC<HomeProps> = ({ setTab }) => {
   const [showAuth, setShowAuth] = useState(false);
-  const fileInputRef = useRef<HTMLInputElement>(null);
-
   const { user, logout } = useAuth();
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (user) setShowAuth(false);
   }, [user]);
 
-  const handleUploadClick = () => {
-    fileInputRef.current?.click();
-  };
-
-  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
-
-    if (!file.name.toLowerCase().endsWith(".gpx")) {
-      alert("Please upload a GPX file");
-      return;
-    }
-
-    console.log("GPX uploaded:", file);
-
-    // optional: jump user to map after upload
-    setTab("map");
-  };
-
   return (
     <div className="home-page">
       {/* ---------- Hero Section ---------- */}
+      {/* <Clouds /> */}
       <div className="home-hero">
         <div className="home-hero-overlay">
-          <Title>Parks & Trails of One Skinny Dude</Title>
-          <Subtitle>
-            Explore detailed trail maps, slope data, difficulty ratings, tree
-            coverage, and more. Perfect for planning your next adventure!
-          </Subtitle>
-
+          <h1 style={{ fontSize: "3rem" }} className="title-main">
+            Trail Depth
+          </h1>
           <div className="home-buttons">
-            <Button onClick={() => setTab("map")}>Go to Map</Button>
+            <CloudButton onClick={() => navigate("/trails")}>
+              Explore
+            </CloudButton>
 
             {!user ? (
-              <Button onClick={() => setShowAuth(true)}>
-                Login to track hikes
-              </Button>
+              <CloudButton onClick={() => setShowAuth(true)}>
+                Login to Track
+              </CloudButton>
             ) : (
-              <>
-                <Button onClick={handleUploadClick}>Upload GPX</Button>
-
-                <Button onClick={logout}>Logout</Button>
-
-                <input
-                  ref={fileInputRef}
-                  type="file"
-                  accept=".gpx"
-                  style={{ display: "none" }}
-                  onChange={handleFileChange}
-                />
-              </>
+              <CloudButton onClick={logout}>Logout</CloudButton>
             )}
           </div>
+          <Subtitle
+            style={{
+              textShadow: "0 10px 10px rgba(0, 0, 0, 1)",
+              fontWeight: "bold",
+              background: "rgba(0, 0, 0, 0.5)",
+              borderRadius: "10px",
+              marginTop: "5%",
+              padding: "1rem",
+            }}
+          >
+            Walk, run, or hike curated trails your way. Track your progress, log
+            your experience, and explore beyond the ordinary. Trail Depth is
+            about more than finishing paths — it’s about how you choose to move.
+            Every step counts.
+          </Subtitle>
         </div>
       </div>
 
-      {/* ---------- Feature Cards (UNCHANGED) ---------- */}
+      {/* ---------- Feature Cards ---------- */}
       <FeaturesGrid>
         <FeatureCard>
-          <FeatureTitle>Interactive Maps</FeatureTitle>
+          <FeatureTitle>Trail Completion</FeatureTitle>
           <FeatureDescription>
-            Zoom, pan, and select trails with color-coded slope segments and
-            trailhead markers.
+            Mark trails as complete and record what you did — walking, running,
+            or hiking — every adventure counts.
           </FeatureDescription>
         </FeatureCard>
 
         <FeatureCard>
-          <FeatureTitle>Trail Difficulty</FeatureTitle>
+          <FeatureTitle>Detailed Slope Maps</FeatureTitle>
           <FeatureDescription>
-            Quickly see average angles, maximum steepness, tree coverage, and
-            distance.
+            See slope and angle data every 25ft along each trail to plan your
+            pace and effort.
           </FeatureDescription>
         </FeatureCard>
 
         <FeatureCard>
-          <FeatureTitle>Adventure Planning</FeatureTitle>
+          <FeatureTitle>Track Your Stats</FeatureTitle>
           <FeatureDescription>
-            Get descriptions, park info, and even links to trail videos.
+            Log distance, time, packs carried, weighted vests, and movement
+            challenges to see your progress.
+          </FeatureDescription>
+        </FeatureCard>
+
+        <FeatureCard>
+          <FeatureTitle>Wildlife & Observations</FeatureTitle>
+          <FeatureDescription>
+            Record wildlife seen, terrain conditions, time of day, and seasonal
+            changes on your hikes.
+          </FeatureDescription>
+        </FeatureCard>
+
+        <FeatureCard>
+          <FeatureTitle>Creative Challenges</FeatureTitle>
+          <FeatureDescription>
+            Optional fun: juggle, ride a unicycle, play disc golf, or test
+            balance with awkward loads. Go beyond the ordinary.
+          </FeatureDescription>
+        </FeatureCard>
+
+        <FeatureCard>
+          <FeatureTitle>Adventure Extras</FeatureTitle>
+          <FeatureDescription>
+            Track stunts, unusual gaits, extreme weather, or “after dark” hikes.
+            Unlock badges for bold moves and creativity.
           </FeatureDescription>
         </FeatureCard>
       </FeaturesGrid>
 
+      {/* ---------- Footer / Invitation ---------- */}
+
+      {/* ---------- Auth Modal ---------- */}
       <AuthScreen open={showAuth} onClose={() => setShowAuth(false)} />
     </div>
   );
@@ -116,7 +129,10 @@ const Home: React.FC<HomeProps> = ({ setTab }) => {
 const FeaturesGrid = styled.section`
   display: grid;
   gap: 1rem;
-  margin-top: 2rem;
+  margin-top: 0.5rem;
+  width: 90%;
+  margin-left: auto;
+  margin-right: auto;
 
   /* Tablet */
   @media (min-width: 640px) {

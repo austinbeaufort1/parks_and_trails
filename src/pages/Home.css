@@ -3,13 +3,36 @@
   width: 100%;
   margin: 0 auto;
   padding: 0;
+  background-image: url("./badges/logo1.jpeg");
+  background-position: center;
+  background-size: 50vw;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+}
+
+@media (max-width: 900px) {
+  .home-page {
+    background-size: 60vw;
+  }
+}
+
+@media (max-width: 600px) {
+  .home-page {
+    background-size: 70vw;
+    background-position: center 10%;
+  }
+}
+
+@media (max-width: 420px) {
+  .home-page {
+    background-size: 80vw;
+    background-position: center 10%;
+  }
 }
 
 /* ---------- Hero Section ---------- */
 .home-hero {
   position: relative;
-  background-image: url('/forest.jpeg');
-  background-position: bottom;
   min-height: 40vh;
   display: flex;
   justify-content: center;
@@ -19,11 +42,17 @@
 
 /* Overlay to darken the image for text readability */
 .home-hero-overlay {
-  background: rgba(0, 0, 0, 0.4);
+  background: linear-gradient(
+    to bottom,
+    rgba(255, 94, 77, 0.4),
+    rgba(255, 149, 0, 0.3),
+    rgba(255, 200, 87, 0.1),
+    rgba(255, 200, 87, 0)
+  );
   padding: 32px;
   text-align: center;
   border-radius: 12px;
-  max-width: 90%;
+  width: 90%;
 }
 
 .home-hero h1 {
@@ -40,10 +69,16 @@
 
 .home-buttons {
   display: flex;
-  justify-content: center;
+  justify-content: space-between;
   gap: 16px;
   flex-wrap: wrap;
 }
+/* 
+@media (min-width: 600px) {
+  .home-buttons {
+    margin-top: 25%;
+  }
+} */
 
 .home-buttons .ant-btn-primary {
   background: #4caf50;
@@ -57,7 +92,7 @@
 }
 
 .home-buttons .ant-btn-default {
-  background: rgba(255,255,255,0.9);
+  background: rgba(255, 255, 255, 0.9);
   color: #333;
 }
 
@@ -77,13 +112,15 @@
   border-radius: 8px;
   padding: 24px;
   text-align: center;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.12);
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
 }
 
 .feature-card:hover {
   transform: translateY(-4px);
-  box-shadow: 0 4px 16px rgba(0,0,0,0.2);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
 }
 
 .feature-card h3 {
@@ -95,6 +132,22 @@
   font-size: 0.95rem;
   line-height: 1.5;
   color: #555;
+}
+
+.title-main {
+  display: block;
+  font-family: "Permanent Marker";
+}
+
+@media (max-width: 600px) {
+  .title-main {
+    display: none;
+  }
+  .home-buttons {
+    gap: 12px;
+    margin-top: 75%;
+    justify-content: center;
+  }
 }
 
 /* ---------- Mobile ---------- */
@@ -113,7 +166,14 @@
   }
 
   .home-buttons {
-    flex-direction: column;
     gap: 12px;
+    margin-top: 75%;
+  }
+}
+
+@media (max-width: 420px) {
+  .home-buttons {
+    gap: 12px;
+    margin-top: 85%;
   }
 }

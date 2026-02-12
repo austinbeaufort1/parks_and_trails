@@ -4,20 +4,25 @@ import { TrailFilters } from "../types/filters";
 import { getAngleDesc } from "../components/helpers/angle";
 import { getDifficultyDescription } from "../components/helpers/difficulty";
 
-const DEFAULT_FILTERS: TrailFilters = {
-  states: [],
-  counties: [],
-  parks: [],
-  difficultyDescs: [],
-  angleDescs: [],
-  cruxAngleDescs: [],
-  distanceRange: [0, 50],
-  elevationRange: [0, 10000],
-  minTreeCover: undefined,
-  landCoverTypes: [],
-};
-
 export function useTrailFilters(trails: TrailCard[]) {
+  console.log("TRAILS", Math.max(...trails.map((t) => t.total_distance_m)));
+  const maxTrailDistanceM = trails.length
+    ? Math.max(...trails.map((t) => t.total_distance_m))
+    : 10000; // or some default max
+
+  const DEFAULT_FILTERS: TrailFilters = {
+    states: [],
+    counties: [],
+    parks: [],
+    difficultyDescs: [],
+    angleDescs: [],
+    cruxAngleDescs: [],
+    distanceRange: [0, 50000], // in meters
+    elevationRange: [0, 1000], // in meters
+    minTreeCover: undefined,
+    landCoverTypes: [],
+  };
+
   const [filters, setFilters] = useState<TrailFilters>(DEFAULT_FILTERS);
 
   const filteredTrails = useMemo(() => {
@@ -39,7 +44,7 @@ export function useTrailFilters(trails: TrailCard[]) {
       if (
         filters.difficultyDescs.length &&
         !filters.difficultyDescs.includes(
-          getDifficultyDescription(trail.difficulty_score)
+          getDifficultyDescription(trail.difficulty_score),
         )
       ) {
         return false;
@@ -61,14 +66,14 @@ export function useTrailFilters(trails: TrailCard[]) {
         }
       }
 
-      // Distance
-      const miles = trail.total_distance_m / 5280;
+      // ===== DISTANCE =====
+      // This is the updated correct distance filter
+      // trail.total_distance_m is in meters
       if (
-        miles < filters.distanceRange[0] ||
-        miles > filters.distanceRange[1]
-      ) {
+        trail.total_distance_m < filters.distanceRange[0] ||
+        trail.total_distance_m > filters.distanceRange[1]
+      )
         return false;
-      }
 
       // Elevation
       if (
@@ -90,7 +95,7 @@ export function useTrailFilters(trails: TrailCard[]) {
       if (
         filters.landCoverTypes.length &&
         !filters.landCoverTypes.some((type) =>
-          trail.landcover_percentages.some((lc) => lc.type === type)
+          trail.landcover_percentages.some((lc) => lc.type === type),
         )
       ) {
         return false;

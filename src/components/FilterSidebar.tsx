@@ -11,6 +11,9 @@ import { Select, Slider } from "antd";
 
 const Section = styled.div`
   margin-bottom: 16px;
+  width: 80%;
+  margin-left: auto;
+  margin-right: auto;
 `;
 
 const Label = styled.label`
@@ -29,6 +32,9 @@ interface Props {
   onReset: () => void;
 }
 
+const METERS_TO_MILES = 0.000621371;
+const METERS_TO_FEET = 3.28084;
+
 export const FilterSidebar: React.FC<Props> = ({
   trails,
   filters,
@@ -38,6 +44,27 @@ export const FilterSidebar: React.FC<Props> = ({
   onReset,
 }) => {
   const unique = <T,>(arr: T[]) => Array.from(new Set(arr));
+  console.log("FILTERS", filters);
+  // Convert distance and elevation ranges for slider display
+  const elevationRangeFeet: [number, number] = [
+    filters.elevationRange[0] * METERS_TO_FEET,
+    filters.elevationRange[1] * METERS_TO_FEET,
+  ];
+
+  // Convert meters → miles for slider display
+  const distanceRangeMiles: [number, number] = [
+    filters.distanceRange[0] * METERS_TO_MILES,
+    filters.distanceRange[1] * METERS_TO_MILES,
+  ];
+
+  // Find max trail distance in miles for slider max
+  const maxDistanceMiles = trails.length
+    ? Math.max(...trails.map((t) => t.total_distance_m)) * METERS_TO_MILES
+    : 50;
+
+  const maxElevationFeet = trails.length
+    ? Math.max(...trails.map((t) => t.elevation_gain_m)) * METERS_TO_FEET
+    : 10000;
 
   return (
     <Sidebar open={open} onClose={onClose} title="Filter Trails">
@@ -48,17 +75,19 @@ export const FilterSidebar: React.FC<Props> = ({
           mode="multiple"
           allowClear
           placeholder="Select states"
-          value={filters.states}
+          value={[...filters.states].sort()} // make a copy and sort
           onChange={(values: string[]) =>
             setFilters({ ...filters, states: values })
           }
           style={{ width: "100%" }}
         >
-          {unique(trails.map((t) => t.state)).map((s) => (
-            <Select.Option key={s} value={s}>
-              {s}
-            </Select.Option>
-          ))}
+          {unique(trails.map((t) => t.state))
+            .sort((a, b) => a.localeCompare(b))
+            .map((s) => (
+              <Select.Option key={s} value={s}>
+                {s}
+              </Select.Option>
+            ))}
         </Select>
       </Section>
 
@@ -68,17 +97,19 @@ export const FilterSidebar: React.FC<Props> = ({
           mode="multiple"
           allowClear
           placeholder="Select counties"
-          value={filters.counties}
+          value={[...filters.counties].sort()} // sorted copy for value
           onChange={(values: string[]) =>
             setFilters({ ...filters, counties: values })
           }
           style={{ width: "100%" }}
         >
-          {unique(trails.map((t) => t.county)).map((c) => (
-            <Select.Option key={c} value={c}>
-              {c}
-            </Select.Option>
-          ))}
+          {unique(trails.map((t) => t.county))
+            .sort((a, b) => a.localeCompare(b)) // sort options alphabetically
+            .map((c) => (
+              <Select.Option key={c} value={c}>
+                {c}
+              </Select.Option>
+            ))}
         </Select>
       </Section>
 
@@ -88,17 +119,19 @@ export const FilterSidebar: React.FC<Props> = ({
           mode="multiple"
           allowClear
           placeholder="Select parks"
-          value={filters.parks}
+          value={[...filters.parks].sort()} // sorted copy for value
           onChange={(values: string[]) =>
             setFilters({ ...filters, parks: values })
           }
           style={{ width: "100%" }}
         >
-          {unique(trails.map((t) => t.park_name)).map((p) => (
-            <Select.Option key={p} value={p}>
-              {p}
-            </Select.Option>
-          ))}
+          {unique(trails.map((t) => t.park_name))
+            .sort((a, b) => a.localeCompare(b)) // sort options alphabetically
+            .map((p) => (
+              <Select.Option key={p} value={p}>
+                {p}
+              </Select.Option>
+            ))}
         </Select>
       </Section>
 
@@ -115,13 +148,49 @@ export const FilterSidebar: React.FC<Props> = ({
           }
           style={{ width: "100%" }}
         >
-          {unique(
-            trails.map((t) => getDifficultyDescription(t.difficulty_score))
-          ).map((d) => (
-            <Select.Option key={d} value={d}>
-              {d}
-            </Select.Option>
-          ))}
+          {[
+            "🟢",
+            "🟢🟢",
+            "🟢🟢🟢",
+            "🟡",
+            "🟡🟡",
+            "🟡🟡🟡",
+            "🟠",
+            "🟠🟠",
+            "🟠🟠🟠",
+            "🔴",
+            "🔴🔴",
+            "🔴🔴🔴",
+            "🟣",
+            "🟣🟣",
+            "🟣🟣🟣",
+            "⚫",
+            "⚫⚫",
+            "⚫⚫⚫",
+            "🔥",
+            "🔥🔥",
+            "🔥🔥🔥",
+            "🌋",
+            "🌋🌋",
+            "🌋🌋🌋",
+            "⚠️",
+            "⚠️⚠️",
+            "⚠️⚠️⚠️",
+            "☠️",
+            "☠️☠️",
+            "☠️☠️☠️",
+            "👑",
+          ]
+            .filter((d) =>
+              trails.some(
+                (t) => getDifficultyDescription(t.difficulty_score) === d,
+              ),
+            )
+            .map((d) => (
+              <Select.Option key={d} value={d}>
+                {d}
+              </Select.Option>
+            ))}
         </Select>
       </Section>
 
@@ -170,34 +239,64 @@ export const FilterSidebar: React.FC<Props> = ({
       <Section>
         <Label>Distance (mi)</Label>
         <Slider
+          range
           min={0}
-          max={50}
+          max={maxDistanceMiles}
           step={0.1}
-          value={filters.distanceRange[1]}
+          value={distanceRangeMiles}
           onChange={(val) =>
             setFilters({
               ...filters,
-              distanceRange: [filters.distanceRange[0], val],
+              distanceRange: [
+                (val as [number, number])[0] / METERS_TO_MILES, // back to meters
+                (val as [number, number])[1] / METERS_TO_MILES,
+              ],
             })
           }
+          tooltip={{ open: false }}
         />
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+            fontSize: 12,
+          }}
+        >
+          <span>{distanceRangeMiles[0].toFixed(1)} mi</span>
+          <span>{distanceRangeMiles[1].toFixed(1)} mi</span>
+        </div>
       </Section>
 
       {/* ===== ELEVATION ===== */}
       <Section>
         <Label>Elevation Gain (ft)</Label>
         <Slider
+          range
           min={0}
-          max={10000}
+          max={maxElevationFeet} // max based on trails
           step={50}
-          value={filters.elevationRange[1]}
+          value={elevationRangeFeet}
           onChange={(val) =>
             setFilters({
               ...filters,
-              elevationRange: [filters.elevationRange[0], val],
+              elevationRange: [
+                (val as [number, number])[0] / METERS_TO_FEET,
+                (val as [number, number])[1] / METERS_TO_FEET,
+              ],
             })
           }
+          tooltip={{ open: false }}
         />
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+            fontSize: 12,
+          }}
+        >
+          <span>{Math.round(elevationRangeFeet[0])} ft</span>
+          <span>{Math.round(elevationRangeFeet[1])} ft</span>
+        </div>
       </Section>
 
       <Button onClick={onReset}>Clear Filters</Button>

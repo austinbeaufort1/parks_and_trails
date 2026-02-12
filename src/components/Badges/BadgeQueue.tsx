@@ -34,12 +34,6 @@ const BadgeContainer = styled.div<{ visible: boolean }>`
   animation: ${pop} 0.6s ease forwards;
 `;
 
-// const BadgeDescription = styled.div`
-//   font-size: 18px;
-//   font-weight: normal;
-//   margin-top: 12px;
-// `;
-
 export interface EarnedBadge {
   id: string;
   title: string;
@@ -92,9 +86,6 @@ export const BadgeQueue: React.FC<BadgeQueueProps> = ({ badges, onFinish }) => {
     <BadgeOverlay visible={visible}>
       <BadgeContainer visible={visible}>
         <BadgePopup badge={current} size={160} />
-        {/* {current.description && (
-          <BadgeDescription>{current.description}</BadgeDescription>
-        )} */}
       </BadgeContainer>
     </BadgeOverlay>
   );

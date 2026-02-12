@@ -17,7 +17,9 @@ export const Button = styled.button`
   background: ${green.green9};
   color: white;
 
-  transition: background 0.15s ease, transform 0.05s ease;
+  transition:
+    background 0.15s ease,
+    transform 0.05s ease;
 
   &:hover {
     background: ${green.green10};
@@ -42,8 +44,9 @@ export const Button = styled.button`
 
 export const FiltersButton = styled.button`
   position: fixed;
-  top: 80px;
-  right: 16px;
+  top: 10px;
+  opacity: 0.8;
+  right: 36px;
   background-color: #005e0c;
   color: white;
   border: none;
@@ -52,7 +55,28 @@ export const FiltersButton = styled.button`
   font-size: 16px;
   border-radius: 4px;
   cursor: pointer;
-  z-index: 1000;
+  z-index: 100;
+  box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.2);
+
+  &:hover {
+    background-color: #004a09;
+  }
+`;
+
+export const FiltersButton1100 = styled.button`
+  position: fixed;
+  top: 10px;
+  opacity: 0.8;
+  right: 36px;
+  background-color: #005e0c;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  font-family: "Permanent Marker";
+  font-size: 16px;
+  border-radius: 4px;
+  cursor: pointer;
+  z-index: 1100;
   box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.2);
 
   &:hover {
@@ -166,5 +190,49 @@ export const ActionButton = styled.button<ActionButtonProps>`
     width: 100%;
     font-size: 13px;
     padding: 10px 14px;
+  }
+`;
+
+export const CloudButton = styled.button`
+  font-family: "Rock Salt", cursive;
+  cursor: pointer;
+  border: none;
+  color: #333;
+  background: rgba(38, 154, 242, 0.8); /* semi-transparent blue */
+
+  padding: 16px 36px;
+  font-size: 1.2rem;
+  position: relative;
+  display: inline-block;
+  text-align: center;
+
+  /* Main cloud pill shape */
+  border-radius: 50px;
+  box-shadow:
+    0 4px 8px rgba(0, 0, 0, 0.1),
+    inset 0 -4px 6px rgba(255, 255, 255, 0.4);
+
+  /* Hover / active effects */
+  transition:
+    transform 0.1s ease,
+    background 0.2s ease;
+  &:hover {
+    transform: translateY(-3px);
+    background: #1f81d6;
+  }
+
+  &:active {
+    transform: translateY(1px);
+  }
+
+  &:focus-visible {
+    outline: 2px solid #87cefa;
+    outline-offset: 2px;
+  }
+
+  /* Mobile adjustment */
+  @media (max-width: 640px) {
+    font-size: 1rem;
+    padding: 12px 28px;
   }
 `;

@@ -46,6 +46,9 @@ import { processRewards } from "../helpers/Rewards/processRewards";
 import { BadgeQueue } from "../Badges/BadgeQueue";
 import { TokenPopup } from "../TokenPopup";
 import { initialFormData } from "../TrailsPage/TrailCard";
+import { parseEstimatedMinutes } from "../helpers/Rewards/tokens/utils";
+import { updateTrailMemoryFromPayload } from "../helpers/updateTrailMemory";
+import { FiltersButton, FiltersButton1100 } from "../ui/Buttons";
 
 const LittleTag = styled(Tag)`
   padding: 3px;
@@ -103,6 +106,8 @@ type TrailsMapProps = {
   onSelectTrail: (id: string | null) => void;
   tokens: EarnedToken[];
   refreshTokens: () => void;
+  isTokensRefreshing: boolean;
+  onOpenFilters: () => void;
 };
 
 function PanToSelectedTrail({
@@ -159,6 +164,8 @@ export default function TrailsMap({
   onSelectTrail,
   tokens,
   refreshTokens,
+  isTokensRefreshing,
+  onOpenFilters,
 }: TrailsMapProps) {
   const { user } = useAuth();
   const mapRef = useRef<L.Map | null>(null);
@@ -216,6 +223,10 @@ export default function TrailsMap({
       {/* <QuestPopup events={earnedQuests} onClose={() => setEarnedQuests([])} /> */}
 
       <MapWrapper>
+        {/* Button to open filters sidebar */}
+        <div style={{ marginBottom: 12, textAlign: "right" }}>
+          <FiltersButton1100 onClick={onOpenFilters}>Filters</FiltersButton1100>
+        </div>
         <FloatingTopNav>
           <NavButton to="/" icon={<HomeOutlined />} label="Home" />
           <NavButton to="/map" icon={<EnvironmentOutlined />} label="Map" />
@@ -229,7 +240,7 @@ export default function TrailsMap({
         </FloatingTopNav>
         <MapContainer
           center={[40.318, -79.475]}
-          zoom={16}
+          zoom={8}
           ref={mapRef}
           style={{ width: "100%", height: "100%" }}
         >
@@ -301,7 +312,23 @@ export default function TrailsMap({
                 payload,
                 timesCompleted: timesCompletedAfter,
                 formData,
+                estimatedTimeMins: parseEstimatedMinutes(trailTime),
+                trail: trails.filter((trail) => trail.id === selectedTrailId),
+                mode: "reward",
               });
+
+              await completeTrail(
+                user.id,
+                selectedTrailId ?? "0",
+                payload,
+                () => {},
+                newRewards.tokens,
+              );
+
+              await updateTrailMemoryFromPayload(
+                selectedTrailId ?? "0",
+                payload,
+              );
 
               setEarnedBadges(newRewards.badges);
               setEarnedTokens(newRewards.tokens);
@@ -309,6 +336,7 @@ export default function TrailsMap({
               refreshTokens();
               refreshCompletions();
               refreshStats();
+              setFormData(initialFormData);
             }}
           />
         )}

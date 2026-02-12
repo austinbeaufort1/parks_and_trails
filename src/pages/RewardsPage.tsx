@@ -3,6 +3,13 @@ import { supabase } from "../connection/supabase";
 import { Badge } from "../components/Badges/Badge";
 import { CollectionBadge } from "../components/Badges/CollectionBadge";
 import usCounties from "@svg-maps/usa.counties";
+import {
+  STATE_COLLECTION_TIERS,
+  TOTAL_DISTANCE_BADGES,
+  TOTAL_ELEVATION_BADGES,
+  UNIQUE_TRAIL_BADGES,
+} from "../components/helpers/Rewards/badges/constants";
+import { LoadSpinner } from "../components/Loader";
 
 interface EarnedBadge {
   id: string;
@@ -13,14 +20,91 @@ interface EarnedBadge {
   svgPath?: string;
 }
 
+// ------------------------
+// Display Case Component
+// ------------------------
+const BadgeDisplayCase: React.FC<{ children: React.ReactNode }> = ({
+  children,
+}) => {
+  return (
+    <div className="badge-display-case">
+      {/* Inset shadow */}
+      <div className="inset-shadow" />
+
+      {/* Sunlight shimmer */}
+      <div className="sun-shimmer" />
+
+      {/* Flex container */}
+      <div className="badge-container">{children}</div>
+
+      <style jsx>{`
+        .badge-display-case {
+          position: relative;
+          border-radius: 24px;
+          padding: 24px;
+          overflow: hidden;
+          background: linear-gradient(145deg, #2b2f27, #1c2118);
+          box-shadow:
+            0 25px 50px rgba(0, 0, 0, 0.35),
+            0 12px 24px rgba(0, 0, 0, 0.25);
+          border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .inset-shadow {
+          position: absolute;
+          inset: 0;
+          box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.5);
+          pointer-events: none;
+        }
+
+        .sun-shimmer {
+          position: absolute;
+          top: -50%;
+          left: -50%;
+          width: 200%;
+          height: 200%;
+          background: linear-gradient(
+            135deg,
+            rgba(69, 43, 10, 0.6) 0%,
+            /* soften the brown edge */ rgba(255, 255, 200, 0.85) 35%,
+            /* strong yellow highlight */ rgba(206, 246, 255, 0.6) 65%,
+            /* soft cyan shimmer */ rgba(69, 43, 10, 0.6) 100%
+          );
+          pointer-events: none;
+          transform: rotate(-10deg);
+          filter: blur(40px); /* big blur to spread the intense colors */
+          animation: sunShine 12s infinite alternate;
+        }
+
+        .badge-container {
+          position: relative;
+          z-index: 0;
+          display: flex;
+          flex-wrap: wrap;
+          gap: 16px;
+        }
+
+        @keyframes sunShine {
+          0% {
+            transform: rotate(-10deg) translateX(-50%);
+          }
+          100% {
+            transform: rotate(-10deg) translateX(50%);
+          }
+        }
+      `}</style>
+    </div>
+  );
+};
+
+// ------------------------
+// Rewards Page Component
+// ------------------------
 const RewardsPage = ({ userId }: { userId: string }) => {
   const [badges, setBadges] = useState<EarnedBadge[]>([]);
   const [loading, setLoading] = useState(true);
   const [openCollection, setOpenCollection] = useState<string | null>(null);
 
-  // ------------------------
-  // Fetch badges
-  // ------------------------
   useEffect(() => {
     if (!userId) return;
 
@@ -49,7 +133,6 @@ const RewardsPage = ({ userId }: { userId: string }) => {
           icon_svg: row.badges.icon_svg,
           earned_at: row.earned_at,
         }));
-
         setBadges(formatted);
       }
 
@@ -60,32 +143,18 @@ const RewardsPage = ({ userId }: { userId: string }) => {
   }, [userId]);
 
   // ------------------------
-  // Badge grouping
+  // Badge grouping logic
   // ------------------------
-
-  // State badges (icon_svg = state abbrev)
   const stateBadges = badges.filter(
     (b) => b.icon_svg && !b.icon_svg.endsWith(".svg"),
   );
-
-  // Season badges (id starts with season_)
   const seasonBadges = badges.filter((b) => b.id.startsWith("season_"));
-
-  // County badges (id ends with "_county_<state>")
   const countyBadges = badges.filter((b) => /_county_/.test(b.id));
-
-  // National Park badges (id ends with _national_park)
   const nationalParkBadges = badges.filter((b) => /_national_park$/.test(b.id));
-
-  // State Park
   const stateParkBadges = badges.filter((b) => /_state_park$/.test(b.id));
-
-  // Holiday badges (id starts with holiday_)
   const holidayBadges = badges.filter((b) => b.id.startsWith("holiday_"));
-  // Streak badges (id starts with streak_)
   const streakBadges = badges.filter((b) => b.id.startsWith("streak_"));
 
-  // Everything else
   const standaloneBadges = badges.filter(
     (b) =>
       !b.id.startsWith("season_") &&
@@ -97,34 +166,88 @@ const RewardsPage = ({ userId }: { userId: string }) => {
       (!b.icon_svg || b.icon_svg.endsWith(".svg")),
   );
 
-  // ------------------------
-  // Helpers
-  // ------------------------
-  const toggleCollection = (name: string) => {
+  // Extract and select highest badges
+  const earnedUniqueTrailBadges = standaloneBadges.filter((b) =>
+    UNIQUE_TRAIL_BADGES.some((badge) => badge.id === b.id),
+  );
+  const earnedElevationBadges = standaloneBadges.filter((b) =>
+    TOTAL_ELEVATION_BADGES.some((badge) => badge.id === b.id),
+  );
+  const earnedDistanceBadges = standaloneBadges.filter((b) =>
+    TOTAL_DISTANCE_BADGES.some((badge) => badge.id === b.id),
+  );
+  const earnedStateCollectionBadges = standaloneBadges.filter((b) =>
+    STATE_COLLECTION_TIERS.some((badge) => badge.id === b.id),
+  );
+
+  const highestUniqueTrailBadge = (() => {
+    const sorted = [...UNIQUE_TRAIL_BADGES].sort((a, b) => b.count - a.count);
+    for (const badgeDef of sorted) {
+      const found = earnedUniqueTrailBadges.find((b) => b.id === badgeDef.id);
+      if (found) return [found];
+    }
+    return [];
+  })();
+
+  const highestElevationBadge = (() => {
+    const sorted = [...TOTAL_ELEVATION_BADGES].sort(
+      (a, b) => b.count - a.count,
+    );
+    for (const badgeDef of sorted) {
+      const found = earnedElevationBadges.find((b) => b.id === badgeDef.id);
+      if (found) return [found];
+    }
+    return [];
+  })();
+
+  const farthestDistanceBadge = (() => {
+    if (earnedDistanceBadges.length === 0) return [];
+    const farthest = earnedDistanceBadges.reduce((max, badge) =>
+      badge.count > max.count ? badge : max,
+    );
+    return [farthest];
+  })();
+
+  const highestStateCollectionBadge = (() => {
+    if (earnedStateCollectionBadges.length === 0) return [];
+    const highest = earnedStateCollectionBadges.reduce((max, badge) =>
+      (STATE_COLLECTION_TIERS.find((t) => t.id === badge.id)?.threshold || 0) >
+      (STATE_COLLECTION_TIERS.find((t) => t.id === max.id)?.threshold || 0)
+        ? badge
+        : max,
+    );
+    return [highest];
+  })();
+
+  const filteredStandaloneBadges = [
+    ...standaloneBadges.filter(
+      (b) =>
+        !UNIQUE_TRAIL_BADGES.some((badge) => badge.id === b.id) &&
+        !TOTAL_ELEVATION_BADGES.some((badge) => badge.id === b.id) &&
+        !TOTAL_DISTANCE_BADGES.some((badge) => badge.id === b.id) &&
+        !STATE_COLLECTION_TIERS.some((badge) => badge.id === b.id),
+    ),
+    ...highestUniqueTrailBadge,
+    ...highestElevationBadge,
+    ...farthestDistanceBadge,
+    ...highestStateCollectionBadge,
+  ];
+
+  const toggleCollection = (name: string) =>
     setOpenCollection((prev) => (prev === name ? null : name));
-  };
 
   const getCountySvgPath = (badgeId: string) => {
-    // badgeId = "westmoreland_county_pa"
     const match = badgeId.match(/^(.+)_county_([a-z]{2})$/);
     if (!match) return undefined;
-
     const [_, countyPart, statePart] = match;
-
     const normalizedCounty = countyPart.replace(/_/g, "").toLowerCase();
-
-    // find matching county in usCounties.locations
     const countyFeature = usCounties.locations.find((c) => {
       const [countyId, stateId] = c.id.split("-");
       return countyId.startsWith(normalizedCounty) && stateId === statePart;
     });
-
     return countyFeature?.path;
   };
 
-  // ------------------------
-  // Seasons grouping by season type and year
-  // ------------------------
   const seasonTypes = ["winter", "spring", "summer", "autumn"];
   const seasonBadgesByType: Record<string, EarnedBadge[]> = {
     winter: [],
@@ -132,46 +255,69 @@ const RewardsPage = ({ userId }: { userId: string }) => {
     summer: [],
     autumn: [],
   };
-
   seasonBadges.forEach((badge) => {
     const match = badge.id.match(
       /^season_(winter|spring|summer|autumn)_\d{4}$/,
     );
-    if (match) {
-      const season = match[1];
-      seasonBadgesByType[season].push(badge);
-    }
+    if (match) seasonBadgesByType[match[1]].push(badge);
   });
-
-  // Sort badges in each season by year descending
-  Object.keys(seasonBadgesByType).forEach((season) => {
-    seasonBadgesByType[season].sort((a, b) => b.title.localeCompare(a.title));
-  });
+  Object.keys(seasonBadgesByType).forEach((season) =>
+    seasonBadgesByType[season].sort((a, b) => b.title.localeCompare(a.title)),
+  );
 
   // ------------------------
   // Render
   // ------------------------
   return (
-    <div>
-      <h3 style={{ fontFamily: "Permanent Marker" }}>
-        Your Field Notes: <br></br>{" "}
-        <span style={{ color: "brown" }}>Landmarks of your adventures</span>
+    <div
+      style={{
+        padding: 24,
+        background: `linear-gradient(
+      to bottom,
+      rgba(48, 25, 52, 0.85) 0%,
+      rgba(75, 0, 130, 0.65) 30%,
+      rgba(138, 43, 226, 0.35) 60%,
+      rgba(138, 43, 226, 0) 90%
+    )`,
+        borderRadius: "12px",
+      }}
+    >
+      <h3
+        style={{
+          fontFamily: "Permanent Marker",
+          color: "white",
+          fontSize: "2rem",
+        }}
+      >
+        Your Achievements
       </h3>
 
-      {loading && <p>Loading badges…</p>}
+      {loading && <LoadSpinner size={200} />}
       {!loading && badges.length === 0 && <p>No badges yet — get hiking!</p>}
 
-      {/* ================= Collections ================= */}
+      {/* Collections */}
       {(stateBadges.length > 0 ||
         seasonBadges.length > 0 ||
-        countyBadges.length > 0) && (
+        countyBadges.length > 0 ||
+        nationalParkBadges.length > 0 ||
+        stateParkBadges.length > 0) && (
         <>
-          <h4>Collections</h4>
-
+          <h4
+            style={{
+              borderBottom: "2px solid brown",
+              borderTop: "2px solid brown",
+              background: "#f8ebdd",
+              paddingTop: "5px",
+              paddingBottom: "5px",
+              paddingLeft: "10px",
+            }}
+          >
+            Collections (tap or click to view)
+          </h4>
           <div
             style={{
               display: "flex",
-              gap: "10px",
+              gap: 10,
               flexWrap: "wrap",
               marginBottom: 16,
             }}
@@ -184,7 +330,6 @@ const RewardsPage = ({ userId }: { userId: string }) => {
                 onClick={() => toggleCollection("States")}
               />
             )}
-
             {seasonBadges.length > 0 && (
               <CollectionBadge
                 name="Seasons"
@@ -196,34 +341,30 @@ const RewardsPage = ({ userId }: { userId: string }) => {
                 onClick={() => toggleCollection("Seasons")}
               />
             )}
-
             {countyBadges.length > 0 && (
               <CollectionBadge
                 name="Counties"
-                total={3001} // approximate number of US counties
+                total={3001}
                 earned={countyBadges.length}
                 onClick={() => toggleCollection("Counties")}
               />
             )}
-
             {nationalParkBadges.length > 0 && (
               <CollectionBadge
                 name="National Parks"
-                total={63} // total number of US national parks
+                total={63}
                 earned={nationalParkBadges.length}
                 onClick={() => toggleCollection("National Parks")}
               />
             )}
-
             {stateParkBadges.length > 0 && (
               <CollectionBadge
                 name="State Parks"
-                total={2966} // total number of US state parks
+                total={2966}
                 earned={stateParkBadges.length}
                 onClick={() => toggleCollection("State Parks")}
               />
             )}
-
             {holidayBadges.length > 0 && (
               <CollectionBadge
                 name="Holidays"
@@ -232,190 +373,110 @@ const RewardsPage = ({ userId }: { userId: string }) => {
                 onClick={() => toggleCollection("Holidays")}
               />
             )}
-
             {streakBadges.length > 0 && (
               <CollectionBadge
                 name="Streaks"
-                total={streakBadges.length} // all streak badges earned are shown, total = earned
+                total={streakBadges.length}
                 earned={streakBadges.length}
                 onClick={() => toggleCollection("Streaks")}
               />
             )}
           </div>
 
-          {/* -------- States Collection -------- */}
+          {/* Render collections */}
           {openCollection === "States" && (
-            <div
-              style={{
-                display: "flex",
-                gap: "12px",
-                flexWrap: "wrap",
-                marginBottom: 24,
-              }}
-            >
+            <BadgeDisplayCase>
               {stateBadges.map((badge) => (
                 <Badge key={badge.id} badge={{ ...badge, color: "#4caf50" }} />
               ))}
-            </div>
+            </BadgeDisplayCase>
           )}
-
-          {/* -------- Seasons Collection -------- */}
           {openCollection === "Seasons" && (
-            <div
-              style={{
-                display: "flex",
-                flexDirection: "column",
-                gap: "16px",
-                marginBottom: 24,
-              }}
-            >
+            <BadgeDisplayCase>
               {seasonTypes.map((season) => {
                 const badges = seasonBadgesByType[season];
-                let color: string | undefined;
+                let color;
                 if (season === "winter") color = "#B3E5FC";
                 if (season === "spring") color = "#C8E6C9";
                 if (season === "summer") color = "#FFE082";
                 if (season === "autumn") color = "#FFCCBC";
-
-                return (
-                  <div key={season}>
-                    <h5 style={{ textTransform: "capitalize" }}>{season}</h5>
-                    <div
-                      style={{
-                        display: "flex",
-                        gap: "12px",
-                        flexWrap: "wrap",
-                        marginBottom: 8,
-                      }}
-                    >
-                      {badges.length > 0 ? (
-                        badges.map((badge) => (
-                          <Badge
-                            key={badge.id}
-                            badge={{ ...badge, color }}
-                            textColor={
-                              season === "winter" ? "white" : undefined
-                            }
-                          />
-                        ))
-                      ) : (
-                        <span style={{ color: "#999" }}>
-                          No badges earned yet
-                        </span>
-                      )}
-                    </div>
-                  </div>
-                );
+                return badges.length > 0
+                  ? badges.map((badge) => (
+                      <Badge
+                        key={badge.id}
+                        badge={{ ...badge, color }}
+                        textColor={season === "winter" ? "white" : undefined}
+                      />
+                    ))
+                  : null;
               })}
-            </div>
+            </BadgeDisplayCase>
           )}
-
-          {/* -------- Counties Collection -------- */}
           {openCollection === "Counties" && (
-            <div
-              style={{
-                display: "flex",
-                gap: "12px",
-                flexWrap: "wrap",
-                marginBottom: 24,
-              }}
-            >
+            <BadgeDisplayCase>
               {countyBadges.map((badge) => (
                 <Badge
                   key={badge.id}
-                  badge={{
-                    ...badge,
-                    svgPath: getCountySvgPath(badge.id),
-                  }}
+                  badge={{ ...badge, svgPath: getCountySvgPath(badge.id) }}
                 />
               ))}
-            </div>
+            </BadgeDisplayCase>
           )}
-
-          {/* -------- National Parks Collection -------- */}
           {openCollection === "National Parks" && (
-            <div
-              style={{
-                display: "flex",
-                gap: "12px",
-                flexWrap: "wrap",
-                marginBottom: 24,
-              }}
-            >
+            <BadgeDisplayCase>
               {nationalParkBadges.map((badge) => (
                 <Badge key={badge.id} badge={{ ...badge, color: "#FF9800" }} />
               ))}
-            </div>
+            </BadgeDisplayCase>
           )}
-
-          {/* -------- State Parks Collection -------- */}
           {openCollection === "State Parks" && (
-            <div
-              style={{
-                display: "flex",
-                gap: "12px",
-                flexWrap: "wrap",
-                marginBottom: 24,
-              }}
-            >
+            <BadgeDisplayCase>
               {stateParkBadges.map((badge) => (
                 <Badge key={badge.id} badge={{ ...badge, color: "#f3ff8b" }} />
               ))}
-            </div>
+            </BadgeDisplayCase>
+          )}
+          {openCollection === "Holidays" && (
+            <BadgeDisplayCase>
+              {holidayBadges.map((badge) => (
+                <Badge key={badge.id} badge={{ ...badge, color: "#FF4081" }} />
+              ))}
+            </BadgeDisplayCase>
+          )}
+          {openCollection === "Streaks" && (
+            <BadgeDisplayCase>
+              {streakBadges.map((badge) => (
+                <Badge key={badge.id} badge={{ ...badge, color: "#FFEB3B" }} />
+              ))}
+            </BadgeDisplayCase>
           )}
         </>
       )}
 
-      {/* -------- Holidays Collection -------- */}
-      {openCollection === "Holidays" && (
-        <div
-          style={{
-            display: "flex",
-            gap: "12px",
-            flexWrap: "wrap",
-            marginBottom: 24,
-          }}
-        >
-          {holidayBadges.map((badge) => (
-            <Badge
-              key={badge.id}
-              badge={{ ...badge, color: "#FF4081" }} // you can pick a holiday color
-            />
-          ))}
-        </div>
-      )}
-
-      {/* -------- Streaks Collection -------- */}
-      {openCollection === "Streaks" && (
-        <div
-          style={{
-            display: "flex",
-            gap: "12px",
-            flexWrap: "wrap",
-            marginBottom: 24,
-          }}
-        >
-          {streakBadges.map((badge) => (
-            <Badge
-              key={badge.id}
-              badge={{ ...badge, color: "#FFEB3B" }} // yellow-ish for streaks
-            />
-          ))}
-        </div>
-      )}
-
-      {/* ================= Standalone Badges ================= */}
-      {standaloneBadges.length > 0 && (
+      {/* Standalone badges */}
+      {filteredStandaloneBadges.length > 0 && (
         <>
-          <h4>Standalone Badges</h4>
-          <div style={{ display: "flex", gap: "12px", flexWrap: "wrap" }}>
-            {standaloneBadges.map((badge) => {
-              let color: string | undefined;
+          <h4
+            style={{
+              borderBottom: "2px solid brown",
+              borderTop: "2px solid brown",
+              background: "#f8ebdd",
+              paddingTop: "5px",
+              paddingBottom: "5px",
+              paddingLeft: "10px",
+              marginTop: openCollection ? "60px" : "5px",
+            }}
+          >
+            Standalone Badges
+          </h4>
+          <BadgeDisplayCase>
+            {filteredStandaloneBadges.map((badge) => {
+              let color;
               if (badge.id === "first_steps") color = "#c1f0cf";
               if (badge.id === "super_hiker") color = "#6EC1E4";
               return <Badge key={badge.id} badge={{ ...badge, color }} />;
             })}
-          </div>
+          </BadgeDisplayCase>
         </>
       )}
     </div>

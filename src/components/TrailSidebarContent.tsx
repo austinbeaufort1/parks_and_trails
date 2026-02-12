@@ -49,9 +49,32 @@ export const TrailSidebarContent: React.FC<TrailSidebarContentProps> = ({
           {trail.title}
         </h2>
 
-        <p style={{ fontSize: "16x !important", fontWeight: "bold" }}>
-          {trail.description}
-        </p>
+        {/* TAGS (scrollable, above description) */}
+        {trail.tags?.length > 0 && (
+          <div
+            style={{
+              display: "flex",
+              gap: "4px",
+              overflowX: "auto",
+              padding: "0",
+              whiteSpace: "nowrap",
+            }}
+          >
+            {trail.tags.map((tag) => (
+              <Tag
+                key={tag}
+                style={{
+                  fontSize: "11px",
+                  padding: "2px 6px",
+                  lineHeight: 1.2,
+                }}
+              >
+                {tag}
+              </Tag>
+            ))}
+          </div>
+        )}
+
         <LabelValue label="Where" value={trail.county + ", " + trail.state} />
         <LabelValue
           label="Distance"
@@ -84,20 +107,29 @@ export const TrailSidebarContent: React.FC<TrailSidebarContentProps> = ({
           }
         />
         <LabelValue label="Tree Coverage" value={`${trail.avg_canopy_pct}%`} />
-        <LandCover landcover_percentages={trail.landcover_percentages} />
+        <h4
+          style={{
+            marginTop: "12px",
+            fontSize: "12px",
+            letterSpacing: "0.08em",
+            textTransform: "uppercase",
+            color: brown.brown9,
+            marginBottom: "-15px",
+          }}
+        >
+          Field Notes
+        </h4>
 
-        <LabelValue
-          label="Tags"
-          value={trail.tags.map((tag, i) =>
-            i === trail.tags.length - 1 ? tag : tag + ", ",
-          )}
-        />
-        {/* <LabelValue
-          label="Trail Tokens (Your Experience on this Trail)"
-          value={trail.tokens.map((tag, i) =>
-            i === trail.tokens.length - 1 ? tag : tag + ", "
-          )}
-        /> */}
+        <p
+          style={{
+            fontSize: "16x !important",
+            fontWeight: "bold",
+            fontFamily: "Patrick Hand",
+          }}
+        >
+          {trail.description}
+        </p>
+        <LandCover landcover_percentages={trail.landcover_percentages} />
       </>
     );
   }
@@ -111,6 +143,7 @@ export const TrailSidebarContent: React.FC<TrailSidebarContentProps> = ({
         completionStyles={completionStyles}
         tokens={tokens}
         distance_m={trail.total_distance_m}
+        trail={trail}
       />
     );
   }
