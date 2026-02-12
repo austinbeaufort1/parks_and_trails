@@ -15,7 +15,7 @@ import { ParkName } from "../ui/ParkName";
 import { TrailTitle } from "../ui/TrailTitle";
 import { TrailDetails } from "../ui/TrailDetails";
 import styled from "styled-components";
-import { Sidebar } from "../SideBar";
+import { Sidebar } from "../Sidebar";
 import { BadgeQueue } from "../Badges/BadgeQueue";
 import { useCompleteTrail } from "../../hooks/useCompleteTrail";
 import { CardHeaderActions } from "../CardHeaderActions";

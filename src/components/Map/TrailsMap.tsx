@@ -20,7 +20,7 @@ import { useUserCompletionsMap } from "../../hooks/useUserCompletionsMap";
 import { useCompleteTrail } from "../../hooks/useCompleteTrail";
 import { useUserStats } from "../../hooks/useUserStats";
 
-import { Sidebar } from "../SideBar";
+import { Sidebar } from "../Sidebar";
 import styled from "styled-components";
 import { TrailCard } from "../../types/trail";
 import { useLocation, Link } from "react-router-dom";
