@@ -48,13 +48,13 @@ const Home: React.FC<HomeProps> = ({ setTab }) => {
               </CloudButton>
               {!user ? (
                 <CloudButton
-                  style={{ marginBottom: "200px" }}
+                  style={{ marginBottom: "210px" }}
                   onClick={() => setShowAuth(true)}
                 >
                   Login to Track
                 </CloudButton>
               ) : (
-                <CloudButton style={{ marginBottom: "200px" }} onClick={logout}>
+                <CloudButton style={{ marginBottom: "210px" }} onClick={logout}>
                   Logout
                 </CloudButton>
               )}
