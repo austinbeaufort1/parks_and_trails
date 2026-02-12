@@ -17,12 +17,17 @@
 }
 
 /* Only apply to iOS devices (iPhone/iPad) */
-/* Only for iOS devices */
-/* Only target iOS devices */
+/* iPhone-only */
 @supports (-webkit-touch-callout: none) {
-  .home-hero h1 {
-    margin-top: 0; /* remove any default top spacing */
-    transform: translateY(-15%); /* move logo up */
+  .home-hero-overlay {
+    display: flex;
+    flex-direction: column; /* stack logo + buttons */
+    align-items: center;
+  }
+
+  .home-hero-overlay .title-main {
+    margin-bottom: 0; /* remove extra spacing */
+    transform: translateY(-30px); /* move logo up */
   }
 }
 
