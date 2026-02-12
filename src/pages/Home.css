@@ -20,7 +20,7 @@
 /* iPhone-only */
 @supports (-webkit-touch-callout: none) {
   .home-hero-overlay {
-    margin-top: -10vh; /* move overlay up */
+    margin-top: 10vh; /* move overlay up */
   }
 }
 
