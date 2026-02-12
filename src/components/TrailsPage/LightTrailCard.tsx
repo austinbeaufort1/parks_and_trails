@@ -8,27 +8,34 @@ interface LightTrailCardProps {
   onViewMap: () => void;
 }
 
+// src/components/TrailsPage/LightTrailCard.tsx
+import React from "react";
+import { TrailCard as TrailCardType } from "../../types/trail";
+
+interface LightTrailCardProps {
+  trail: TrailCardType;
+  onViewMap: () => void;
+}
+
 export const LightTrailCard: React.FC<LightTrailCardProps> = ({
   trail,
   onViewMap,
 }) => {
   return (
     <div
-      onClick={onViewMap}
       style={{
-        padding: 12,
-        marginBottom: 12,
+        border: "1px solid #ccc",
         borderRadius: 8,
-        background: "#ccc",
-        width: "100%",
-        boxSizing: "border-box",
+        padding: 12,
+        background: "#f9f9f9",
       }}
     >
-      <h3 style={{ margin: 0 }}>{trail.title}</h3>
-      <p style={{ margin: "4px 0" }}>
-        Distance: {formatDistance(trail.total_distance_m)}
+      <h3>{trail.name}</h3>
+      <p>
+        {trail.parkName} – {trail.state}, {trail.county}
       </p>
-      <p style={{ margin: "4px 0" }}>Difficulty: {trail.difficulty_score}</p>
+      <p>{trail.details}</p>
+      <button onClick={onViewMap}>View on Map</button>
     </div>
   );
 };
