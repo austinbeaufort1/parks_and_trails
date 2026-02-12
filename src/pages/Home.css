@@ -1,13 +1,15 @@
 /* ---------- Page Layout ---------- */
 .home-page {
-  width: 100%;
-  margin: 0 auto;
-  padding: 0;
-  /* background-image: url("/badges/logo1.jpeg"); */
   background-position: center;
   background-size: 50vw;
   background-repeat: no-repeat;
-  /* background-attachment: fixed; */
+  background-attachment: scroll;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .home-page {
+    background-attachment: fixed;
+  }
 }
 
 @media (max-width: 900px) {
