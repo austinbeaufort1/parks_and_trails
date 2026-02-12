@@ -43,7 +43,7 @@ export const TrailSidebarContent: React.FC<TrailSidebarContentProps> = ({
         <h2
           style={{
             fontFamily: "Permanent Marker",
-            borderBottom: `5px solid ${brown.brown11}`,
+            borderBottom: `5px groove ${brown.brown11}`,
           }}
         >
           {trail.title}
@@ -115,6 +115,7 @@ export const TrailSidebarContent: React.FC<TrailSidebarContentProps> = ({
             textTransform: "uppercase",
             color: brown.brown9,
             marginBottom: "-15px",
+            textAlign: "start",
           }}
         >
           Field Notes
@@ -125,6 +126,10 @@ export const TrailSidebarContent: React.FC<TrailSidebarContentProps> = ({
             fontSize: "16x !important",
             fontWeight: "bold",
             fontFamily: "Patrick Hand",
+            textAlign: "start",
+            background: "#fffbdf",
+            borderRadius: "12px",
+            padding: "5px",
           }}
         >
           {trail.description}

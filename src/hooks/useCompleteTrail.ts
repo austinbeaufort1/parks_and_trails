@@ -47,14 +47,11 @@ export function useCompleteTrail() {
     trailId: string,
     payload?: CompleteTrailPayload,
     onSuccess?: () => void,
-    tokens?: EarnedToken[],
   ) {
     setLoading(true);
     setError(null);
-    const filteredTokens = filterTokens(tokens);
-    const tokenTitles = filteredTokens.map((token) => token.title);
 
-    // 1️⃣ Insert completion
+    // 1️⃣ Insert completion WITHOUT tokens
     const { error: completionError } = await supabase
       .from("user_completed_trails")
       .insert([
@@ -63,7 +60,7 @@ export function useCompleteTrail() {
           trail_id: trailId,
           duration_seconds: payload?.duration_seconds ?? null,
           details: payload?.details ?? null,
-          completion_tokens: tokenTitles,
+          completion_tokens: null, // tokens added later
         },
       ]);
 
@@ -77,8 +74,27 @@ export function useCompleteTrail() {
     setLoading(false);
   }
 
+  // 2️⃣ New helper: update tokens after rewards are calculated
+  async function updateTrailTokens(
+    userId: string,
+    trailId: string,
+    tokens: EarnedToken[],
+  ) {
+    const filteredTokens = filterTokens(tokens);
+    const tokenTitles = filteredTokens.map((t) => t.title);
+
+    if (tokenTitles.length === 0) return;
+
+    await supabase
+      .from("user_completed_trails")
+      .update({ completion_tokens: tokenTitles })
+      .eq("user_id", userId)
+      .eq("trail_id", trailId);
+  }
+
   return {
     completeTrail,
+    updateTrailTokens,
     loading,
     error,
   };

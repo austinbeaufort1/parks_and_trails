@@ -4,6 +4,7 @@ import { LabelValue } from "./LabelValue";
 
 const LandCoverContainer = styled.p`
   margin: 0.5em 0;
+  text-align: start;
 `;
 
 const LandCoverItem = styled.span`

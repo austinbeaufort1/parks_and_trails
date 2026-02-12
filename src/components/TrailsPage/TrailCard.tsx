@@ -31,6 +31,8 @@ import {
 } from "../helpers/updateTrailMemory";
 import { Flex } from "antd";
 import { parseEstimatedMinutes } from "../helpers/Rewards/tokens/utils";
+import { Tag } from "../ui/Tag";
+import { slate } from "@radix-ui/colors";
 
 type DrawerView = "trail" | "completion";
 
@@ -84,7 +86,7 @@ export const TrailCard: React.FC<TrailCardProps> = ({ trail, onViewMap }) => {
   const [formData, setFormData] = useState(initialFormData);
   const [completionLoading, setCompletionLoading] = useState(false);
 
-  const { completeTrail } = useCompleteTrail();
+  const { completeTrail, updateTrailTokens } = useCompleteTrail();
   const { completionsMap, refresh: refreshCompletions } = useUserCompletionsMap(
     user?.id ?? null,
   );
@@ -158,6 +160,7 @@ export const TrailCard: React.FC<TrailCardProps> = ({ trail, onViewMap }) => {
             display: "flex",
             flexDirection: "column",
             justifyContent: "space-between",
+            textAlign: "start",
           }}
         >
           <div>
@@ -170,47 +173,129 @@ export const TrailCard: React.FC<TrailCardProps> = ({ trail, onViewMap }) => {
             <TrailTitle>{trail.title}</TrailTitle>
 
             <TrailDetails>
-              <span style={{ marginBottom: "-5px" }}>
+              <span style={{ marginBottom: "-5px", marginTop: "10px" }}>
                 Effort Level: ({trail.difficulty_score}){" "}
                 {getDifficultyDescription(trail.difficulty_score)}
               </span>
             </TrailDetails>
 
             <TrailDetails>
-              <span>
+              <span style={{ marginTop: "10px" }}>
                 <i>Distance: {formatDistance(trail.total_distance_m)}</i>
               </span>
-              {" · "}
-              <span>
-                <i>Est. {trailTime}</i>
+              <span
+                style={{
+                  color: slate.slate11,
+                  marginTop: "5px",
+                  borderBottom: "1px solid brown",
+                  paddingBottom: "10px",
+                }}
+              >
+                <i>Est. Time: {trailTime}</i>
               </span>
               <div
                 style={{
-                  display: "flex",
+                  // display: "flex",
                   fontSize: "14px",
-                  marginTop: "-10px",
-                  marginBottom: "-10px",
+                  // marginTop: "-10px",
+                  // marginBottom: "-10px",
+                  textAlign: "start",
                 }}
               >
-                <p
+                {/* <Tag
                   style={{
-                    borderBottom: `3px solid ${getAngleColor(trail.avg_angle)}`,
-                    borderTop: `3px solid ${getAngleColor(trail.avg_angle)}`,
-                    paddingLeft: "2px",
-                    paddingRight: "2px",
-                    marginRight: "10px",
+                    backgroundColor: getAngleColor(trail.avg_angle, 0.3), // light colored background
+                    color: "#000", // text fully opaque
+                    border: `1px solid ${getAngleColor(trail.avg_angle, 0.5)}`, // slightly stronger border
+                    width: "50%",
+                    textAlign: "center",
                   }}
                 >
                   Avg°: {getAngleDesc(trail.avg_angle)}
-                </p>
-                <p
+                </Tag>
+
+                <Tag
                   style={{
-                    borderBottom: `3px solid ${getAngleColor(trail.max_angle)}`,
-                    borderTop: `3px solid ${getAngleColor(trail.max_angle)}`,
-                    paddingLeft: "2px",
-                    paddingRight: "2px",
+                    backgroundColor: getAngleColor(trail.max_angle, 0.3),
+                    color: "#000",
+                    border: `1px solid ${getAngleColor(trail.max_angle, 0.5)}`,
+                    width: "50%",
+                    textAlign: "center",
                   }}
                 >
+                  Max°: {getAngleDesc(trail.max_angle)}
+                </Tag> */}
+                <p
+                  style={{
+                    position: "relative",
+                    paddingLeft: "5px",
+                    paddingRight: "2px",
+                    paddingTop: "3px",
+                    paddingBottom: "5px",
+                    borderLeft: `10px solid ${getAngleColor(trail.avg_angle)}`,
+                    height: "24px", // adjust based on font size
+                    lineHeight: "24px",
+                  }}
+                >
+                  {/* Top border fade */}
+                  <span
+                    style={{
+                      position: "absolute",
+                      top: 0,
+                      left: 0,
+                      right: 0,
+                      height: "2px",
+                      background: `linear-gradient(to right, ${getAngleColor(trail.avg_angle)} 0%, rgba(0,0,0,0) 70%)`,
+                    }}
+                  />
+                  {/* Bottom border fade */}
+                  <span
+                    style={{
+                      position: "absolute",
+                      bottom: 0,
+                      left: 0,
+                      right: 0,
+                      height: "2px",
+                      background: `linear-gradient(to right, ${getAngleColor(trail.avg_angle)} 0%, rgba(0,0,0,0) 70%)`,
+                    }}
+                  />
+                  Avg°: {getAngleDesc(trail.avg_angle)}
+                </p>
+
+                <p
+                  style={{
+                    position: "relative",
+                    paddingLeft: "5px",
+                    paddingRight: "2px",
+                    paddingTop: "3px",
+                    paddingBottom: "5px",
+                    borderLeft: `10px solid ${getAngleColor(trail.max_angle)}`,
+                    height: "24px", // adjust based on font size
+                    lineHeight: "24px",
+                  }}
+                >
+                  {/* Top border fade */}
+                  <span
+                    style={{
+                      position: "absolute",
+                      top: 0,
+                      left: 0,
+                      right: 0,
+                      height: "2px",
+                      background: `linear-gradient(to right, ${getAngleColor(trail.max_angle)} 0%, rgba(0,0,0,0) 70%)`,
+                    }}
+                  />
+                  {/* Bottom border fade */}
+                  <span
+                    style={{
+                      position: "absolute",
+                      bottom: 0,
+                      left: 0,
+                      right: 0,
+                      height: "2px",
+                      background: `linear-gradient(to right, ${getAngleColor(trail.max_angle)} 0%, rgba(0,0,0,0) 70%)`,
+                    }}
+                  />
                   Max°: {getAngleDesc(trail.max_angle)}
                 </p>
               </div>
@@ -259,46 +344,39 @@ export const TrailCard: React.FC<TrailCardProps> = ({ trail, onViewMap }) => {
             trail={trail}
             setFormData={setFormData}
             onCompleted={async (payload) => {
-              const newRewards = await processRewards({
-                userId: user.id,
-                trailId: trail.id,
-                trailDistance: trail.total_distance_m,
-                payload,
-                timesCompleted: timesCompletedAfter,
-                formData,
-                estimatedTimeMins: parseEstimatedMinutes(trailTime),
-                trail: trail,
-                mode: "reward",
-              });
+              try {
+                // ✅ 1. Complete trail first (no tokens yet)
+                await completeTrail(user.id, trail.id, payload);
 
-              const detectedRewards = await processRewards({
-                userId: user.id,
-                trailId: trail.id,
-                trailDistance: trail.total_distance_m,
-                payload,
-                timesCompleted: timesCompletedAfter,
-                formData,
-                estimatedTimeMins: parseEstimatedMinutes(trailTime),
-                trail: trail,
-                mode: "detect",
-              });
+                // ✅ 2. Process rewards (tokens + badges)
+                const newRewards = await processRewards({
+                  userId: user.id,
+                  trailId: trail.id,
+                  trailDistance: trail.total_distance_m,
+                  payload,
+                  timesCompleted: timesCompletedAfter,
+                  formData,
+                  estimatedTimeMins: parseEstimatedMinutes(trailTime),
+                  trail,
+                  mode: "reward",
+                });
 
-              await completeTrail(
-                user.id,
-                trail.id,
-                payload,
-                () => {},
-                newRewards.tokens,
-              );
-              // ✅ Update trail memory
-              await updateTrailMemoryFromPayload(trail.id, payload);
+                // ✅ 3. Update completion with earned tokens
+                await updateTrailTokens(user.id, trail.id, newRewards.tokens);
 
-              setEarnedBadges(newRewards.badges);
-              setEarnedTokens(newRewards.tokens);
-              refreshTokens();
-              refreshCompletions();
-              refreshStats();
-              setFormData(initialFormData);
+                // ✅ 4. Update trail memory / details
+                await updateTrailMemoryFromPayload(trail.id, payload);
+
+                // ✅ 5. Update UI / state
+                setEarnedBadges(newRewards.badges);
+                setEarnedTokens(newRewards.tokens);
+                refreshTokens();
+                refreshCompletions();
+                refreshStats();
+                setFormData(initialFormData);
+              } catch (err: any) {
+                console.error("Error completing trail:", err);
+              }
             }}
           />
         )}

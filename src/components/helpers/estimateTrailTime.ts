@@ -8,7 +8,7 @@ type LandcoverPercent = {
 function surfaceMultiplier(
   surface: string,
   waterDepthFeet?: number,
-  waterCurrent?: "low" | "medium" | "high"
+  waterCurrent?: "low" | "medium" | "high",
 ): number {
   const lc = surface.toLowerCase();
 
@@ -35,19 +35,19 @@ function surfaceMultiplier(
           ? waterCurrent === "low"
             ? 1.8
             : waterCurrent === "medium"
-            ? 2.0
-            : 2.2
+              ? 2.0
+              : 2.2
           : waterDepthFeet < 3
-          ? waterCurrent === "low"
-            ? 2.2
-            : waterCurrent === "medium"
-            ? 2.4
-            : 2.6
-          : waterCurrent === "low"
-          ? 2.5
-          : waterCurrent === "medium"
-          ? 2.7
-          : 3.0;
+            ? waterCurrent === "low"
+              ? 2.2
+              : waterCurrent === "medium"
+                ? 2.4
+                : 2.6
+            : waterCurrent === "low"
+              ? 2.5
+              : waterCurrent === "medium"
+                ? 2.7
+                : 3.0;
     }
     return multiplier;
   }
@@ -61,7 +61,7 @@ export function estimateTrailTime(
   avgAngle: number,
   difficultyScore: number,
   landcoverPercents: LandcoverPercent[] = [],
-  baseSpeedMph = 2
+  baseSpeedMph = 2,
 ): string {
   const distanceMiles = total_distance_m / 1609.34; // 1 mile ≈ 1609.34 meters
 
@@ -72,13 +72,13 @@ export function estimateTrailTime(
   if (landcoverPercents.length > 0) {
     const totalPercent = landcoverPercents.reduce(
       (sum, lc) => sum + lc.percent,
-      0
+      0,
     );
     if (totalPercent > 0) {
       weightedSurfaceMult =
         landcoverPercents.reduce(
           (sum, lc) => sum + surfaceMultiplier(lc.type) * lc.percent,
-          0
+          0,
         ) / totalPercent;
     }
   }

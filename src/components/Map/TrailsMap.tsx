@@ -173,7 +173,7 @@ export default function TrailsMap({
   const [earnedTokens, setEarnedTokens] = useState<EarnedToken[]>([]);
   // const [earnedQuests, setEarnedQuests] = useState<QuestEvent[]>([]);
 
-  const { completeTrail } = useCompleteTrail();
+  const { completeTrail, updateTrailTokens } = useCompleteTrail();
 
   const selectedTrail = trails.find((t) => t.id === selectedTrailId);
   const { points: selectedPoints } = useTrailPoints(selectedTrailId);
@@ -304,39 +304,46 @@ export default function TrailsMap({
             formData={formData}
             setFormData={setFormData}
             onCompleted={async (payload) => {
-              await completeTrail(user.id, selectedTrailId ?? "0", payload);
-              const newRewards = await processRewards({
-                userId: user.id,
-                trailId: selectedTrailId ?? "0",
-                trailDistance: selectedTrail?.total_distance_m ?? 0,
-                payload,
-                timesCompleted: timesCompletedAfter,
-                formData,
-                estimatedTimeMins: parseEstimatedMinutes(trailTime),
-                trail: trails.filter((trail) => trail.id === selectedTrailId),
-                mode: "reward",
-              });
+              try {
+                // 1️⃣ Complete trail first (no tokens)
+                await completeTrail(user.id, selectedTrailId ?? "0", payload);
 
-              await completeTrail(
-                user.id,
-                selectedTrailId ?? "0",
-                payload,
-                () => {},
-                newRewards.tokens,
-              );
+                // 2️⃣ Calculate rewards (tokens + badges)
+                const newRewards = await processRewards({
+                  userId: user.id,
+                  trailId: selectedTrailId ?? "0",
+                  trailDistance: selectedTrail?.total_distance_m ?? 0,
+                  payload,
+                  timesCompleted: timesCompletedAfter,
+                  formData,
+                  estimatedTimeMins: parseEstimatedMinutes(trailTime),
+                  trail: trails.filter((trail) => trail.id === selectedTrailId),
+                  mode: "reward",
+                });
 
-              await updateTrailMemoryFromPayload(
-                selectedTrailId ?? "0",
-                payload,
-              );
+                // 3️⃣ Update the completion row with earned tokens
+                await updateTrailTokens(
+                  user.id,
+                  selectedTrailId ?? "0",
+                  newRewards.tokens,
+                );
 
-              setEarnedBadges(newRewards.badges);
-              setEarnedTokens(newRewards.tokens);
-              // setEarnedQuests(newRewards.quests ?? []);
-              refreshTokens();
-              refreshCompletions();
-              refreshStats();
-              setFormData(initialFormData);
+                // 4️⃣ Update trail memory / details
+                await updateTrailMemoryFromPayload(
+                  selectedTrailId ?? "0",
+                  payload,
+                );
+
+                // 5️⃣ Update UI / state
+                setEarnedBadges(newRewards.badges);
+                setEarnedTokens(newRewards.tokens);
+                refreshTokens();
+                refreshCompletions();
+                refreshStats();
+                setFormData(initialFormData);
+              } catch (err: any) {
+                console.error("Error completing trail:", err);
+              }
             }}
           />
         )}

@@ -81,7 +81,7 @@ export const TrailListPage: React.FC<TrailListPageProps> = ({
             <div
               key={trail.id}
               style={{
-                flex: "1 1 300px",
+                flex: "1 1 340px",
                 maxWidth: "100%",
                 boxSizing: "border-box",
                 marginBottom: 16,
