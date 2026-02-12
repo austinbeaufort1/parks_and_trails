@@ -28,7 +28,10 @@ const Home: React.FC<HomeProps> = ({ setTab }) => {
   }, [user]);
 
   return (
-    <div className="home-page">
+    <div
+      style={{ backgroundImage: `url("/badges/logo1.jpeg")` }}
+      className="home-page"
+    >
       {/* ---------- Hero Section ---------- */}
       {/* <Clouds /> */}
       <div className="home-hero">
