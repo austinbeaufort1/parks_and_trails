@@ -7,9 +7,16 @@
 
 #root {
   margin: 0 auto;
-  padding: 2rem;
+  /* padding: 2rem; */
   text-align: center;
   background: white;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  background-color: #ffffff;
 }
 
 .ant-table-thead .ant-table-cell {
