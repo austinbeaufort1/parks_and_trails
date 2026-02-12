@@ -31,7 +31,7 @@ jobs:
 
       # 5. Build Vite project WITHOUT type checking
       - name: Build for production
-        run: npm run build -- --no-ts-check
+        run: npm run build
 
       # 6. Copy CNAME for GitHub Pages
       - run: cp CNAME dist/CNAME
