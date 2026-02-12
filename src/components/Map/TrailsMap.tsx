@@ -185,13 +185,9 @@ export default function TrailsMap({
 
   const [overlayTrail, setOverlayTrail] = useState<TrailCard | null>(null);
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  const count = selectedTrail?.id ? completionsMap[selectedTrail?.id] : 0;
-  const totalCompletions = Object.values(completionsMap).reduce(
-    (sum, val) => sum + val,
-    0,
-  );
+  const count = selectedTrail?.id ? (completionsMap[selectedTrail.id] ?? 0) : 0;
+  const timesCompletedAfter = count + 1;
 
-  const timesCompletedAfter = totalCompletions + 1;
   const [drawerView, setDrawerView] = useState<DrawerView>("trail");
   const [completeModalOpen, setCompleteModalOpen] = useState(false);
   const completionStyles: string[] = selectedTrail?.details || [];
@@ -201,7 +197,9 @@ export default function TrailsMap({
     selectedTrail?.difficulty_score ?? 0,
     selectedTrail?.landcover_percentages,
   );
-  const [formData, setFormData] = useState(initialFormData);
+  const [formData, setFormData] = useState(() =>
+    structuredClone(initialFormData),
+  );
 
   useEffect(() => {
     if (selectedTrail) {
@@ -212,6 +210,12 @@ export default function TrailsMap({
       setSidebarOpen(false);
     }
   }, [selectedTrail]);
+
+  useEffect(() => {
+    if (completeModalOpen) {
+      setFormData(structuredClone(initialFormData));
+    }
+  }, [completeModalOpen]);
 
   return (
     <>
@@ -340,7 +344,7 @@ export default function TrailsMap({
                 refreshTokens();
                 refreshCompletions();
                 refreshStats();
-                setFormData(initialFormData);
+                setFormData(structuredClone(initialFormData));
               } catch (err: any) {
                 console.error("Error completing trail:", err);
               }

@@ -48,6 +48,7 @@ export function useCompleteTrail() {
     payload?: CompleteTrailPayload,
     onSuccess?: () => void,
   ) {
+    console.log("TRAIL ID", trailId);
     setLoading(true);
     setError(null);
 

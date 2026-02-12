@@ -40,17 +40,15 @@ const CloseButton = styled.button`
 `;
 
 const TokenList = styled.div`
-  display: flex;
-  flex-wrap: wrap;
   gap: 12px;
   justify-content: center;
-  margin-top: 12px;
 `;
 
 const TokenItem = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+  margin-top: 10px;
 `;
 
 const TokenIcon = styled.img`
@@ -83,7 +81,16 @@ export const TokenPopup: React.FC<TokenPopupProps> = ({ tokens, onClose }) => {
     <Overlay>
       <Container>
         <CloseButton onClick={onClose}>×</CloseButton>
-        <h3>New Tokens!</h3>
+        <h3
+          style={{
+            borderTop: "5px solid #45330d",
+            borderBottom: "5px solid brown",
+            borderLeft: "25px groove brown",
+            borderRight: "25px groove brown",
+          }}
+        >
+          New Tokens!
+        </h3>
         <TokenList>
           {tokens.map((token) => (
             <TokenItem key={token.id}>

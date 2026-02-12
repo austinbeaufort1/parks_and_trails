@@ -83,7 +83,9 @@ export const TrailCard: React.FC<TrailCardProps> = ({ trail, onViewMap }) => {
   const [earnedBadges, setEarnedBadges] = useState<EarnedBadge[]>([]);
   const [earnedTokens, setEarnedTokens] = useState<EarnedToken[]>([]);
   const { tokens, refresh: refreshTokens } = useTrailTokens(user?.id, trail.id);
-  const [formData, setFormData] = useState(initialFormData);
+  const [formData, setFormData] = useState(() =>
+    structuredClone(initialFormData),
+  );
   const [completionLoading, setCompletionLoading] = useState(false);
 
   const { completeTrail, updateTrailTokens } = useCompleteTrail();
@@ -117,6 +119,12 @@ export const TrailCard: React.FC<TrailCardProps> = ({ trail, onViewMap }) => {
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
+
+  useEffect(() => {
+    if (completeModalOpen) {
+      setFormData(structuredClone(initialFormData));
+    }
+  }, [completeModalOpen]);
 
   return (
     <>
@@ -373,7 +381,7 @@ export const TrailCard: React.FC<TrailCardProps> = ({ trail, onViewMap }) => {
                 refreshTokens();
                 refreshCompletions();
                 refreshStats();
-                setFormData(initialFormData);
+                setFormData(structuredClone(initialFormData));
               } catch (err: any) {
                 console.error("Error completing trail:", err);
               }
