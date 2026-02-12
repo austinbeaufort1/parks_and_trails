@@ -16,6 +16,18 @@
   }
 }
 
+/* Only apply to iOS devices (iPhone/iPad) */
+@supports (-webkit-touch-callout: none) {
+  .home-hero {
+    padding-top: 12vh; /* push logo down */
+    padding-bottom: 6vh; /* optional: extra bottom spacing */
+  }
+
+  .home-buttons {
+    margin-top: 2rem; /* separate buttons from logo */
+  }
+}
+
 @media (max-width: 900px) {
   .home-page {
     background-size: 60vw;
