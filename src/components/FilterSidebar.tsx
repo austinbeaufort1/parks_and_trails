@@ -1,7 +1,7 @@
 // src/components/FilterSidebar.tsx
 import React from "react";
 import styled from "styled-components";
-import { Sidebar } from "./SideBar"; // your reusable sidebar
+import { Sidebar } from "./Sidebar";
 import { TrailCard as TrailCardType } from "../types/trail";
 import { TrailFilters } from "../types/filters";
 import { getDifficultyDescription } from "./helpers/difficulty";
