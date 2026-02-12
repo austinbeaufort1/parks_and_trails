@@ -8,7 +8,7 @@ import { buildTopCombos } from "../helpers/Rewards/badgeCombos";
 import { LabelValue } from "../LabelValue";
 import { EarnedToken } from "../TokenPopup";
 import { TokenTag } from "../ui/Tag";
-import Tooltip from "antd/lib/Tooltip";
+import { Tooltip } from "antd";
 import { Flex } from "antd";
 
 interface CompletionDetailsPanelProps {
