@@ -43,10 +43,7 @@ const Home: React.FC<HomeProps> = ({ setTab }) => {
             {/* keep overlay! */}
             <h1 className="title-main">Trail Depth</h1>
             <div className="home-buttons">
-              <CloudButton
-                style={{ marginBottom: "150px" }}
-                onClick={() => navigate("/trails")}
-              >
+              <CloudButton onClick={() => navigate("/trails")}>
                 Explore
               </CloudButton>
               {!user ? (
