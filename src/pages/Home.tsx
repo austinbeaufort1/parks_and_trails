@@ -8,7 +8,7 @@ import {
   FeatureTitle,
 } from "../components/ui/FeatureCard";
 import { useNavigate } from "react-router-dom";
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import { useAuth } from "../components/AuthContext";
 import "./Home.css";
 import AuthScreen from "../components/AuthScreen";
@@ -23,6 +23,9 @@ const Home: React.FC<HomeProps> = ({ setTab }) => {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
 
+  // Detect iPhone/iOS
+  const isiPhone = /iPhone|iPad|iPod/i.test(navigator.userAgent);
+
   useEffect(() => {
     if (user) setShowAuth(false);
   }, [user]);
@@ -33,17 +36,14 @@ const Home: React.FC<HomeProps> = ({ setTab }) => {
       className="home-page"
     >
       {/* ---------- Hero Section ---------- */}
-      {/* <Clouds /> */}
-      <div className="home-hero">
-        <div className="home-hero-overlay">
-          <h1 style={{ fontSize: "3rem" }} className="title-main">
-            Trail Depth
-          </h1>
+      {isiPhone ? (
+        // iPhone-specific hero
+        <div className="home-hero-iphone">
+          <h1 className="title-main">Trail Depth</h1>
           <div className="home-buttons">
             <CloudButton onClick={() => navigate("/trails")}>
               Explore
             </CloudButton>
-
             {!user ? (
               <CloudButton onClick={() => setShowAuth(true)}>
                 Login to Track
@@ -52,23 +52,50 @@ const Home: React.FC<HomeProps> = ({ setTab }) => {
               <CloudButton onClick={logout}>Logout</CloudButton>
             )}
           </div>
-          <Subtitle
-            style={{
-              textShadow: "0 10px 10px rgba(0, 0, 0, 1)",
-              fontWeight: "bold",
-              background: "rgba(0, 0, 0, 0.5)",
-              borderRadius: "10px",
-              marginTop: "5%",
-              padding: "1rem",
-            }}
-          >
+          <Subtitle className="iphone-subtitle">
             Walk, run, or hike curated trails your way. Track your progress, log
             your experience, and explore beyond the ordinary. Trail Depth is
             about more than finishing paths — it’s about how you choose to move.
             Every step counts.
           </Subtitle>
         </div>
-      </div>
+      ) : (
+        // Default hero for desktop/Android
+        <div className="home-hero">
+          <div className="home-hero-overlay">
+            <h1 style={{ fontSize: "3rem" }} className="title-main">
+              Trail Depth
+            </h1>
+            <div className="home-buttons">
+              <CloudButton onClick={() => navigate("/trails")}>
+                Explore
+              </CloudButton>
+              {!user ? (
+                <CloudButton onClick={() => setShowAuth(true)}>
+                  Login to Track
+                </CloudButton>
+              ) : (
+                <CloudButton onClick={logout}>Logout</CloudButton>
+              )}
+            </div>
+            <Subtitle
+              style={{
+                textShadow: "0 10px 10px rgba(0, 0, 0, 1)",
+                fontWeight: "bold",
+                background: "rgba(0, 0, 0, 0.5)",
+                borderRadius: "10px",
+                marginTop: "5%",
+                padding: "1rem",
+              }}
+            >
+              Walk, run, or hike curated trails your way. Track your progress,
+              log your experience, and explore beyond the ordinary. Trail Depth
+              is about more than finishing paths — it’s about how you choose to
+              move. Every step counts.
+            </Subtitle>
+          </div>
+        </div>
+      )}
 
       {/* ---------- Feature Cards ---------- */}
       <FeaturesGrid>
@@ -121,14 +148,13 @@ const Home: React.FC<HomeProps> = ({ setTab }) => {
         </FeatureCard>
       </FeaturesGrid>
 
-      {/* ---------- Footer / Invitation ---------- */}
-
       {/* ---------- Auth Modal ---------- */}
       <AuthScreen open={showAuth} onClose={() => setShowAuth(false)} />
     </div>
   );
 };
 
+// Styled grid for feature cards
 const FeaturesGrid = styled.section`
   display: grid;
   gap: 1rem;

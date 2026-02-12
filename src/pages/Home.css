@@ -16,13 +16,36 @@
   }
 }
 
-/* Only apply to iOS devices (iPhone/iPad) */
-/* iPhone-only */
-@supports (-webkit-touch-callout: none) {
-  .home-hero-overlay {
-    margin-top: 10vh; /* move overlay up */
-  }
+/* iPhone hero adjustments */
+.home-hero-iphone {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start; /* push logo up */
+  min-height: 50vh;
+  padding-top: 2rem; /* adjust as needed */
+  color: #fff;
+  text-align: center;
 }
+
+.home-hero-iphone .title-main {
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+}
+
+.home-hero-iphone .home-buttons {
+  margin-top: 1.5rem;
+}
+
+.home-hero-iphone .iphone-subtitle {
+  margin-top: 1rem;
+  padding: 1rem;
+  background: rgba(0, 0, 0, 0.5);
+  border-radius: 10px;
+  font-weight: bold;
+}
+
+/* Only apply to iOS devices (iPhone/iPad) */
 
 @media (max-width: 900px) {
   .home-page {
