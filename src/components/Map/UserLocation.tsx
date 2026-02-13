@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useRef } from "react";
 import { Marker, useMap, Circle } from "react-leaflet";
 import L from "leaflet";
 
@@ -22,12 +22,16 @@ function UserLocation() {
   const map = useMap();
   const [position, setPosition] = useState<[number, number] | null>(null);
   const [accuracy, setAccuracy] = useState<number | null>(null);
+  const [isTracking, setIsTracking] = useState(false);
   const hasCentered = useRef(false);
+  const watchIdRef = useRef<number | null>(null);
 
-  useEffect(() => {
+  const startTracking = () => {
     if (!navigator.geolocation) return;
 
-    const watchId = navigator.geolocation.watchPosition(
+    setIsTracking(true);
+
+    watchIdRef.current = navigator.geolocation.watchPosition(
       (pos) => {
         const latlng: [number, number] = [
           pos.coords.latitude,
@@ -37,7 +41,6 @@ function UserLocation() {
         setPosition(latlng);
         setAccuracy(pos.coords.accuracy);
 
-        // Only auto-center once (prevents annoying snapping)
         if (!hasCentered.current) {
           map.setView(latlng, 15);
           hasCentered.current = true;
@@ -50,15 +53,48 @@ function UserLocation() {
         enableHighAccuracy: true,
       },
     );
+  };
 
-    return () => navigator.geolocation.clearWatch(watchId);
-  }, [map]);
-
-  if (!position) return null;
+  // Optional: stop tracking if component unmounts
+  // (good practice)
+  if (watchIdRef.current && !isTracking) {
+    navigator.geolocation.clearWatch(watchIdRef.current);
+  }
 
   return (
     <>
-      {accuracy && (
+      {!isTracking && (
+        <button
+          onClick={startTracking}
+          style={{
+            position: "absolute",
+            bottom: 30,
+            right: 20,
+            zIndex: 1000,
+            padding: "12px 16px",
+            background: "#3399ff", // Dodger Blue
+            color: "white", // text/icon contrast
+            borderRadius: 12, // rounded pill shape
+            border: "none",
+            boxShadow: "0 2px 8px rgba(0,0,0,0.25)",
+            cursor: "pointer",
+            fontWeight: 600,
+            fontSize: 14,
+            display: "flex",
+            alignItems: "center",
+            gap: 6,
+            transition: "transform 0.1s, background 0.2s",
+          }}
+          onMouseEnter={(e) =>
+            (e.currentTarget.style.transform = "scale(1.05)")
+          }
+          onMouseLeave={(e) => (e.currentTarget.style.transform = "scale(1)")}
+        >
+          🧭 Locate Me
+        </button>
+      )}
+
+      {position && accuracy && (
         <Circle
           center={position}
           radius={accuracy}
@@ -70,7 +106,8 @@ function UserLocation() {
           }}
         />
       )}
-      <Marker position={position} icon={userLocationIcon} />
+
+      {position && <Marker position={position} icon={userLocationIcon} />}
     </>
   );
 }
