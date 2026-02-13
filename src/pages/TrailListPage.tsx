@@ -98,9 +98,8 @@
 
 // src/pages/TrailListPage.tsx
 // src/pages/TrailListPage.tsx
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { TrailCard } from "../components/TrailsPage/TrailCard";
-import { LightTrailCard } from "../components/TrailsPage/LightTrailCard"; // lightweight version
 import { FiltersButton } from "../components/ui/Buttons";
 import { LoadSpinner } from "../components/Loader";
 import { TrailFilters } from "../types/filters";
@@ -123,6 +122,14 @@ export const TrailListPage: React.FC<TrailListPageProps> = ({
   onViewMap,
   onOpenFilters,
 }) => {
+  const ITEMS_PER_PAGE = 6;
+  const [visibleCount, setVisibleCount] = useState(ITEMS_PER_PAGE);
+
+  // Reset pagination when filters change
+  useEffect(() => {
+    setVisibleCount(ITEMS_PER_PAGE);
+  }, [filteredTrails]);
+
   if (loading)
     return (
       <div
@@ -145,9 +152,6 @@ export const TrailListPage: React.FC<TrailListPageProps> = ({
     );
   }
 
-  // Simple small screen check
-  const isSmallScreen = window.innerWidth < 600; // adjust threshold as needed
-
   return (
     <div
       style={{
@@ -169,38 +173,56 @@ export const TrailListPage: React.FC<TrailListPageProps> = ({
       {filteredTrails.length === 0 ? (
         <p>No trails match your filters.</p>
       ) : (
-        <div
-          style={{
-            display: "flex",
-            flexWrap: "wrap",
-            gap: 16,
-            justifyContent: "center",
-          }}
-        >
-          {filteredTrails.map((trail) => (
-            <div
-              key={trail.id}
-              style={{
-                flex: "1 1 340px",
-                maxWidth: "100%",
-                boxSizing: "border-box",
-                marginBottom: 16,
-              }}
-            >
-              {isSmallScreen ? (
-                <LightTrailCard
-                  trail={trail}
-                  onViewMap={() => onViewMap(trail.id)}
-                />
-              ) : (
+        <>
+          <div
+            style={{
+              display: "flex",
+              flexWrap: "wrap",
+              gap: 16,
+              justifyContent: "center",
+            }}
+          >
+            {filteredTrails.slice(0, visibleCount).map((trail) => (
+              <div
+                key={trail.id}
+                style={{
+                  flex: "1 1 340px",
+                  maxWidth: "100%",
+                  boxSizing: "border-box",
+                  marginBottom: 16,
+                }}
+              >
                 <TrailCard
                   trail={trail}
                   onViewMap={() => onViewMap(trail.id)}
                 />
-              )}
+              </div>
+            ))}
+          </div>
+
+          {visibleCount < filteredTrails.length && (
+            <div style={{ marginTop: 24 }}>
+              <button
+                onClick={() =>
+                  setVisibleCount((prev) =>
+                    Math.min(prev + ITEMS_PER_PAGE, filteredTrails.length),
+                  )
+                }
+                style={{
+                  padding: "12px 24px",
+                  borderRadius: 8,
+                  border: "none",
+                  backgroundColor: "#4b0082",
+                  color: "white",
+                  fontWeight: 600,
+                  cursor: "pointer",
+                }}
+              >
+                Load More Trails
+              </button>
             </div>
-          ))}
-        </div>
+          )}
+        </>
       )}
     </div>
   );
