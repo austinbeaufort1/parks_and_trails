@@ -1,5 +1,5 @@
-import { useState, useRef } from "react";
-import { Marker, useMap, Circle } from "react-leaflet";
+import { useState, useRef, useEffect } from "react";
+import { Marker, Circle, useMap } from "react-leaflet";
 import L from "leaflet";
 
 const userLocationIcon = L.divIcon({
@@ -18,26 +18,24 @@ const userLocationIcon = L.divIcon({
   iconAnchor: [8, 8],
 });
 
-function UserLocation() {
+export default function UserLocation() {
   const map = useMap();
   const [position, setPosition] = useState<[number, number] | null>(null);
   const [accuracy, setAccuracy] = useState<number | null>(null);
-  const [isTracking, setIsTracking] = useState(false);
+  const [watchId, setWatchId] = useState<number | null>(null);
   const hasCentered = useRef(false);
-  const watchIdRef = useRef<number | null>(null);
 
-  const startTracking = () => {
+  // --- Add the button handler inside the component ---
+  const handleLocateClick = () => {
     if (!navigator.geolocation) return;
 
-    setIsTracking(true);
-
-    watchIdRef.current = navigator.geolocation.watchPosition(
+    // First, prompt the user
+    navigator.geolocation.getCurrentPosition(
       (pos) => {
         const latlng: [number, number] = [
           pos.coords.latitude,
           pos.coords.longitude,
         ];
-
         setPosition(latlng);
         setAccuracy(pos.coords.accuracy);
 
@@ -45,54 +43,54 @@ function UserLocation() {
           map.setView(latlng, 15);
           hasCentered.current = true;
         }
+
+        // Start continuous tracking
+        const id = navigator.geolocation.watchPosition(
+          (pos) => {
+            const latlng: [number, number] = [
+              pos.coords.latitude,
+              pos.coords.longitude,
+            ];
+            setPosition(latlng);
+            setAccuracy(pos.coords.accuracy);
+          },
+          (err) => console.error(err),
+          { enableHighAccuracy: true },
+        );
+        setWatchId(id);
       },
-      (err) => {
-        console.error("Geolocation error:", err);
-      },
-      {
-        enableHighAccuracy: true,
-      },
+      (err) => console.error(err),
+      { enableHighAccuracy: true },
     );
   };
 
-  // Optional: stop tracking if component unmounts
-  // (good practice)
-  if (watchIdRef.current && !isTracking) {
-    navigator.geolocation.clearWatch(watchIdRef.current);
-  }
+  // Cleanup watch on unmount
+  useEffect(() => {
+    return () => {
+      if (watchId !== null) navigator.geolocation.clearWatch(watchId);
+    };
+  }, [watchId]);
 
   return (
     <>
-      {!isTracking && (
-        <button
-          onClick={startTracking}
-          style={{
-            position: "absolute",
-            bottom: 30,
-            right: 20,
-            zIndex: 1000,
-            padding: "12px 16px",
-            background: "#3399ff", // Dodger Blue
-            color: "white", // text/icon contrast
-            borderRadius: 12, // rounded pill shape
-            border: "none",
-            boxShadow: "0 2px 8px rgba(0,0,0,0.25)",
-            cursor: "pointer",
-            fontWeight: 600,
-            fontSize: 14,
-            display: "flex",
-            alignItems: "center",
-            gap: 6,
-            transition: "transform 0.1s, background 0.2s",
-          }}
-          onMouseEnter={(e) =>
-            (e.currentTarget.style.transform = "scale(1.05)")
-          }
-          onMouseLeave={(e) => (e.currentTarget.style.transform = "scale(1)")}
-        >
-          🧭 Locate Me
-        </button>
-      )}
+      {/* Button users click to trigger geolocation */}
+      <button
+        onClick={handleLocateClick}
+        style={{
+          position: "absolute",
+          bottom: 16,
+          right: 16,
+          zIndex: 1000,
+          background: "#1e90ff",
+          color: "white",
+          border: "none",
+          borderRadius: 8,
+          padding: "8px 12px",
+          cursor: "pointer",
+        }}
+      >
+        🧭 Locate Me
+      </button>
 
       {position && accuracy && (
         <Circle
@@ -106,10 +104,7 @@ function UserLocation() {
           }}
         />
       )}
-
       {position && <Marker position={position} icon={userLocationIcon} />}
     </>
   );
 }
-
-export default UserLocation;
