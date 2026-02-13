@@ -49,6 +49,7 @@ import { initialFormData } from "../TrailsPage/TrailCard";
 import { parseEstimatedMinutes } from "../helpers/Rewards/tokens/utils";
 import { updateTrailMemoryFromPayload } from "../helpers/updateTrailMemory";
 import { FiltersButton, FiltersButton1100 } from "../ui/Buttons";
+import UserLocation from "./UserLocation";
 
 const LittleTag = styled(Tag)`
   padding: 3px;
@@ -249,6 +250,7 @@ export default function TrailsMap({
           style={{ width: "100%", height: "100%" }}
         >
           <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
+          <UserLocation />
           <MapClickHandler
             sidebarOpen={sidebarOpen}
             overlayTrail={overlayTrail}
