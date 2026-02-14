@@ -21,6 +21,7 @@ import { useTrails } from "./hooks/useTrails";
 import { useTrailFilters } from "./hooks/useTrailFilters";
 import { FilterSidebar } from "./components/FilterSidebar";
 import { useTrailTokens } from "./hooks/useTrailTokens";
+import UpdatesPage from "./pages/UpdatesPage";
 
 import {
   HomeOutlined,
@@ -108,7 +109,7 @@ function App() {
 
         {/* ===== ROUTES ===== */}
         <Routes>
-          <Route path="/" element={<Home />} />
+          <Route path="/" element={<Home trails={trails} />} />
           <Route path="/combos" element={<UserTrailCombosPage />} />
           <Route
             path="/trails/:trailId/combos"
@@ -147,6 +148,8 @@ function App() {
               />
             }
           />
+
+          <Route path="/updates" element={<UpdatesPage />} />
 
           {user && <Route path="/stats" element={<StatsPage />} />}
           {user && (

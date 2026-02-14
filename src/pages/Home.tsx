@@ -2,6 +2,7 @@ import styled from "styled-components";
 import { Button, CloudButton } from "../components/ui/Buttons";
 import { Title } from "../components/ui/Titles";
 import { Subtitle } from "../components/ui/Subtitles";
+import { updates } from "../devlog/updates"; // your updates const
 import {
   FeatureCard,
   FeatureDescription,
@@ -16,12 +17,15 @@ import { Clouds } from "../components/ui/Clouds";
 
 interface HomeProps {
   setTab: (key: string) => void;
+  trails: any;
 }
 
-const Home: React.FC<HomeProps> = ({ setTab }) => {
+const Home: React.FC<HomeProps> = ({ setTab, trails }) => {
   const [showAuth, setShowAuth] = useState(false);
   const { user, logout } = useAuth();
   const navigate = useNavigate();
+
+  const recentUpdates = updates.slice(0, 3); // show 3 most recent
 
   // Detect iPhone/iOS
   const isiPhone = /iPhone|iPad|iPod/i.test(navigator.userAgent);
@@ -109,7 +113,6 @@ const Home: React.FC<HomeProps> = ({ setTab }) => {
           </div>
         </div>
       )}
-
       {/* ---------- Feature Cards ---------- */}
       <FeaturesGrid>
         <FeatureCard>
@@ -160,7 +163,6 @@ const Home: React.FC<HomeProps> = ({ setTab }) => {
           </FeatureDescription>
         </FeatureCard>
       </FeaturesGrid>
-
       {/* ---------- Auth Modal ---------- */}
       <AuthScreen open={showAuth} onClose={() => setShowAuth(false)} />
     </div>
@@ -185,6 +187,26 @@ const FeaturesGrid = styled.section`
   @media (min-width: 1024px) {
     grid-template-columns: repeat(3, 1fr);
   }
+`;
+
+// Styled components
+const UpdatesTitle = styled.h2`
+  font-size: 1.75rem;
+  margin-bottom: 1rem;
+  text-align: center;
+  color: #1e90ff;
+`;
+
+const UpdateItem = styled.div`
+  margin-bottom: 1rem;
+  background: rgba(255, 255, 255, 0.1);
+  padding: 0.75rem 1rem;
+  border-radius: 8px;
+`;
+
+const UpdateDate = styled.div`
+  font-weight: bold;
+  margin-bottom: 0.25rem;
 `;
 
 export default Home;

@@ -37,9 +37,10 @@ export function useTrails() {
           avg_canopy_pct,
           difficulty_score,
           video,
+          created_at,
           landcover_percentages,
           tags
-        `
+        `,
       );
 
       if (error) {

@@ -104,6 +104,7 @@ import { FiltersButton } from "../components/ui/Buttons";
 import { LoadSpinner } from "../components/Loader";
 import { TrailFilters } from "../types/filters";
 import { TrailCard as TrailCardType } from "../types/trail";
+import { Navigate, useNavigate } from "react-router-dom";
 
 interface TrailListPageProps {
   trails: TrailCardType[];
@@ -121,9 +122,21 @@ export const TrailListPage: React.FC<TrailListPageProps> = ({
   error,
   onViewMap,
   onOpenFilters,
+  trails,
 }) => {
   const ITEMS_PER_PAGE = 6;
   const [visibleCount, setVisibleCount] = useState(ITEMS_PER_PAGE);
+  const [showBanner, setShowBanner] = useState(true);
+  const navigate = useNavigate();
+  // inside Home component
+  const sevenDaysAgo = new Date();
+  sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
+
+  // count trails added in last 7 days
+  trails.map((trail) => console.log(new Date(trail.created_at)));
+  const newTrailsThisWeek = trails.filter(
+    (t) => new Date(t.created_at) >= sevenDaysAgo,
+  ).length;
 
   // Reset pagination when filters change
   useEffect(() => {
@@ -169,6 +182,65 @@ export const TrailListPage: React.FC<TrailListPageProps> = ({
       }}
     >
       <FiltersButton onClick={onOpenFilters}>Filters</FiltersButton>
+      {showBanner && (
+        <div
+          style={{
+            position: "relative",
+            margin: "1rem 0",
+            padding: "1rem 1rem 1rem 1rem",
+            backgroundColor: "rgba(34, 139, 34, 0.15)",
+            borderLeft: "4px solid #228B22",
+            borderRadius: "8px",
+            textAlign: "center",
+            fontWeight: "bold",
+            color: "#0b3d0b",
+          }}
+        >
+          {/* Close Button */}
+          <button
+            style={{
+              position: "absolute",
+              top: "0.5rem",
+              right: "0.5rem",
+              padding: "0.2rem 0.6rem",
+              border: "none",
+              borderRadius: "50%",
+              backgroundColor: "transparent",
+              color: "#0b3d0b",
+              cursor: "pointer",
+              fontWeight: "bold",
+              fontSize: "1.4rem",
+              lineHeight: 1,
+            }}
+            onClick={() => setShowBanner(false)}
+            aria-label="Close banner"
+          >
+            ×
+          </button>
+
+          <div>
+            🌿 Trail Depth is actively evolving! <br />
+            {newTrailsThisWeek} new trail
+            {newTrailsThisWeek === 1 ? "" : "s"} added this week.
+          </div>
+
+          <button
+            style={{
+              marginTop: "0.5rem",
+              padding: "0.4rem 0.8rem",
+              border: "none",
+              borderRadius: "6px",
+              backgroundColor: "#228B22",
+              color: "white",
+              cursor: "pointer",
+              fontWeight: 600,
+            }}
+            onClick={() => navigate("/updates")}
+          >
+            View Updates
+          </button>
+        </div>
+      )}
 
       {filteredTrails.length === 0 ? (
         <p>No trails match your filters.</p>
