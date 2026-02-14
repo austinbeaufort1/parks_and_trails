@@ -5,6 +5,8 @@ import { getDifficultyDescription } from "../components/helpers/difficulty";
 import { formatDistance } from "../components/helpers/format";
 import { getAngleColor, getAngleDesc } from "../components/helpers/angle";
 import { TrailCard as TrailCardType } from "../types/trail";
+import { useUserCompletionsMap } from "../hooks/useUserCompletionsMap";
+import { useAuth } from "./AuthContext";
 
 interface OverlayTrailPreviewProps {
   trail: TrailCardType;
@@ -19,6 +21,12 @@ export const OverlayTrailPreview: React.FC<OverlayTrailPreviewProps> = ({
   setSidebarOpen,
   setDrawerView,
 }) => {
+  const { user } = useAuth();
+  const { completionsMap, refresh: refreshCompletions } = useUserCompletionsMap(
+    user?.id ?? null,
+  );
+  const count = completionsMap[trail.id] ?? 0;
+
   return (
     <OverlayPreview>
       <div
@@ -70,16 +78,37 @@ export const OverlayTrailPreview: React.FC<OverlayTrailPreviewProps> = ({
           Max: {getAngleDesc(trail.max_angle)}
         </p>
       </div>
+      <div style={{ display: "flex" }}>
+        <button
+          onClick={() => {
+            setSidebarOpen(true);
+            setDrawerView("trail");
+          }}
+          style={{ width: "100%", fontWeight: "bold" }}
+        >
+          View Details
+        </button>
 
-      <button
-        onClick={() => {
-          setSidebarOpen(true);
-          setDrawerView("trail");
-        }}
-        style={{ width: "100%", fontWeight: "bold" }}
-      >
-        View Details
-      </button>
+        {user && count > 0 && (
+          <button
+            onClick={() => {
+              setSidebarOpen(true);
+              setDrawerView("completion");
+            }}
+            style={{
+              width: "100%",
+              fontWeight: "bold",
+              background: "#DCC48E",
+              color: "#5D4037",
+              marginLeft: "10px",
+              paddingTop: "3px",
+              paddingBottom: "5px",
+            }}
+          >
+            View Memories
+          </button>
+        )}
+      </div>
     </OverlayPreview>
   );
 };

@@ -12,6 +12,7 @@ export const updates: UpdateEntry[] = [
       "Launched the updates page — now you can track our growth!",
       "Added a banner on top of the Trails Page showing how many new trails sprouted this week 🌱",
       "Added 1 Trail: Norlo Park Lower Loop",
+      "Added 'View Memories' button to preview overlay on map view for completed trails. This pattern matches the trail cards.",
     ],
   },
 ].sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
