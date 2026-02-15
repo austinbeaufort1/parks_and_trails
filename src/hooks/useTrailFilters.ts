@@ -5,7 +5,6 @@ import { getAngleDesc } from "../components/helpers/angle";
 import { getDifficultyDescription } from "../components/helpers/difficulty";
 
 export function useTrailFilters(trails: TrailCard[]) {
-  console.log("TRAILS", Math.max(...trails.map((t) => t.total_distance_m)));
   const maxTrailDistanceM = trails.length
     ? Math.max(...trails.map((t) => t.total_distance_m))
     : 10000; // or some default max

@@ -14,6 +14,7 @@ export async function checkWildlifeTokens({
 }): Promise<EarnedToken[]> {
   // No wildlife logged → no token
   if (!wildlife || wildlife.length === 0) return [];
+  console.log("IN WILDLIFE TOKENS", wildlife);
 
   const tokenId = "wildlife_witness";
 

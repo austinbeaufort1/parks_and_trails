@@ -10,6 +10,8 @@ export const updates: UpdateEntry[] = [
     title: "A Toast",
     items: [
       "Added Toast Notifications on marking a trail complete for better user feedback.",
+      "Fixed an error being received when entering wildlife into the trail completion form. Wildlife Witness token now displays as expected.",
+      "Centered New Tokens text in token popup",
     ],
   },
   {

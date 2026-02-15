@@ -87,6 +87,7 @@ export const TokenPopup: React.FC<TokenPopupProps> = ({ tokens, onClose }) => {
             borderBottom: "5px solid brown",
             borderLeft: "25px groove brown",
             borderRight: "25px groove brown",
+            textAlign: "center",
           }}
         >
           New Tokens!

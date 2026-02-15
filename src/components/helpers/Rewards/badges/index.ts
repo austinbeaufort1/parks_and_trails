@@ -17,7 +17,6 @@ export async function checkBadges(
   trailId: string,
 ): Promise<EarnedBadge[]> {
   const earnedBadges: EarnedBadge[] = [];
-  console.log("IN MAIN BADGE CHECK");
 
   const badgeChecks = [
     checkFirstSteps(userId),

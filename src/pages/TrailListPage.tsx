@@ -133,7 +133,6 @@ export const TrailListPage: React.FC<TrailListPageProps> = ({
   sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
 
   // count trails added in last 7 days
-  trails.map((trail) => console.log(new Date(trail.created_at)));
   const newTrailsThisWeek = trails.filter(
     (t) => new Date(t.created_at) >= sevenDaysAgo,
   ).length;

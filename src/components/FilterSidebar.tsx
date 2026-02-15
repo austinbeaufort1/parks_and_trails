@@ -44,7 +44,6 @@ export const FilterSidebar: React.FC<Props> = ({
   onReset,
 }) => {
   const unique = <T,>(arr: T[]) => Array.from(new Set(arr));
-  console.log("FILTERS", filters);
   // Convert distance and elevation ranges for slider display
   const elevationRangeFeet: [number, number] = [
     filters.elevationRange[0] * METERS_TO_FEET,

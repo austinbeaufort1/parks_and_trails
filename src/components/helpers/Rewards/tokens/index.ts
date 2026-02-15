@@ -92,7 +92,12 @@ export async function checkTokens({
       environmentSelections: formData.environment,
       mode,
     }),
-    checkWildlifeTokens({ userId, trailId, wildlife: formData.wildlife, mode }),
+    checkWildlifeTokens({
+      userId,
+      trailId,
+      wildlife: formData.otherWildlife,
+      mode,
+    }),
     checkCircusTokens({ userId, trailId, formData, trail, mode }),
     checkSportsTokens({
       userId,

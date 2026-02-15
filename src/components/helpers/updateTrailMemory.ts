@@ -66,7 +66,7 @@ export async function updateTrailMemoryFromPayload(
     if (!items.length) continue;
 
     const sortedItems = [...items].sort();
-
+    console.log("BEFORE TRY", categories);
     try {
       // Fetch existing rows for this trail + category
       const { data: rows, error } = await supabase
@@ -74,6 +74,8 @@ export async function updateTrailMemoryFromPayload(
         .select("id, count, items")
         .eq("trail_id", trailId)
         .eq("category", category);
+
+      console.log("IN TRY DATA", rows);
 
       if (error) {
         console.error("Error fetching trail memory:", error);
@@ -89,20 +91,24 @@ export async function updateTrailMemoryFromPayload(
       );
 
       if (match) {
-        await supabase
+        const { error: memoryError } = await supabase
           .from("trail_memory")
           .update({
             count: match.count + 1,
             last_updated: new Date().toISOString(),
           })
           .eq("id", match.id);
+        console.log("mem eorror", memoryError);
       } else {
-        await supabase.from("trail_memory").insert({
-          trail_id: trailId,
-          category,
-          items: sortedItems,
-          count: 1,
-        });
+        const { error: memoryError } = await supabase
+          .from("trail_memory")
+          .insert({
+            trail_id: trailId,
+            category,
+            items: sortedItems,
+            count: 1,
+          });
+        console.log("mem eorror", memoryError);
       }
     } catch (err) {
       console.error("Error updating trail memory:", err);
