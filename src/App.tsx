@@ -109,7 +109,7 @@ function App() {
             <NavButton
               to="/contact"
               icon={<MessageOutlined />}
-              label="Contact Us"
+              label="Contact"
             />
           </TopNav>
         )}
@@ -219,7 +219,7 @@ const BottomNav: React.FC<{ user: any }> = ({ user }) => {
     { to: "/trails", icon: <CompassOutlined /> },
     ...(user ? [{ to: "/stats", icon: <BarChartOutlined /> }] : []),
     ...(user ? [{ to: "/badges", icon: <TrophyOutlined /> }] : []),
-    { to: "/contacts", icon: <MessageOutlined /> },
+    { to: "/contact", icon: <MessageOutlined /> },
   ];
 
   return (

@@ -30,6 +30,7 @@ import {
   CompassOutlined,
   BarChartOutlined,
   TrophyOutlined,
+  MessageOutlined,
 } from "@ant-design/icons";
 import { CardHeaderActions } from "../CardHeaderActions";
 import { TrailSidebarContent } from "../TrailSidebarContent";
@@ -243,6 +244,7 @@ export default function TrailsMap({
           {user && (
             <NavButton to="/badges" icon={<TrophyOutlined />} label="Badges" />
           )}
+          <NavButton to="/contact" icon={<MessageOutlined />} label="Contact" />
         </FloatingTopNav>
         <MapContainer
           center={[40.318, -79.475]}
