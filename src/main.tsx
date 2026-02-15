@@ -10,6 +10,7 @@ import L from "leaflet";
 import markerIcon from "leaflet/dist/images/marker-icon.png";
 import markerShadow from "leaflet/dist/images/marker-shadow.png";
 import { GlobalStyle } from "./components/ui/GlobalStyles.tsx";
+import { Toaster } from "react-hot-toast";
 
 // Fix Leaflet default marker icons in Vite / React
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -25,7 +26,8 @@ createRoot(document.getElementById("root")!).render(
     <BrowserRouter>
       <AuthProvider>
         <App />
+        <Toaster position="top-center" />
       </AuthProvider>
     </BrowserRouter>
-  </StrictMode>
+  </StrictMode>,
 );

@@ -50,6 +50,7 @@ import { parseEstimatedMinutes } from "../helpers/Rewards/tokens/utils";
 import { updateTrailMemoryFromPayload } from "../helpers/updateTrailMemory";
 import { FiltersButton, FiltersButton1100 } from "../ui/Buttons";
 import UserLocation from "./UserLocation";
+import toast from "react-hot-toast";
 
 const LittleTag = styled(Tag)`
   padding: 3px;
@@ -313,7 +314,12 @@ export default function TrailsMap({
               try {
                 // 1️⃣ Complete trail first (no tokens)
                 await completeTrail(user.id, selectedTrailId ?? "0", payload);
-
+                toast.success("Trail Marked as Complete!", {
+                  duration: 4000,
+                  style: {
+                    background: "#a9ff9c",
+                  },
+                });
                 // 2️⃣ Calculate rewards (tokens + badges)
                 const newRewards = await processRewards({
                   userId: user.id,
@@ -348,6 +354,7 @@ export default function TrailsMap({
                 refreshStats();
                 setFormData(structuredClone(initialFormData));
               } catch (err: any) {
+                toast.error("Error saving trail completion.");
                 console.error("Error completing trail:", err);
               }
             }}

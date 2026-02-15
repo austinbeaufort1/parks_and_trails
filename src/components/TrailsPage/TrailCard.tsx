@@ -33,6 +33,7 @@ import { Flex } from "antd";
 import { parseEstimatedMinutes } from "../helpers/Rewards/tokens/utils";
 import { Tag } from "../ui/Tag";
 import { slate } from "@radix-ui/colors";
+import toast from "react-hot-toast";
 
 type DrawerView = "trail" | "completion";
 
@@ -355,7 +356,12 @@ export const TrailCard: React.FC<TrailCardProps> = ({ trail, onViewMap }) => {
               try {
                 // ✅ 1. Complete trail first (no tokens yet)
                 await completeTrail(user.id, trail.id, payload);
-
+                toast.success("Trail Marked as Complete!", {
+                  duration: 4000,
+                  style: {
+                    background: "#a9ff9c",
+                  },
+                });
                 // ✅ 2. Process rewards (tokens + badges)
                 const newRewards = await processRewards({
                   userId: user.id,
@@ -383,6 +389,7 @@ export const TrailCard: React.FC<TrailCardProps> = ({ trail, onViewMap }) => {
                 refreshStats();
                 setFormData(structuredClone(initialFormData));
               } catch (err: any) {
+                toast.error("Error saving trail completion.");
                 console.error("Error completing trail:", err);
               }
             }}

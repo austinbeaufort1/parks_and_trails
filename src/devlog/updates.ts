@@ -6,6 +6,13 @@ export type UpdateEntry = {
 
 export const updates: UpdateEntry[] = [
   {
+    date: "2026-02-14",
+    title: "A Toast",
+    items: [
+      "Added Toast Notifications on marking a trail complete for better user feedback.",
+    ],
+  },
+  {
     date: "2026-02-13",
     title: "First Updates 🌿",
     items: [

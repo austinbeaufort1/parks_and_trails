@@ -101,7 +101,7 @@ export const OverlayTrailPreview: React.FC<OverlayTrailPreviewProps> = ({
               background: "#DCC48E",
               color: "#5D4037",
               marginLeft: "10px",
-              paddingTop: "3px",
+              paddingTop: "5px",
               paddingBottom: "5px",
             }}
           >
