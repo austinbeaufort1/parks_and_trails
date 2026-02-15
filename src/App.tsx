@@ -29,10 +29,12 @@ import {
   CompassOutlined,
   BarChartOutlined,
   TrophyOutlined,
+  MessageOutlined,
 } from "@ant-design/icons";
 import { UserTrailCombosPage } from "./pages/TrailCombosPage";
 import { LoadSpinner } from "./components/Loader";
 import { FullLoadSpinner } from "./components/FullLoadSpinner";
+import Contact from "./pages/Contact";
 
 const STORAGE_KEY = "activeRoute";
 
@@ -104,6 +106,11 @@ function App() {
                 label="Badges"
               />
             )}
+            <NavButton
+              to="/contact"
+              icon={<MessageOutlined />}
+              label="Contact Us"
+            />
           </TopNav>
         )}
 
@@ -150,6 +157,7 @@ function App() {
           />
 
           <Route path="/updates" element={<UpdatesPage />} />
+          <Route path="/contact" element={<Contact />} />
 
           {user && <Route path="/stats" element={<StatsPage />} />}
           {user && (
@@ -211,6 +219,7 @@ const BottomNav: React.FC<{ user: any }> = ({ user }) => {
     { to: "/trails", icon: <CompassOutlined /> },
     ...(user ? [{ to: "/stats", icon: <BarChartOutlined /> }] : []),
     ...(user ? [{ to: "/badges", icon: <TrophyOutlined /> }] : []),
+    { to: "/contacts", icon: <MessageOutlined /> },
   ];
 
   return (

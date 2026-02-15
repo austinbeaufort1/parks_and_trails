@@ -6,6 +6,13 @@ export type UpdateEntry = {
 
 export const updates: UpdateEntry[] = [
   {
+    date: "2026-02-15",
+    title: "Hello There",
+    items: [
+      "Added a Contact Us page. Created a traildepth email where users can submit requests for new trails to add to the app.",
+    ],
+  },
+  {
     date: "2026-02-14",
     title: "A Toast",
     items: [
