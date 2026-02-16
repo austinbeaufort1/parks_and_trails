@@ -35,6 +35,7 @@ import { UserTrailCombosPage } from "./pages/TrailCombosPage";
 import { LoadSpinner } from "./components/Loader";
 import { FullLoadSpinner } from "./components/FullLoadSpinner";
 import Contact from "./pages/Contact";
+import ComingSoon from "./pages/ComingSoonPage";
 
 const STORAGE_KEY = "activeRoute";
 
@@ -158,6 +159,7 @@ function App() {
 
           <Route path="/updates" element={<UpdatesPage />} />
           <Route path="/contact" element={<Contact />} />
+          <Route path="/video-coming-soon" element={<ComingSoon />} />
 
           {user && <Route path="/stats" element={<StatsPage />} />}
           {user && (

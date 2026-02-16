@@ -11,6 +11,7 @@ export const updates: UpdateEntry[] = [
     items: [
       "Added a Contact page. Created a traildepth email where users can submit requests for new trails to add to the app.",
       "Five new trails added. Four new trails at Nay Aug Park in Scranton, PA, one trail near Uniontown, PA",
+      "Added Video Coming Soon Page for trails that are hiked, but video not yet available.",
     ],
   },
   {
