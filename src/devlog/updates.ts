@@ -8,7 +8,10 @@ export const updates: UpdateEntry[] = [
   {
     date: "2026-02-16",
     title: "Trail Additions",
-    items: ["Added a trail and video for Mammoth Park main lake loop."],
+    items: [
+      "Added a trail and video for Mammoth Park main lake loop.",
+      "Added a trail in Deer Lakes Park",
+    ],
   },
   {
     date: "2026-02-15",
