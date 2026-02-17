@@ -6,6 +6,11 @@ export type UpdateEntry = {
 
 export const updates: UpdateEntry[] = [
   {
+    date: "2026-02-16",
+    title: "Trail Additions",
+    items: ["Added a trail and video for Mammoth Park main lake loop."],
+  },
+  {
     date: "2026-02-15",
     title: "Hello There",
     items: [
