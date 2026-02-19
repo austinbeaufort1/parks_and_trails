@@ -14,6 +14,8 @@ function surfaceMultiplier(
 
   // Locked multipliers
   if (lc.includes("developed") || lc.includes("asphalt")) return 0.9;
+  if (lc.includes("brick")) return 0.9;
+  if (lc.includes("stairs")) return 1.2;
   if (lc.includes("gravel")) return 1.0;
   if (lc.includes("grass")) return 1.1;
   if (lc.includes("forest")) return 1.2;

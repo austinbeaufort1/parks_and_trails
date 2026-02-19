@@ -1,35 +1,21 @@
 import { RouteType, AngleDesc } from "../../types/angle";
 
-export function getAngleDesc(
-  angle: number,
-  type: RouteType = "hike",
-): AngleDesc {
-  if (type === "hike") {
-    if (angle < 1) return "Flat";
-    if (angle < 2) return "Nearly Flat";
-    if (angle < 4) return "Gentle Slopes";
-    if (angle < 8) return "Moderate";
-    if (angle < 12) return "Moderately Steep";
-    if (angle < 20) return "Steep";
-    if (angle < 28) return "Very Steep";
-    return "Terrifying";
-  }
-
-  if (type === "scramble") {
-    if (angle < 35) return "Easy Scramble";
-    if (angle < 40) return "Moderate Scramble";
-    if (angle < 50) return "Hard Scramble";
-    return "Very Hard Scramble";
-  }
-
-  if (type === "climb") {
-    if (angle < 60) return "Easy Climb";
-    if (angle < 70) return "Moderate Climb";
-    if (angle < 80) return "Hard Climb";
-    return "Very Hard Climb";
-  }
-
-  return "Unknown";
+export function getAngleDesc(angle: number): string {
+  if (angle < 1) return "Flat"; // 0.5 weight
+  if (angle < 2) return "Nearly Flat"; // 1.0
+  if (angle < 4) return "Gentle Slopes"; // 1.5
+  if (angle < 8) return "Moderate"; // 2.5
+  if (angle < 12) return "Moderately Steep"; // 4.0
+  if (angle < 20) return "Steep"; // 6.0
+  if (angle < 28) return "Very Steep"; // 8.0
+  if (angle < 35) return "Challenging"; // 10.0
+  if (angle < 40) return "Easy Technical"; // 12.0
+  if (angle < 45) return "Moderate Technical"; // 14.0
+  if (angle < 50) return "Hard Technical"; // 16.0
+  if (angle < 60) return "Very Hard Technical"; // 18.0
+  if (angle < 70) return "Near Vertical"; // 20.0
+  if (angle < 80) return "Extreme"; // 22.0
+  return "Vertical / Extreme"; // 25.0
 }
 
 // export function getAngleColor(angle: number, alpha = 0.5): string {

@@ -107,6 +107,11 @@ export const TrailCard: React.FC<TrailCardProps> = ({ trail, onViewMap }) => {
 
   const completionStyles: string[] = trail.details || [];
 
+  const toEmbedUrl = (url: string) =>
+    url.includes("youtu")
+      ? `https://www.youtube.com/embed/${url.split(/(youtu.be\/|v=)/)[2].split(/[?&]/)[0]}`
+      : "";
+
   // Close overflow when clicking outside
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -145,8 +150,8 @@ export const TrailCard: React.FC<TrailCardProps> = ({ trail, onViewMap }) => {
           boxShadow: "3px 3px 3px 3px rgba(0,0,0,0.2)",
           position: "relative",
           boxSizing: "border-box",
-          minHeight: "480px",
-          maxHeight: "480px",
+          minHeight: "680px",
+          maxHeight: "680px",
           display: "flex",
           flexDirection: "column",
           // opacity: 0.95,
@@ -180,7 +185,15 @@ export const TrailCard: React.FC<TrailCardProps> = ({ trail, onViewMap }) => {
             <ParkName>{trail.park_name}</ParkName>
 
             <TrailTitle>{trail.title}</TrailTitle>
-
+            <iframe
+              height="180"
+              src={trail && trail.video ? toEmbedUrl(trail.video) : ""}
+              title="YouTube video player"
+              frameborder="0"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+              referrerpolicy="strict-origin-when-cross-origin"
+              allowfullscreen
+            ></iframe>
             <TrailDetails>
               <span style={{ marginBottom: "-5px", marginTop: "10px" }}>
                 Effort Level: ({trail.difficulty_score}){" "}
