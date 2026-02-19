@@ -185,15 +185,22 @@ export const TrailCard: React.FC<TrailCardProps> = ({ trail, onViewMap }) => {
             <ParkName>{trail.park_name}</ParkName>
 
             <TrailTitle>{trail.title}</TrailTitle>
-            <iframe
-              height="180"
-              src={trail && trail.video ? toEmbedUrl(trail.video) : ""}
-              title="YouTube video player"
-              frameborder="0"
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-              referrerpolicy="strict-origin-when-cross-origin"
-              allowfullscreen
-            ></iframe>
+            <VideoPanel>
+              {trail && trail.video && trail.video.includes("youtu") ? (
+                <iframe
+                  height="180"
+                  src={toEmbedUrl(trail.video)}
+                  title="YouTube video player"
+                  frameborder="0"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                  referrerpolicy="strict-origin-when-cross-origin"
+                  allowfullscreen
+                ></iframe>
+              ) : (
+                <VideoPlaceholder>🎬 Trail Video Coming Soon</VideoPlaceholder>
+              )}
+            </VideoPanel>
+
             <TrailDetails>
               <span style={{ marginBottom: "-5px", marginTop: "10px" }}>
                 Effort Level: ({trail.difficulty_score}){" "}
@@ -450,4 +457,27 @@ const CardContent = styled.div`
   flex-direction: column;
   gap: 6px;
   padding: 0 12px 12px 12px;
+`;
+
+const VideoPanel = styled.div`
+  width: 100%;
+  height: 180px;
+  margin: 8px 0;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  overflow: hidden;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #111;
+  color: #fff;
+  font-weight: 500;
+  font-size: 14px;
+  text-align: center;
+`;
+
+const VideoPlaceholder = styled.div`
+  opacity: 0.8;
+  letter-spacing: 0.5px;
 `;
