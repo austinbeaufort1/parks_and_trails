@@ -20,10 +20,15 @@ interface TrailListPageProps {
 type SortOption =
   | "default"
   | "newest"
+  | "oldest"
   | "effort_desc"
+  | "effort_asc"
   | "distance_desc"
+  | "distance_asc"
   | "max_angle_desc"
-  | "avg_angle_desc";
+  | "max_angle_asc"
+  | "avg_angle_desc"
+  | "avg_angle_asc";
 
 export const TrailListPage: React.FC<TrailListPageProps> = ({
   filteredTrails,
@@ -60,17 +65,34 @@ export const TrailListPage: React.FC<TrailListPageProps> = ({
           new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
         );
 
+      case "oldest":
+        return (
+          new Date(a.created_at).getTime() - new Date(b.created_at).getTime()
+        );
+
       case "effort_desc":
         return b.difficulty_score - a.difficulty_score;
+
+      case "effort_asc":
+        return a.difficulty_score - b.difficulty_score;
 
       case "distance_desc":
         return b.total_distance_m - a.total_distance_m;
 
+      case "distance_asc":
+        return a.total_distance_m - b.total_distance_m;
+
       case "max_angle_desc":
         return b.max_angle - a.max_angle;
 
+      case "max_angle_asc":
+        return a.max_angle - b.max_angle;
+
       case "avg_angle_desc":
         return b.avg_angle - a.avg_angle;
+
+      case "avg_angle_asc":
+        return a.avg_angle - b.avg_angle;
 
       default:
         return 0;
@@ -140,11 +162,31 @@ export const TrailListPage: React.FC<TrailListPageProps> = ({
             }}
           >
             <option value="default">Default</option>
-            <option value="newest">Newest</option>
-            <option value="effort_desc">Effort (High → Low)</option>
-            <option value="distance_desc">Distance (Long → Short)</option>
-            <option value="max_angle_desc">Max Angle (Steepest)</option>
-            <option value="avg_angle_desc">Avg Angle (Steepest)</option>
+
+            <optgroup label="Date">
+              <option value="newest">Newest</option>
+              <option value="oldest">Oldest</option>
+            </optgroup>
+
+            <optgroup label="Effort">
+              <option value="effort_desc">High → Low</option>
+              <option value="effort_asc">Low → High</option>
+            </optgroup>
+
+            <optgroup label="Distance">
+              <option value="distance_desc">Long → Short</option>
+              <option value="distance_asc">Short → Long</option>
+            </optgroup>
+
+            <optgroup label="Average Angle">
+              <option value="avg_angle_desc">Steepest → Flattest</option>
+              <option value="avg_angle_asc">Flattest → Steepest</option>
+            </optgroup>
+
+            <optgroup label="Max Angle">
+              <option value="max_angle_desc">Steepest → Flattest</option>
+              <option value="max_angle_asc">Flattest → Steepest</option>
+            </optgroup>
           </select>
         </div>
       </div>
