@@ -6,6 +6,13 @@ export type UpdateEntry = {
 
 export const updates: UpdateEntry[] = [
   {
+    date: "2026-02-19",
+    title: "Sort those trails!",
+    items: [
+      "On the trail cards page users can now sort by distance, effort level, angle, etc.",
+    ],
+  },
+  {
     date: "2026-02-18",
     title: "Trail Additions",
     items: [
