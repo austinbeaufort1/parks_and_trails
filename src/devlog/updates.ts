@@ -6,6 +6,14 @@ export type UpdateEntry = {
 
 export const updates: UpdateEntry[] = [
   {
+    date: "2026-02-25",
+    title: "Fresh Trail and Videos",
+    items: [
+      "Added Peach Park Trail",
+      "Added new videos for Historic Hannahstown, Peach Park, and Weatherwood Park",
+    ],
+  },
+  {
     date: "2026-02-19",
     title: "Sort those trails!",
     items: [
