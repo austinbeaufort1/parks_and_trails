@@ -6,6 +6,15 @@ export type UpdateEntry = {
 
 export const updates: UpdateEntry[] = [
   {
+    date: "2026-02-27",
+    title: "Revision and New Trail",
+    items: [
+      "Revised Effort Level Scale.",
+      "Added Graham Park trail and video",
+      "Added video for Norlo Park",
+    ],
+  },
+  {
     date: "2026-02-26",
     title: "Video Update",
     items: ["Added video for upper lake hill climb in Twin Lakes, PA."],
