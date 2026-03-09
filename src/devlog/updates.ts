@@ -6,6 +6,14 @@ export type UpdateEntry = {
 
 export const updates: UpdateEntry[] = [
   {
+    date: "2026-03-08",
+    title: "Map Updates and New Trails",
+    items: [
+      "Map icons updated to give more insight. At first glance trail types can now be distinguished as hike, walk, historic, any other special features, etc.",
+      "Added Graham Park trail and video",
+    ],
+  },
+  {
     date: "2026-02-27",
     title: "Revision and New Trail",
     items: [

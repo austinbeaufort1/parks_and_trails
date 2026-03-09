@@ -293,7 +293,7 @@ export default function TrailsMap({
                   icon={
                     completionsCount > 0
                       ? completedMarkerIcon(completionsCount)
-                      : startMarkerIcon()
+                      : startMarkerIcon(trail.tags, 1)
                   }
                   eventHandlers={{ click: () => onSelectTrail(trail.id) }}
                 />

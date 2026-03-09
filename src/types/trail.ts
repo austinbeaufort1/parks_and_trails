@@ -63,4 +63,5 @@ export type TrailCard = {
   difficulty_score: number;
   video?: string | null;
   landcover_percentages: any;
+  tags: string[];
 };
