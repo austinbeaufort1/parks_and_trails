@@ -13,6 +13,9 @@ import { EarnedToken } from "./TokenPopup";
 import { useTrailTokens } from "../hooks/useTrailTokens";
 import { calculatePar } from "./helpers/parCalculator";
 import { ActivityParsTooltip } from "./ActivityParsTooltip";
+import { getMapsLinks } from "./helpers/mapsLinks";
+import { ActionButton, CloudButton } from "./ui/Buttons";
+import styled from "styled-components";
 
 interface TrailSidebarContentProps {
   drawerView: "trail" | "completion";
@@ -24,6 +27,10 @@ interface TrailSidebarContentProps {
   refreshTokens: () => void;
 }
 
+const Label = styled.strong`
+  margin-right: 0.25em;
+`;
+
 export const TrailSidebarContent: React.FC<TrailSidebarContentProps> = ({
   drawerView,
   trail,
@@ -33,6 +40,7 @@ export const TrailSidebarContent: React.FC<TrailSidebarContentProps> = ({
   tokens,
 }) => {
   const cruxAngle = trail.max_angle;
+  const { google, apple } = getMapsLinks(trail.start_lat, trail.start_lng);
 
   if (drawerView === "trail") {
     return (
@@ -75,7 +83,58 @@ export const TrailSidebarContent: React.FC<TrailSidebarContentProps> = ({
           </div>
         )}
 
-        <LabelValue label="Where" value={trail.county + ", " + trail.state} />
+        {/* <LabelValue label="Where" value={trail.county + ", " + trail.state} /> */}
+        <div
+          style={{
+            display: "flex",
+            gap: "8px",
+            marginTop: "8px",
+            marginBottom: "8px",
+          }}
+        >
+          <Label>Directions: </Label>
+          <a
+            href={apple}
+            target="_blank"
+            rel="noopener noreferrer"
+            style={{ textDecoration: "none" }}
+          >
+            <CloudButton
+              style={{
+                paddingBottom: "3px",
+                paddingTop: "3px",
+                paddingLeft: "5px",
+                paddingRight: "5px",
+                fontSize: "0.8rem",
+                fontFamily: "Patrick Hand",
+                letterSpacing: "0.1rem",
+              }}
+            >
+              Apple Maps
+            </CloudButton>
+          </a>
+
+          <a
+            href={google}
+            target="_blank"
+            rel="noopener noreferrer"
+            style={{ textDecoration: "none" }}
+          >
+            <CloudButton
+              style={{
+                paddingBottom: "3px",
+                paddingTop: "3px",
+                paddingLeft: "5px",
+                paddingRight: "5px",
+                fontSize: "0.8rem",
+                fontFamily: "Patrick Hand",
+                letterSpacing: "0.1rem",
+              }}
+            >
+              Google Maps
+            </CloudButton>
+          </a>
+        </div>
         <LabelValue
           label="Distance"
           value={formatDistance(trail.total_distance_m)}
