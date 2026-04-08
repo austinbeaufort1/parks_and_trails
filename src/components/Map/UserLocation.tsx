@@ -78,8 +78,8 @@ export default function UserLocation() {
         onClick={handleLocateClick}
         style={{
           position: "absolute",
-          bottom: 16,
-          right: 16,
+          bottom: 30,
+          right: 20,
           zIndex: 1000,
           background: "#1e90ff",
           color: "white",
