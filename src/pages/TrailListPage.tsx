@@ -45,11 +45,11 @@ export const TrailListPage: React.FC<TrailListPageProps> = ({
 
   const navigate = useNavigate();
 
-  const sevenDaysAgo = new Date();
-  sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
+  const thirtyDaysAgo = new Date();
+  thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
 
-  const newTrailsThisWeek = trails.filter(
-    (t) => new Date(t.created_at) >= sevenDaysAgo,
+  const newTrailsThisMonth = trails.filter(
+    (t) => new Date(t.created_at) >= thirtyDaysAgo,
   ).length;
 
   // Reset pagination when filters OR sort changes
@@ -221,8 +221,8 @@ export const TrailListPage: React.FC<TrailListPageProps> = ({
             ×
           </button>
           🌿 Trail Depth is actively evolving! <br />
-          {newTrailsThisWeek} new trail
-          {newTrailsThisWeek === 1 ? "" : "s"} added this week.
+          {newTrailsThisMonth} new trail
+          {newTrailsThisMonth === 1 ? "" : "s"} added this month.
           <div>
             <button
               style={{
