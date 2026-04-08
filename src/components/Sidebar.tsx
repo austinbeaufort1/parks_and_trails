@@ -62,11 +62,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
         <SidebarContent>{children}</SidebarContent>
 
         {/* Close button always at bottom */}
-        <SidebarCloseContainer>
-          <Button onClick={onClose} style={{ width: "100%" }}>
-            Close
-          </Button>
-        </SidebarCloseContainer>
+        <CloseButtonFloating onClick={onClose}>✕</CloseButtonFloating>
       </SidebarContainer>
     </>
   );
@@ -95,4 +91,18 @@ const SidebarCloseContainer = styled.div`
   z-index: 10;
   display: flex;
   justify-content: center;
+`;
+
+const CloseButtonFloating = styled(Button)`
+  position: absolute;
+  top: 50%;
+  right: 16px;
+  transform: translateY(-50%);
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  border-radius: 50%;
+  font-size: 16px;
+  z-index: 1000;
+  background-color: #65543f;
 `;

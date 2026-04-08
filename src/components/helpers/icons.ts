@@ -6,6 +6,7 @@ import L from "leaflet";
 const tagToType: Record<string, string> = {
   cemetery: "cemetery",
   gravestones: "cemetery",
+  // hill: "hill",
   historic: "historic",
   national_register: "historic",
   dirt_scramble: "scramble",
@@ -22,18 +23,18 @@ const tagToType: Record<string, string> = {
   wetland: "wetland",
 };
 
-// Priority order: first match wins
 const priority = [
-  "cemetery",
-  "historic",
-  "scramble",
-  "lighthouse", // NEW: lighthouse before hike/sneaker
   "waterfall",
+  "lighthouse",
+  "scramble",
+  // "hill",
+  "historic",
+  "cemetery",
   "wetland",
+  "rail",
+  "urban",
   "hike",
   "sneaker",
-  "urban",
-  "rail",
 ];
 
 // Determine primary adventure type from tags
@@ -173,6 +174,15 @@ const typeConfig: Record<
     fontSize: 20,
     bg: "#f1c40f",
     borderRadius: "12px",
+    boxShadow: "0 2px 4px rgba(0,0,0,0.25)",
+  },
+  hill: {
+    emoji: "📈",
+    size: 40,
+    fontSize: 20,
+    bg: "#f7ff89",
+    borderRadius: "12px",
+    border: "2px solid #ffd98e",
     boxShadow: "0 2px 4px rgba(0,0,0,0.25)",
   },
 };

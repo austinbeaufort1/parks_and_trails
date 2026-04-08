@@ -6,6 +6,24 @@ export type UpdateEntry = {
 
 export const updates: UpdateEntry[] = [
   {
+    date: "2026-04-03",
+    title: "Trails",
+    items: ["Five new videos added for newest adventures."],
+  },
+  {
+    date: "2026-03-26",
+    title: "Trails",
+    items: ["New Trail and Video Added for Boyce Park"],
+  },
+  {
+    date: "2026-03-21",
+    title: "Tagging Trails",
+    items: [
+      "Added Tags to Trails and the ability to filter by tags in the filter sidebar.",
+      "Two new trails added by CCAC.",
+    ],
+  },
+  {
     date: "2026-03-15",
     title: "New trail!",
     items: ["Added Keller-Skena Nature Reserves Loop"],

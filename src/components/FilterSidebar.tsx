@@ -1,13 +1,15 @@
 // src/components/FilterSidebar.tsx
-import React from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { Sidebar } from "./Sidebar";
 import { TrailCard as TrailCardType } from "../types/trail";
 import { TrailFilters } from "../types/filters";
 import { getDifficultyDescription } from "./helpers/difficulty";
 import { getAngleDesc } from "./helpers/angle";
-import { Button } from "./ui/Buttons";
-import { Select, Slider } from "antd";
+import { Button, CloudButton } from "./ui/Buttons";
+import { Select, Slider, Tag } from "antd";
+
+const { CheckableTag } = Tag;
 
 const Section = styled.div`
   margin-bottom: 16px;
@@ -43,20 +45,24 @@ export const FilterSidebar: React.FC<Props> = ({
   onClose,
   onReset,
 }) => {
+  const [showAllTags, setShowAllTags] = useState(false);
+  const [openGroup, setOpenGroup] = useState<string | null>(null);
+
   const unique = <T,>(arr: T[]) => Array.from(new Set(arr));
-  // Convert distance and elevation ranges for slider display
+
+  // ✅ your tags source
+  const tags = [...new Set(trails.flatMap((trail) => trail.tags))];
+
   const elevationRangeFeet: [number, number] = [
     filters.elevationRange[0] * METERS_TO_FEET,
     filters.elevationRange[1] * METERS_TO_FEET,
   ];
 
-  // Convert meters → miles for slider display
   const distanceRangeMiles: [number, number] = [
     filters.distanceRange[0] * METERS_TO_MILES,
     filters.distanceRange[1] * METERS_TO_MILES,
   ];
 
-  // Find max trail distance in miles for slider max
   const maxDistanceMiles = trails.length
     ? Math.max(...trails.map((t) => t.total_distance_m)) * METERS_TO_MILES
     : 50;
@@ -65,8 +71,99 @@ export const FilterSidebar: React.FC<Props> = ({
     ? Math.max(...trails.map((t) => t.elevation_gain_m)) * METERS_TO_FEET
     : 10000;
 
+  const TAG_GROUPS: Record<string, string[]> = {
+    lake: ["lake_view", "lake_adjacent", "lake_loop"],
+    river: ["river_view", "river_adjacent", "river_loop"],
+    stream: ["stream_view", "stream_adjacent", "stream_loop"],
+  };
+
+  // close dropdown on outside click
+  useEffect(() => {
+    const handleClick = () => setOpenGroup(null);
+    window.addEventListener("click", handleClick);
+    return () => window.removeEventListener("click", handleClick);
+  }, []);
+
   return (
     <Sidebar open={open} onClose={onClose} title="Filter Trails">
+      <StickyFooter>
+        <CloudButton
+          onClick={onReset}
+          style={{
+            padding: "5px 20px",
+            fontSize: "1rem",
+            fontFamily: "Patrick Hand",
+          }}
+        >
+          Clear Filters
+        </CloudButton>
+      </StickyFooter>
+      {/* ===== TRAIL TAGS (NEW) ===== */}
+      <Section>
+        <Label>
+          Tags {filters.tags.length > 0 && `(${filters.tags.length})`}
+        </Label>
+
+        {(() => {
+          const commonTags = ["hike", "walk"];
+          const otherTags = tags
+            .filter((t) => !commonTags.includes(t))
+            .sort((a, b) => a.localeCompare(b));
+          const sortedTags = [
+            ...commonTags.filter((t) => tags.includes(t)), // only if present
+            ...otherTags,
+          ];
+
+          const visibleTags = showAllTags
+            ? sortedTags
+            : sortedTags.slice(0, 10);
+
+          return (
+            <>
+              <div style={{ display: "flex", flexWrap: "wrap", gap: 6 }}>
+                {visibleTags.map((tag) => {
+                  const checked = filters.tags.includes(tag);
+
+                  return (
+                    <CheckableTag
+                      key={tag}
+                      checked={checked}
+                      onChange={(isChecked) => {
+                        setFilters({
+                          ...filters,
+                          tags: isChecked
+                            ? [...filters.tags, tag]
+                            : filters.tags.filter((t) => t !== tag),
+                        });
+                      }}
+                    >
+                      {tag}
+                    </CheckableTag>
+                  );
+                })}
+              </div>
+
+              {sortedTags.length > 10 && (
+                <Button
+                  type="link"
+                  onClick={() => setShowAllTags(!showAllTags)}
+                  style={{
+                    paddingTop: 0,
+                    paddingBottom: 0,
+                    paddingLeft: "5px",
+                    paddingRight: "5px",
+                    marginTop: 6,
+                    fontFamily: "monospace",
+                  }}
+                >
+                  {showAllTags ? "Show less" : "Show more"}
+                </Button>
+              )}
+            </>
+          );
+        })()}
+      </Section>
+
       {/* ===== LOCATION ===== */}
       <Section>
         <Label>State</Label>
@@ -74,7 +171,7 @@ export const FilterSidebar: React.FC<Props> = ({
           mode="multiple"
           allowClear
           placeholder="Select states"
-          value={[...filters.states].sort()} // make a copy and sort
+          value={[...filters.states].sort()}
           onChange={(values: string[]) =>
             setFilters({ ...filters, states: values })
           }
@@ -96,14 +193,14 @@ export const FilterSidebar: React.FC<Props> = ({
           mode="multiple"
           allowClear
           placeholder="Select counties"
-          value={[...filters.counties].sort()} // sorted copy for value
+          value={[...filters.counties].sort()}
           onChange={(values: string[]) =>
             setFilters({ ...filters, counties: values })
           }
           style={{ width: "100%" }}
         >
           {unique(trails.map((t) => t.county))
-            .sort((a, b) => a.localeCompare(b)) // sort options alphabetically
+            .sort((a, b) => a.localeCompare(b))
             .map((c) => (
               <Select.Option key={c} value={c}>
                 {c}
@@ -118,14 +215,14 @@ export const FilterSidebar: React.FC<Props> = ({
           mode="multiple"
           allowClear
           placeholder="Select parks"
-          value={[...filters.parks].sort()} // sorted copy for value
+          value={[...filters.parks].sort()}
           onChange={(values: string[]) =>
             setFilters({ ...filters, parks: values })
           }
           style={{ width: "100%" }}
         >
           {unique(trails.map((t) => t.park_name))
-            .sort((a, b) => a.localeCompare(b)) // sort options alphabetically
+            .sort((a, b) => a.localeCompare(b))
             .map((p) => (
               <Select.Option key={p} value={p}>
                 {p}
@@ -282,7 +379,7 @@ export const FilterSidebar: React.FC<Props> = ({
             setFilters({
               ...filters,
               distanceRange: [
-                (val as [number, number])[0] / METERS_TO_MILES, // back to meters
+                (val as [number, number])[0] / METERS_TO_MILES,
                 (val as [number, number])[1] / METERS_TO_MILES,
               ],
             })
@@ -307,7 +404,7 @@ export const FilterSidebar: React.FC<Props> = ({
         <Slider
           range
           min={0}
-          max={maxElevationFeet} // max based on trails
+          max={maxElevationFeet}
           step={50}
           value={elevationRangeFeet}
           onChange={(val) =>
@@ -332,8 +429,16 @@ export const FilterSidebar: React.FC<Props> = ({
           <span>{Math.round(elevationRangeFeet[1])} ft</span>
         </div>
       </Section>
-
-      <Button onClick={onReset}>Clear Filters</Button>
     </Sidebar>
   );
 };
+
+const StickyFooter = styled.div`
+  position: sticky;
+  bottom: 0;
+  padding: 16px;
+  background: white; // match sidebar background
+  border-top: 1px solid #eee;
+  text-align: center;
+  z-index: 10;
+`;

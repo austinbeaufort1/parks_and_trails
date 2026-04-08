@@ -20,6 +20,7 @@ export function useTrailFilters(trails: TrailCard[]) {
     elevationRange: [0, 1000], // in meters
     minTreeCover: undefined,
     landCoverTypes: [],
+    tags: [],
   };
 
   const [filters, setFilters] = useState<TrailFilters>(DEFAULT_FILTERS);
@@ -98,6 +99,14 @@ export function useTrailFilters(trails: TrailCard[]) {
         )
       ) {
         return false;
+      }
+
+      // ===== TAGS =====
+      if (filters.tags.length > 0) {
+        const hasAllTags = filters.tags.every((tag) =>
+          trail.tags.includes(tag),
+        );
+        if (!hasAllTags) return false;
       }
 
       return true;

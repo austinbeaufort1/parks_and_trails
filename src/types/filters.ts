@@ -14,4 +14,6 @@ export interface TrailFilters {
 
   minTreeCover?: number;
   landCoverTypes: string[];
+
+  tags: string[];
 }
