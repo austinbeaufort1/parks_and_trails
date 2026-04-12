@@ -6,6 +6,13 @@ export type UpdateEntry = {
 
 export const updates: UpdateEntry[] = [
   {
+    date: "2026-04-12",
+    title: "New Trails!",
+    items: [
+      "Two new trails and videos added: Winnie Palmer Nature Reserve in Latrobe and Hill Climb at Boyce Park.",
+    ],
+  },
+  {
     date: "2026-04-03",
     title: "Trails",
     items: ["Five new videos added for newest adventures."],
