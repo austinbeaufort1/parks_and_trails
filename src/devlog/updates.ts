@@ -6,6 +6,11 @@ export type UpdateEntry = {
 
 export const updates: UpdateEntry[] = [
   {
+    date: "2026-05-04",
+    title: "Heritage Trail",
+    items: ["Added Heritage Trail in Monroeville, PA to the database."],
+  },
+  {
     date: "2026-04-16",
     title: "Rock Arch Trail",
     items: ["Added Rock Arch Trail to the database."],
