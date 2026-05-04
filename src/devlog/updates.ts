@@ -7,8 +7,10 @@ export type UpdateEntry = {
 export const updates: UpdateEntry[] = [
   {
     date: "2026-05-04",
-    title: "Heritage Trail",
-    items: ["Added Heritage Trail in Monroeville, PA to the database."],
+    title: "New Videos, Heritage Trail added to map.",
+    items: [
+      "Added Heritage Trail in Monroeville, PA to the database. Added new videos for CCAC Loops, Kellman-Skena Nature Reserve, and The Forgotten Loop at Boyce Park",
+    ],
   },
   {
     date: "2026-04-16",
