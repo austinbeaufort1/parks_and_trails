@@ -6,6 +6,11 @@ export type UpdateEntry = {
 
 export const updates: UpdateEntry[] = [
   {
+    date: "2026-05-14",
+    title: "Twin Lakes Meadow Loop",
+    items: ["Added Twin Lakes Meadow Loop and video, Greensburg, PA"],
+  },
+  {
     date: "2026-05-04",
     title: "New Videos, Heritage Trail added to map.",
     items: [
